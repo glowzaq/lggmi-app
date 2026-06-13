@@ -35,6 +35,39 @@ lggmi-app/
 └── README.md
 \`\`\`
 
+## Getting Started
+
+### Prerequisites
+
+Make sure you have these installed:
+- [Docker](https://www.docker.com/products/docker-desktop)
+- [Docker Compose](https://docs.docker.com/compose/)
+- [Node.js](https://nodejs.org/) v18+
+- [Git](https://git-scm.com/)
+
+### Installation
+
+\`\`\`bash
+# Clone the repository
+git clone https://github.com/YOUR_USERNAME/church-app.git
+cd church-app
+
+# Copy environment file and fill in your values
+cp apps/api/.env.example apps/api/.env
+\`\`\`
+
+### Running with Docker
+
+\`\`\`bash
+# Start all services
+docker-compose up -d
+
+# Check running containers
+docker ps
+\`\`\`
+
+Visit **http://localhost:5050** to access PGAdmin (database manager)
+
 ## Status
 
 🚧 Currently in active development
