@@ -2,8 +2,6 @@ services:
   postgres:
     image: postgres:15-alpine
     container_name: church_db
-    env_file:
-      - ./apps/api/.env
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -19,14 +17,14 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     container_name: church_pgadmin
-    env_file:
-      - ./apps/api/.env
     restart: unless-stopped
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
     ports:
       - '5050:80'
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
     depends_on:
       - postgres
     networks:
@@ -34,6 +32,7 @@ services:
 
 volumes:
   postgres_data:
+  pgadmin_data:
 
 networks:
   church_network:
