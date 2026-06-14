@@ -68,6 +68,26 @@ docker ps
 
 Visit **http://localhost:5050** to access PGAdmin (database manager)
 
+### Running the API locally
+
+\`\`\`bash
+cd apps/api
+npm install
+npm run prisma:generate
+npm run prisma:push
+npm run dev
+\`\`\`
+
+API runs on **http://localhost:5000**
+Health check: **http://localhost:5000/health**
+
+### Database Management
+
+\`\`\`bash
+# Open Prisma Studio (visual DB editor)
+npm run prisma:studio
+\`\`\`
+
 ## Status
 
 🚧 Currently in active development
