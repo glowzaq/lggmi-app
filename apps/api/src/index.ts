@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import path from 'path';
 import authRoutes from './modules/auth/auth.routes';
+import memberRoutes from './modules/members/members.routes'
 
 dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/auth', authRoutes);
+app.use('/api/members', memberRoutes);
 
 app.get('/health', (req: Request, res: Response) => {
     res.status(200).json({
