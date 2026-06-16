@@ -88,6 +88,33 @@ Health check: **http://localhost:5000/health**
 npm run prisma:studio
 \`\`\`
 
+### Running the Frontend
+
+\`\`\`bash
+cd apps/web
+npm install
+npm run dev
+\`\`\`
+
+Frontend runs on **http://localhost:3000**
+
+### API Endpoints
+
+#### Auth
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| POST | /api/auth/register | Public | Register new user |
+| POST | /api/auth/login | Public | Login |
+
+#### Members
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| GET | /api/members | Admin, Pastor | Get all members |
+| GET | /api/members/stats | Admin, Pastor | Get member statistics |
+| GET | /api/members/:id | All | Get single member |
+| PATCH | /api/members/:id | All | Update member |
+| DELETE | /api/members/:id | Admin | Deactivate member |
+
 ## Status
 
 🚧 Currently in active development
