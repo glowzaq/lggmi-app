@@ -24,9 +24,9 @@ export default function LoginPage() {
             localStorage.setItem('user', JSON.stringify(data.data.user))
 
             const role = data.data.user.role
-            if (role === 'PASTOR') router.push('/pastor/dashboard')
-            else if (role === 'ADMIN') router.push('/admin/dashboard')
-            else router.push('/member/dashboard')
+            if (role === 'PASTOR') router.push('/pastor-dashboard')
+            else if (role === 'ADMIN') router.push('/major')
+            else router.push('/member-dashboard')
         } catch (error: any) {
             setError(error.response?.data?.message || 'Login Failed')
         }finally {

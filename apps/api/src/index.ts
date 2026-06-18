@@ -5,7 +5,10 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import path from 'path';
 import authRoutes from './modules/auth/auth.routes';
-import memberRoutes from './modules/members/members.routes'
+import memberRoutes from './modules/members/members.routes';
+import eventRoutes from './modules/events/events.routes';
+import sermonRoutes from './modules/sermons/sermons.routes'
+import attendanceRoutes from './modules/attendance/attendance.routes';
 
 dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 
@@ -20,6 +23,9 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/members', memberRoutes);
+app.use('/api/events', eventRoutes);
+app.use('/api/attendances', attendanceRoutes);
+app.use('/api/sermons', sermonRoutes)
 
 app.get('/health', (req: Request, res: Response) => {
     res.status(200).json({
