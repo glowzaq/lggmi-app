@@ -115,6 +115,37 @@ Frontend runs on **http://localhost:3000**
 | PATCH | /api/members/:id | All | Update member |
 | DELETE | /api/members/:id | Admin | Deactivate member |
 
+#### Events
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| GET | /api/events | Admin, Pastor | Get all events |
+| GET | /api/events/upcoming | All | Get upcoming events |
+| GET | /api/events/stats | Admin, Pastor | Get event statistics |
+| GET | /api/events/:id | All | Get single event |
+| POST | /api/events | Admin | Create event |
+| PATCH | /api/events/:id | Admin | Update event |
+| DELETE | /api/events/:id | Admin | Delete event |
+
+#### Attendance
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| POST | /api/attendance | Admin | Mark single attendance |
+| POST | /api/attendance/bulk | Admin | Bulk mark attendance |
+| GET | /api/attendance/event/:eventId | Admin, Pastor | Get event attendance |
+| GET | /api/attendance/member/:memberId | All | Get member attendance |
+| GET | /api/attendance/stats | Admin, Pastor | Get attendance trend |
+
+#### Sermons
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| GET | /api/sermons | All | Get all sermons |
+| GET | /api/sermons/latest | All | Get latest sermons |
+| GET | /api/sermons/series | All | Get all series names |
+| GET | /api/sermons/:id | All | Get single sermon |
+| POST | /api/sermons | Admin | Create sermon |
+| PATCH | /api/sermons/:id | Admin | Update sermon |
+| DELETE | /api/sermons/:id | Admin | Delete sermon |
+
 ## Status
 
 🚧 Currently in active development
