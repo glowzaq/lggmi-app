@@ -146,6 +146,41 @@ Frontend runs on **http://localhost:3000**
 | PATCH | /api/sermons/:id | Admin | Update sermon |
 | DELETE | /api/sermons/:id | Admin | Delete sermon |
 
+#### Donations
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| GET | /api/donations | Admin, Pastor | Get all donations |
+| GET | /api/donations/stats | Admin, Pastor | Get donation stats and trend |
+| GET | /api/donations/:id | Admin, Pastor | Get single donation |
+| GET | /api/donations/member/:memberId | All | Get member giving history |
+| POST | /api/donations | Admin | Record donation |
+| PATCH | /api/donations/:id | Admin | Update donation |
+| DELETE | /api/donations/:id | Admin | Delete donation |
+
+#### Announcements
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| GET | /api/announcements | Admin, Pastor | Get all announcements |
+| GET | /api/announcements/active | All | Get active announcements |
+| GET | /api/announcements/:id | All | Get single announcement |
+| POST | /api/announcements | Admin | Create announcement |
+| PATCH | /api/announcements/:id | Admin | Update announcement |
+| PATCH | /api/announcements/:id/toggle | Admin | Toggle active status |
+| DELETE | /api/announcements/:id | Admin | Delete announcement |
+
+#### Prayer Requests
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| GET | /api/prayer-requests | Admin, Pastor | Get all prayer requests |
+| GET | /api/prayer-requests/public | All | Get public requests |
+| GET | /api/prayer-requests/stats | Admin, Pastor | Get prayer stats |
+| GET | /api/prayer-requests/member/:memberId | All | Get member requests |
+| GET | /api/prayer-requests/:id | All | Get single request |
+| POST | /api/prayer-requests | All | Submit prayer request |
+| PATCH | /api/prayer-requests/:id | All | Update request |
+| PATCH | /api/prayer-requests/:id/status | Admin, Pastor | Update status |
+| DELETE | /api/prayer-requests/:id | Admin | Delete request |
+
 ## Status
 
 🚧 Currently in active development
