@@ -15,14 +15,11 @@ const router = Router()
 
 router.use(protect)
 
-// All logged in users see active announcements
 router.get('/active', getActive)
 router.get('/:id', getOne)
 
-// Admin and pastor see all
 router.get('/', restrictTo('PASTOR', 'ADMIN'), getAll)
 
-// Admin only
 router.post('/', restrictTo('ADMIN'), create)
 router.patch('/:id', restrictTo('ADMIN'), update)
 router.patch('/:id/toggle', restrictTo('ADMIN'), toggle)

@@ -136,7 +136,7 @@ export default function DonationsPage() {
                                 <XAxis dataKey="month" tick={{ fontSize: 12 }} />
                                 <YAxis tick={{ fontSize: 12 }} />
                                 <Tooltip
-                                    formatter={(value: number) =>
+                                    formatter={(value: any) =>
                                         `₦${value.toLocaleString()}`
                                     }
                                 />
