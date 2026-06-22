@@ -181,6 +181,36 @@ Frontend runs on **http://localhost:3000**
 | PATCH | /api/prayer-requests/:id/status | Admin, Pastor | Update status |
 | DELETE | /api/prayer-requests/:id | Admin | Delete request |
 
+## Dashboard Roles
+
+### Pastor Dashboard
+Read-only visibility into all church metrics including member breakdown,
+attendance trends, giving reports and prayer request status.
+
+### Admin Dashboard
+Full control center with live stats, giving charts, attendance trends,
+recent donations and breakdown by giving type.
+
+### Member Dashboard
+Personal portal showing upcoming events, latest sermons, announcements,
+personal attendance rate and giving history.
+
+## Frontend Structure
+
+\`\`\`
+src/
+├── app/
+│   ├── (auth)/login/       ← Login page
+│   ├── (admin)/            ← Admin pages
+│   ├── (pastor)/           ← Pastor pages
+│   └── (member)/           ← Member pages
+├── components/
+│   ├── layout/             ← Sidebar, Topbar, DashboardLayout
+│   └── shared/             ← AuthGuard, StatCard
+└── services/
+    └── api.ts              ← Axios instance with interceptors
+\`\`\`
+
 ## Status
 
 🚧 Currently in active development
