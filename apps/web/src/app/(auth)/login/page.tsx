@@ -7,9 +7,11 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
+
 export default function LoginPage() {
     const router = useRouter()
-    const [formData, setFormData] = useState({email: '', password: ''})
+    const [formData, setFormData] = useState({ email: '', password: '' })
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
 
@@ -19,17 +21,17 @@ export default function LoginPage() {
         setError('')
 
         try {
-            const {data} = await api.post('/auth/login', formData)
+            const { data } = await api.post('/auth/login', formData)
             localStorage.setItem('token', data.data.token)
             localStorage.setItem('user', JSON.stringify(data.data.user))
 
             const role = data.data.user.role
-            if (role === 'PASTOR') router.push('/pastor-dashboard')
-            else if (role === 'ADMIN') router.push('/major')
-            else router.push('/member-dashboard')
+            if (role === 'PASTOR') router.push('/pastor/dashboard')
+            else if (role === 'ADMIN') router.push('/admin/dashboard')
+            else router.push('/member/dashboard')
         } catch (error: any) {
             setError(error.response?.data?.message || 'Login Failed')
-        }finally {
+        } finally {
             setLoading(false)
         }
     }
@@ -38,9 +40,19 @@ export default function LoginPage() {
         <div className="min-h-screen flex items-center justify-center bg-slate-50">
             <Card className="w-full max-w-md shadow-lg">
                 <CardHeader className="text-center space-y-1">
-                    <div className="text-4xl mb-2">⛪</div>
+                    <div className="flex flex-col items-center justify-center w-full mb-6">
+                        <div className="relative h-16 w-16 overflow-hidden rounded-full border border-slate-700 shrink-0 bg-white flex items-center justify-center">
+                            <Image
+                                src="https://res.cloudinary.com/dfrfg6hk2/image/upload/q_auto/f_auto/v1781981549/lggmi-logo.jpg"
+                                alt="LGGMI Logo"
+                                fill
+                                className="object-cover scale-105"
+                                priority
+                            />
+                        </div>
+                    </div>
                     <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
-                    <CardDescription>Sign in to your church account</CardDescription>
+                    <CardDescription>Sign in to your account</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleSubmit} className="space-y-4">
@@ -49,7 +61,7 @@ export default function LoginPage() {
                             <Input
                                 id="email"
                                 type="email"
-                                placeholder="you@church.com"
+                                placeholder="name@example.com"
                                 value={formData.email}
                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                 required

@@ -12,6 +12,17 @@ export const getAllMembers = async () => {
     });
 }
 
+export const getMyProfile = async (userId: string) => {
+    const member = await prisma.member.findUnique({
+        where: {userId: String(userId)},
+        include: {user: true},
+    })
+
+    if (!member) throw new Error('Profile not found')
+    
+    return member
+}
+
 export const getMemberById = async (id: string) => {
     const member = await prisma.member.findUnique({
         where: {id},

@@ -16,11 +16,11 @@ const router = Router()
 router.use(protect)
 
 router.get('/active', getActive)
-router.get('/:id', getOne)
-
 router.get('/', restrictTo('PASTOR', 'ADMIN'), getAll)
 
 router.post('/', restrictTo('ADMIN'), create)
+router.get('/:id', getOne)
+
 router.patch('/:id', restrictTo('ADMIN'), update)
 router.patch('/:id/toggle', restrictTo('ADMIN'), toggle)
 router.delete('/:id', restrictTo('ADMIN'), remove)

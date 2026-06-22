@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/members', memberRoutes);
 app.use('/api/events', eventRoutes);
-app.use('/api/attendances', attendanceRoutes);
+app.use('/api/attendance', attendanceRoutes);
 app.use('/api/sermons', sermonRoutes);
 app.use('/api/donations', donationRoutes);
 app.use('/api/announcements', announcementRoutes);

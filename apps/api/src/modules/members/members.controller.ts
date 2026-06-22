@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { deactivateMember, getAllMembers, getMemberById, getMemberStats, updateMember } from "./members.service"
+import { deactivateMember, getAllMembers, getMemberById, getMemberStats, getMyProfile, updateMember } from "./members.service"
 
 export const getMembers = async (req: Request, res: Response) => {
     try {
@@ -7,6 +7,23 @@ export const getMembers = async (req: Request, res: Response) => {
         res.status(200).json({status: 'success', data: members})
     } catch (error: any) {
         res.status(500).json({status: 'error', message: error.message})
+    }
+}
+
+export const getProfile = async (req: Request, res: Response) => {
+    try {
+        const userId = req.user?.userId
+        if (typeof userId !== 'string') {
+            return res.status(400).json({
+                status: 'error',
+                message: 'Invalid ID'
+            })
+        }
+        const member = await getMyProfile(userId)
+        res.status(200).json({status: 'success', data: member})
+    } catch (error: any) {
+        console.error(error.message)
+        res.status(400).json({status: 'error', message: error.message})
     }
 }
 
