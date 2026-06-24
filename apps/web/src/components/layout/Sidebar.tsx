@@ -35,7 +35,7 @@ const navItems: Record<string, NavItem[]> = {
     ],
     MEMBER: [
         {label: 'Dashboard', href: '/member/dashboard', icon: LayoutDashboard},
-        {label: 'My Profile', href: '/member/profile', icon: Users},
+        {label: 'My Profile', href: '/member/me', icon: Users},
         {label: 'Events', href: '/member/events', icon: Calendar},
         {label: 'Sermons', href: '/member/sermons', icon: BookOpen},
         {label: 'Announcements', href: '/member/announcements', icon: Bell},

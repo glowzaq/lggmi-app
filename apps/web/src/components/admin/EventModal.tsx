@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Modal from '@/components/shared/Modal'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -47,6 +47,24 @@ export default function EventModal({
 
     const set = (key: string, value: string) =>
         setForm((prev) => ({ ...prev, [key]: value }))
+
+    useEffect(() => {
+        if (isOpen) {
+            setForm({
+                title: event?.title ?? '',
+                type: event?.type ?? 'SUNDAY_SERVICE',
+                location: event?.location ?? '',
+                description: event?.description ?? '',
+                startTime: event?.startTime
+                    ? new Date(event.startTime).toISOString().slice(0, 16)
+                    : '',
+                endTime: event?.endTime
+                    ? new Date(event.endTime).toISOString().slice(0, 16)
+                    : '',
+            })
+            setError('')
+        }
+    }, [event, isOpen])
 
     const handleSubmit = async () => {
         if (!form.title || !form.startTime) {
@@ -148,7 +166,11 @@ export default function EventModal({
                     <Button variant="outline" onClick={onClose}>
                         Cancel
                     </Button>
-                    <Button onClick={handleSubmit} disabled={loading}>
+                    <Button
+                        onClick={handleSubmit}
+                        disabled={loading}
+                        className="bg-[#693465] hover:bg-[#52284f] text-white"
+                    >
                         {loading ? 'Saving...' : isEdit ? 'Save Changes' : 'Create Event'}
                     </Button>
                 </div>

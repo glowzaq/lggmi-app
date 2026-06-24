@@ -61,7 +61,6 @@ export default function MemberDashboard() {
         BIBLE_STUDY: 'Bible Study',
         PRAYER_MEETING: 'Prayer Meeting',
         SPECIAL_PROGRAM: 'Special Program',
-        YOUTH_SERVICE: 'Youth Service',
         OTHER: 'Other',
     }
 
@@ -129,9 +128,7 @@ export default function MemberDashboard() {
                     ))}
                 </div>
 
-                {/* Main content grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Upcoming events */}
                     <Card className="lg:col-span-2">
                         <CardHeader className="flex flex-row items-center justify-between">
                             <CardTitle className="text-base font-semibold text-slate-800">
@@ -181,7 +178,6 @@ export default function MemberDashboard() {
                         </CardContent>
                     </Card>
 
-                    {/* Announcements */}
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between">
                             <CardTitle className="text-base font-semibold text-slate-800">
@@ -211,7 +207,6 @@ export default function MemberDashboard() {
                     </Card>
                 </div>
 
-                {/* Latest sermons */}
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between">
                         <CardTitle className="text-base font-semibold text-slate-800">

@@ -1,216 +1,274 @@
-# ⛪ LGGMI App
+# ⛪ Church App
 
-A full-stack web application for managing church operations including 
-member management, events, sermons, donations, attendance and more.
+A full-stack web application for managing church operations — built with
+PostgreSQL, Prisma, TypeScript, Docker, Next.js and Express.
+
+![Status](https://img.shields.io/badge/status-complete-green)
+![Stack](https://img.shields.io/badge/stack-TypeScript-blue)
+![Docker](https://img.shields.io/badge/docker-ready-blue)
+
+---
 
 ## Tech Stack
 
 | Layer | Technology |
 |---|---|
-| Frontend | Next.js + Tailwind CSS + shadcn/ui |
-| Backend | Node.js + Express + TypeScript |
-| Database | PostgreSQL |
+| Frontend | Next.js 14 · Tailwind CSS · shadcn/ui |
+| Backend | Node.js · Express · TypeScript |
+| Database | PostgreSQL 15 |
 | ORM | Prisma |
-| Infrastructure | Docker + Docker Compose |
+| Infrastructure | Docker · Docker Compose |
+| Charts | Recharts |
+| Auth | JWT · Role-based access control |
+
+---
 
 ## Features
 
-- 👥 Member Management
-- 📅 Events & Services
-- 🎙️ Sermon Archive
-- 💰 Donation Tracking
-- ✅ Attendance Management
-- 📢 Announcements
-- 🙏 Prayer Requests
-- 🔐 Role-based access (Pastor, Admin, Member)
+| Feature | Pastor | Admin | Member |
+|---|---|---|---|
+| Dashboard overview | ✅ | ✅ | ✅ |
+| Member management | 👁️ | ✅ | — |
+| Events management | 👁️ | ✅ | 👁️ |
+| Attendance tracking | 👁️ | ✅ | 👁️ |
+| Sermon archive | 👁️ | ✅ | 👁️ |
+| Donation records | 👁️ | ✅ | Own only |
+| Announcements | 👁️ | ✅ | 👁️ |
+| Prayer requests | 👁️ | ✅ | ✅ |
+
+✅ Full access · 👁️ Read only · — No access
+
+---
 
 ## Project Structure
 
 \`\`\`
-lggmi-app/
+church-app/
 ├── apps/
-│   ├── api/        # Express TypeScript Backend
-│   └── web/        # Next.js Frontend
+│   ├── api/                        ← Express TypeScript backend
+│   │   ├── src/
+│   │   │   ├── modules/
+│   │   │   │   ├── auth/
+│   │   │   │   ├── members/
+│   │   │   │   ├── events/
+│   │   │   │   ├── attendance/
+│   │   │   │   ├── sermons/
+│   │   │   │   ├── donations/
+│   │   │   │   ├── announcements/
+│   │   │   │   └── prayer-requests/
+│   │   │   ├── middleware/
+│   │   │   └── utils/
+│   │   └── prisma/schema.prisma
+│   └── web/                        ← Next.js frontend
+│       └── src/
+│           ├── app/
+│           │   ├── (auth)/
+│           │   ├── (admin)/
+│           │   ├── (pastor)/
+│           │   └── (member)/
+│           ├── components/
+│           │   ├── layout/
+│           │   ├── shared/
+│           │   └── admin/
+│           ├── services/
+│           └── hooks/
 ├── docker-compose.yml
 └── README.md
 \`\`\`
+
+---
 
 ## Getting Started
 
 ### Prerequisites
 
-Make sure you have these installed:
-- [Docker](https://www.docker.com/products/docker-desktop)
-- [Docker Compose](https://docs.docker.com/compose/)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop)
 - [Node.js](https://nodejs.org/) v18+
 - [Git](https://git-scm.com/)
 
-### Installation
+### Quick Start (Docker — recommended)
 
 \`\`\`bash
-# Clone the repository
+# 1. Clone the repository
 git clone https://github.com/YOUR_USERNAME/church-app.git
 cd church-app
 
-# Copy environment file and fill in your values
+# 2. Set up environment variables
 cp apps/api/.env.example apps/api/.env
-\`\`\`
+# Edit apps/api/.env and fill in your values
 
-### Running with Docker
+cp apps/web/.env.example apps/web/.env.local
+# Edit apps/web/.env.local and fill in your values
 
-\`\`\`bash
-# Start all services
-docker-compose up -d
+# 3. Start everything
+docker-compose up --build -d
 
-# Check running containers
+# 4. Check all containers are running
 docker ps
 \`\`\`
 
-Visit **http://localhost:5050** to access PGAdmin (database manager)
+| Service | URL |
+|---|---|
+| Frontend | http://localhost:3000 |
+| API | http://localhost:5000 |
+| PGAdmin | http://localhost:5050 |
 
-### Running the API locally
+### Local Development (without Docker)
 
 \`\`\`bash
+# Backend
 cd apps/api
 npm install
 npm run prisma:generate
 npm run prisma:push
 npm run dev
-\`\`\`
 
-API runs on **http://localhost:5000**
-Health check: **http://localhost:5000/health**
-
-### Database Management
-
-\`\`\`bash
-# Open Prisma Studio (visual DB editor)
-npm run prisma:studio
-\`\`\`
-
-### Running the Frontend
-
-\`\`\`bash
+# Frontend (new terminal)
 cd apps/web
 npm install
 npm run dev
 \`\`\`
 
-Frontend runs on **http://localhost:3000**
+---
 
-### API Endpoints
+## Environment Variables
 
-#### Auth
-| Method | Endpoint | Access | Description |
-|---|---|---|---|
-| POST | /api/auth/register | Public | Register new user |
-| POST | /api/auth/login | Public | Login |
+### `apps/api/.env`
 
-#### Members
-| Method | Endpoint | Access | Description |
-|---|---|---|---|
-| GET | /api/members | Admin, Pastor | Get all members |
-| GET | /api/members/stats | Admin, Pastor | Get member statistics |
-| GET | /api/members/:id | All | Get single member |
-| PATCH | /api/members/:id | All | Update member |
-| DELETE | /api/members/:id | Admin | Deactivate member |
+\`\`\`env
+POSTGRES_USER=church_user
+POSTGRES_PASSWORD=your_password
+POSTGRES_DB=church_db
+DATABASE_URL=postgresql://church_user:your_password@localhost:5432/church_db
+PGADMIN_EMAIL=admin@church.com
+PGADMIN_PASSWORD=admin123
+PORT=5000
+NODE_ENV=development
+JWT_SECRET=your_super_secret_key
+CORS_ORIGIN=http://localhost:3000
+\`\`\`
 
-#### Events
-| Method | Endpoint | Access | Description |
-|---|---|---|---|
-| GET | /api/events | Admin, Pastor | Get all events |
-| GET | /api/events/upcoming | All | Get upcoming events |
-| GET | /api/events/stats | Admin, Pastor | Get event statistics |
-| GET | /api/events/:id | All | Get single event |
-| POST | /api/events | Admin | Create event |
-| PATCH | /api/events/:id | Admin | Update event |
-| DELETE | /api/events/:id | Admin | Delete event |
+### `apps/web/.env.local`
 
-#### Attendance
-| Method | Endpoint | Access | Description |
-|---|---|---|---|
-| POST | /api/attendance | Admin | Mark single attendance |
-| POST | /api/attendance/bulk | Admin | Bulk mark attendance |
-| GET | /api/attendance/event/:eventId | Admin, Pastor | Get event attendance |
-| GET | /api/attendance/member/:memberId | All | Get member attendance |
-| GET | /api/attendance/stats | Admin, Pastor | Get attendance trend |
+\`\`\`env
+NEXT_PUBLIC_API_URL=http://localhost:5000/api
+\`\`\`
 
-#### Sermons
-| Method | Endpoint | Access | Description |
-|---|---|---|---|
-| GET | /api/sermons | All | Get all sermons |
-| GET | /api/sermons/latest | All | Get latest sermons |
-| GET | /api/sermons/series | All | Get all series names |
-| GET | /api/sermons/:id | All | Get single sermon |
-| POST | /api/sermons | Admin | Create sermon |
-| PATCH | /api/sermons/:id | Admin | Update sermon |
-| DELETE | /api/sermons/:id | Admin | Delete sermon |
+---
 
-#### Donations
-| Method | Endpoint | Access | Description |
-|---|---|---|---|
-| GET | /api/donations | Admin, Pastor | Get all donations |
-| GET | /api/donations/stats | Admin, Pastor | Get donation stats and trend |
-| GET | /api/donations/:id | Admin, Pastor | Get single donation |
-| GET | /api/donations/member/:memberId | All | Get member giving history |
-| POST | /api/donations | Admin | Record donation |
-| PATCH | /api/donations/:id | Admin | Update donation |
-| DELETE | /api/donations/:id | Admin | Delete donation |
+## API Reference
 
-#### Announcements
-| Method | Endpoint | Access | Description |
-|---|---|---|---|
-| GET | /api/announcements | Admin, Pastor | Get all announcements |
-| GET | /api/announcements/active | All | Get active announcements |
-| GET | /api/announcements/:id | All | Get single announcement |
-| POST | /api/announcements | Admin | Create announcement |
-| PATCH | /api/announcements/:id | Admin | Update announcement |
-| PATCH | /api/announcements/:id/toggle | Admin | Toggle active status |
-| DELETE | /api/announcements/:id | Admin | Delete announcement |
+### Auth
+| Method | Endpoint | Access |
+|---|---|---|
+| POST | /api/auth/register | Public |
+| POST | /api/auth/login | Public |
 
-#### Prayer Requests
-| Method | Endpoint | Access | Description |
-|---|---|---|---|
-| GET | /api/prayer-requests | Admin, Pastor | Get all prayer requests |
-| GET | /api/prayer-requests/public | All | Get public requests |
-| GET | /api/prayer-requests/stats | Admin, Pastor | Get prayer stats |
-| GET | /api/prayer-requests/member/:memberId | All | Get member requests |
-| GET | /api/prayer-requests/:id | All | Get single request |
-| POST | /api/prayer-requests | All | Submit prayer request |
-| PATCH | /api/prayer-requests/:id | All | Update request |
-| PATCH | /api/prayer-requests/:id/status | Admin, Pastor | Update status |
-| DELETE | /api/prayer-requests/:id | Admin | Delete request |
+### Members
+| Method | Endpoint | Access |
+|---|---|---|
+| GET | /api/members | Admin, Pastor |
+| GET | /api/members/stats | Admin, Pastor |
+| GET | /api/members/:id | All |
+| PATCH | /api/members/:id | All |
+| DELETE | /api/members/:id | Admin |
+
+### Events
+| Method | Endpoint | Access |
+|---|---|---|
+| GET | /api/events | Admin, Pastor |
+| GET | /api/events/upcoming | All |
+| GET | /api/events/stats | Admin, Pastor |
+| POST | /api/events | Admin |
+| PATCH | /api/events/:id | Admin |
+| DELETE | /api/events/:id | Admin |
+
+### Attendance
+| Method | Endpoint | Access |
+|---|---|---|
+| POST | /api/attendance | Admin |
+| POST | /api/attendance/bulk | Admin |
+| GET | /api/attendance/event/:id | Admin, Pastor |
+| GET | /api/attendance/member/:id | All |
+| GET | /api/attendance/stats | Admin, Pastor |
+
+### Sermons
+| Method | Endpoint | Access |
+|---|---|---|
+| GET | /api/sermons | All |
+| GET | /api/sermons/latest | All |
+| GET | /api/sermons/series | All |
+| POST | /api/sermons | Admin |
+| PATCH | /api/sermons/:id | Admin |
+| DELETE | /api/sermons/:id | Admin |
+
+### Donations
+| Method | Endpoint | Access |
+|---|---|---|
+| GET | /api/donations | Admin, Pastor |
+| GET | /api/donations/stats | Admin, Pastor |
+| GET | /api/donations/member/:id | All |
+| POST | /api/donations | Admin |
+| PATCH | /api/donations/:id | Admin |
+| DELETE | /api/donations/:id | Admin |
+
+### Announcements
+| Method | Endpoint | Access |
+|---|---|---|
+| GET | /api/announcements | Admin, Pastor |
+| GET | /api/announcements/active | All |
+| POST | /api/announcements | Admin |
+| PATCH | /api/announcements/:id | Admin |
+| PATCH | /api/announcements/:id/toggle | Admin |
+| DELETE | /api/announcements/:id | Admin |
+
+### Prayer Requests
+| Method | Endpoint | Access |
+|---|---|---|
+| GET | /api/prayer-requests | Admin, Pastor |
+| GET | /api/prayer-requests/public | All |
+| GET | /api/prayer-requests/stats | Admin, Pastor |
+| GET | /api/prayer-requests/member/:id | All |
+| POST | /api/prayer-requests | All |
+| PATCH | /api/prayer-requests/:id/status | Admin, Pastor |
+| DELETE | /api/prayer-requests/:id | Admin |
+
+---
 
 ## Dashboard Roles
 
 ### Pastor Dashboard
-Read-only visibility into all church metrics including member breakdown,
-attendance trends, giving reports and prayer request status.
+Read-only visibility into all church metrics. Includes member breakdown,
+attendance trends, giving reports, upcoming events and prayer requests.
 
 ### Admin Dashboard
-Full control center with live stats, giving charts, attendance trends,
-recent donations and breakdown by giving type.
+Full control center. Create and manage members, events, sermons,
+donations, announcements and prayer requests. Includes live charts.
 
 ### Member Dashboard
-Personal portal showing upcoming events, latest sermons, announcements,
-personal attendance rate and giving history.
+Personal portal. View upcoming events, latest sermons, announcements,
+personal attendance rate, giving history and prayer requests.
 
-## Frontend Structure
+---
 
+## Useful Commands
+
+\`\`\`bash
+# Docker
+docker-compose up -d           # Start all services
+docker-compose down            # Stop all services
+docker-compose down -v         # Stop and delete all data
+docker logs church_api         # API logs
+docker logs church_db          # Database logs
+
+# Prisma
+npm run prisma:studio          # Open visual DB editor
+npm run prisma:migrate         # Run migrations
+npm run prisma:generate        # Regenerate client
 \`\`\`
-src/
-├── app/
-│   ├── (auth)/login/       ← Login page
-│   ├── (admin)/            ← Admin pages
-│   ├── (pastor)/           ← Pastor pages
-│   └── (member)/           ← Member pages
-├── components/
-│   ├── layout/             ← Sidebar, Topbar, DashboardLayout
-│   └── shared/             ← AuthGuard, StatCard
-└── services/
-    └── api.ts              ← Axios instance with interceptors
-\`\`\`
 
-## Status
+---
 
-🚧 Currently in active development
+## License
+
+MIT
