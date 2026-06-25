@@ -72,6 +72,7 @@ export default function Sidebar({role}: SidebarProps) {
                         src="https://res.cloudinary.com/dfrfg6hk2/image/upload/q_auto/f_auto/v1781981549/lggmi-logo.jpg"
                         alt="LGGMI Logo"
                         fill
+                        sizes="64px"
                         className="object-cover scale-105"
                         priority
                     />

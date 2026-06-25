@@ -7,6 +7,9 @@ import {
 export const createPrayerRequest = async (
     input: CreatePrayerRequestInput
 ) => {
+    if(!input.memberId) {
+        throw new Error('Member ID must be provided')
+    }
     const member = await prisma.member.findUnique({
         where: { id: input.memberId },
     })

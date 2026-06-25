@@ -13,7 +13,7 @@ import {
 
 export const create = async (req: Request, res: Response) => {
     try {
-        const request = await createPrayerRequest(req.body)
+        const request = await createPrayerRequest({...req.body, memberId: req.user?.userId})
         res.status(201).json({
             status: 'success',
             message: 'Prayer request submitted successfully',
