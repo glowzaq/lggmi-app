@@ -60,7 +60,7 @@ export default function Sidebar({role}: SidebarProps) {
     return (
         <aside
             className={`
-        relative flex flex-col h-screen bg-[#16141a] text-white
+        relative flex flex-col h-screen bg-[#1a1118] text-white
         transition-all duration-300 ease-in-out
         ${collapsed ? 'w-16' : 'w-64'}
     `}
@@ -112,7 +112,7 @@ export default function Sidebar({role}: SidebarProps) {
 
             <button
                 onClick={() => setCollapsed(!collapsed)}
-                className="absolute -right-3 top-20 bg-slate-900 border border-slate-700 rounded-full p-1 text-slate-400 hover:text-white"
+                className="absolute -right-3 top-20 bg-[#1a1118] border border-slate-700 rounded-full p-1 text-slate-400 hover:text-white"
             >
                 {collapsed
                     ? <ChevronRight className="h-3 w-3" />
@@ -123,7 +123,7 @@ export default function Sidebar({role}: SidebarProps) {
             <div className="border-t border-slate-800 p-4">
                 <button
                     onClick={handleLogout}
-                    className="w-full flex items-center gap-3 text-sm text-slate-400
+                    className="w-full flex items-center gap-3 text-l text-white
             hover:text-red-400 transition-colors"
                 >
                     <LogOut className="h-4 w-4 shrink-0" />

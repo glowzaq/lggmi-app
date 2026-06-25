@@ -243,7 +243,7 @@ export default function PastorDashboard() {
                                         key={member.id}
                                         className="flex items-center gap-3"
                                     >
-                                        <div className="h-9 w-9 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 text-sm font-semibold shrink-0">
+                                        <div className="h-9 w-9 rounded-full bg-[#683565] flex items-center justify-center text-white text-sm font-semibold shrink-0">
                                             {member.firstName[0]}{member.lastName[0]}
                                         </div>
                                         <div className="flex-1 min-w-0">
