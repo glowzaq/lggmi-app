@@ -3,7 +3,7 @@ import {
     create,
     getAll,
     getPublic,
-    getByMember,
+    getByUser,
     getOne,
     update,
     remove,
@@ -19,7 +19,7 @@ router.use(protect)
 
 router.get('/public', getPublic)
 router.get('/stats', restrictTo('PASTOR', 'ADMIN'), getStats)
-router.get('/member/:memberId', getByMember)
+router.get('/user/:userId', getByUser)
 router.get('/', restrictTo('PASTOR', 'ADMIN'), getAll)
 router.post('/', create)
 router.get('/:id', getOne)

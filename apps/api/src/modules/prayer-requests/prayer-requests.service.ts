@@ -7,18 +7,18 @@ import {
 export const createPrayerRequest = async (
     input: CreatePrayerRequestInput
 ) => {
-    if(!input.memberId) {
-        throw new Error('Member ID must be provided')
+    if(!input.userId) {
+        throw new Error('User ID must be provided')
     }
-    const member = await prisma.member.findUnique({
-        where: { id: input.memberId },
+    const user = await prisma.user.findUnique({
+        where: { id: input.userId },
     })
-    if (!member) throw new Error('Member not found')
+    if (!user) throw new Error('User not found')
 
     return prisma.prayerRequest.create({
         data: input,
         include: {
-            member: { select: { firstName: true, lastName: true } },
+            user: { select: { firstName: true, lastName: true } },
         },
     })
 }
@@ -27,7 +27,7 @@ export const getAllPrayerRequests = async (status?: string) => {
     return prisma.prayerRequest.findMany({
         where: status ? { status: status as any } : undefined,
         include: {
-            member: { select: { firstName: true, lastName: true } },
+            user: { select: { firstName: true, lastName: true } },
         },
         orderBy: { createdAt: 'desc' },
     })
@@ -37,18 +37,18 @@ export const getPublicPrayerRequests = async () => {
     return prisma.prayerRequest.findMany({
         where: { isPrivate: false },
         include: {
-            member: { select: { firstName: true, lastName: true } },
+            user: { select: { firstName: true, lastName: true } },
         },
         orderBy: { createdAt: 'desc' },
     })
 }
 
-export const getMemberPrayerRequests = async (memberId: string) => {
-    const member = await prisma.member.findUnique({ where: { id: memberId } })
-    if (!member) throw new Error('Member not found')
+export const getUserPrayerRequests = async (userId: string) => {
+    const user = await prisma.user.findUnique({ where: { id: userId } })
+    if (!user) throw new Error('User not found')
 
     return prisma.prayerRequest.findMany({
-        where: { memberId },
+        where: { userId },
         orderBy: { createdAt: 'desc' },
     })
 }
@@ -57,7 +57,7 @@ export const getPrayerRequestById = async (id: string) => {
     const request = await prisma.prayerRequest.findUnique({
         where: { id },
         include: {
-            member: { select: { firstName: true, lastName: true } },
+            user: { select: { firstName: true, lastName: true } },
         },
     })
     if (!request) throw new Error('Prayer request not found')

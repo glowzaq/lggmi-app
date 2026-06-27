@@ -2,22 +2,22 @@ import prisma from '../../utils/prisma'
 import { CreateDonationInput, UpdateDonationInput, DonationReportFilter } from './donations.types'
 
 export const createDonation = async (input: CreateDonationInput) => {
-    const { memberId, amount, type, note, donatedAt } = input
+    const { userId, amount, type, note, donatedAt } = input
 
-    const member = await prisma.member.findUnique({ where: { id: memberId } })
-    if (!member) throw new Error('Member not found')
+    const user = await prisma.user.findUnique({ where: { id: userId } })
+    if (!user) throw new Error('User not found')
     if (amount <= 0) throw new Error('Amount must be greater than zero')
 
     return prisma.donation.create({
         data: {
-            memberId,
+            userId,
             amount,
             type: type || 'OFFERING',
             note,
             donatedAt: donatedAt ? new Date(donatedAt) : new Date(),
         },
         include: {
-            member: {
+            user: {
                 select: { firstName: true, lastName: true },
             },
         },
@@ -25,11 +25,11 @@ export const createDonation = async (input: CreateDonationInput) => {
 }
 
 export const getAllDonations = async (filter: DonationReportFilter = {}) => {
-    const { startDate, endDate, type, memberId } = filter
+    const { startDate, endDate, type, userId } = filter
 
     return prisma.donation.findMany({
         where: {
-            ...(memberId && { memberId }),
+            ...(userId && { userId }),
             ...(type && { type: type as any }),
             ...(startDate || endDate
                 ? {
@@ -41,7 +41,7 @@ export const getAllDonations = async (filter: DonationReportFilter = {}) => {
                 : {}),
         },
         include: {
-            member: {
+            user: {
                 select: { firstName: true, lastName: true },
             },
         },
@@ -49,12 +49,12 @@ export const getAllDonations = async (filter: DonationReportFilter = {}) => {
     })
 }
 
-export const getMemberDonations = async (memberId: string) => {
-    const member = await prisma.member.findUnique({ where: { id: memberId } })
-    if (!member) throw new Error('Member not found')
+export const getUserDonations = async (userId: string) => {
+    const user = await prisma.user.findUnique({ where: { id: userId } })
+    if (!user) throw new Error('User not found')
 
     const donations = await prisma.donation.findMany({
-        where: { memberId },
+        where: { userId },
         orderBy: { donatedAt: 'desc' },
     })
 
@@ -70,7 +70,7 @@ export const getDonationById = async (id: string) => {
     const donation = await prisma.donation.findUnique({
         where: { id },
         include: {
-            member: {
+            user: {
                 select: { firstName: true, lastName: true },
             },
         },

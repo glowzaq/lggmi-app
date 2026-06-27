@@ -1,4 +1,4 @@
-import { bulkMarkAttendance, getAttendanceByEvent, getAttendanceStats, getMemberAttendance, markAttendance } from "./attendance.service"
+import { bulkMarkAttendance, getAttendanceByEvent, getAttendanceStats, getUserAttendance, markAttendance } from "./attendance.service"
 import { Request, Response } from "express"
 
 export const mark = async (req: Request, res: Response) => {
@@ -55,16 +55,16 @@ export const getByEvent = async (req: Request, res: Response) => {
     }
 }
 
-export const getByMember = async (req: Request, res: Response) => {
+export const getByUser = async (req: Request, res: Response) => {
     try {
-        const { memberId } = req.params
-        if (typeof memberId !== 'string') {
+        const { userId } = req.params
+        if (typeof userId !== 'string') {
             return res.status(400).json({
                 status: 'error',
                 message: 'Invalid event ID'
             })
         }
-        const data = await getMemberAttendance(memberId)
+        const data = await getUserAttendance(userId)
         res.status(200).json({ status: 'success', data })
     } catch (error: any) {
         res.status(404).json({ status: 'error', message: error.message })

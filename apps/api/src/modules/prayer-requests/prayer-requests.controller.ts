@@ -3,7 +3,7 @@ import {
     createPrayerRequest,
     getAllPrayerRequests,
     getPublicPrayerRequests,
-    getMemberPrayerRequests,
+    getUserPrayerRequests,
     getPrayerRequestById,
     updatePrayerRequest,
     deletePrayerRequest,
@@ -13,7 +13,7 @@ import {
 
 export const create = async (req: Request, res: Response) => {
     try {
-        const request = await createPrayerRequest({...req.body, memberId: req.user?.userId})
+        const request = await createPrayerRequest({...req.body, userId: req.user?.userId})
         res.status(201).json({
             status: 'success',
             message: 'Prayer request submitted successfully',
@@ -43,17 +43,17 @@ export const getPublic = async (req: Request, res: Response) => {
     }
 }
 
-export const getByMember = async (req: Request, res: Response) => {
+export const getByUser = async (req: Request, res: Response) => {
     try {
-        const {memberId} = req.params
-        if(typeof memberId !== 'string') {
+        const {userId} = req.params
+        if(typeof userId !== 'string') {
             return res.status(400).json({
                 status: 'error',
                 message: 'Invalid ID'
             })
         }
 
-        const requests = await getMemberPrayerRequests(memberId)
+        const requests = await getUserPrayerRequests(userId)
         res.status(200).json({ status: 'success', data: requests })
     } catch (error: any) {
         res.status(404).json({ status: 'error', message: error.message })

@@ -1,7 +1,7 @@
 export interface CreateDonationInput {
-    memberId: string
+    userId: string
     amount: number
-    type?: 'TITHES' | 'OFFERING' | 'SPECIAL_SEED' | 'OTHER'
+    type?: 'TITHE' | 'OFFERING' | 'SPECIAL_SEED' | 'OTHER'
     note?: string
     donatedAt?: string
 }
@@ -12,5 +12,5 @@ export interface DonationReportFilter {
     startDate?: string
     endDate?: string
     type?: string
-    memberId?: string
+    userId?: string
 }

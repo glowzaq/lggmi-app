@@ -1,5 +1,5 @@
 export interface CreatePrayerRequestInput {
-    memberId: string
+    userId: string
     title: string
     content: string
     isPrivate?: boolean

@@ -1,5 +1,5 @@
 export interface MarkAttendanceInput {
-    memberId: string;
+    userId: string;
     eventId: string;
     note?: string;
     status?: 'PRESENT' | 'ABSENT' | 'EXCUSED'
@@ -8,7 +8,7 @@ export interface MarkAttendanceInput {
 export interface BulkAttendanceInput {
     eventId: string;
     records: {
-        memberId: string
+        userId: string
         status: 'PRESENT' | 'ABSENT' | 'EXCUSED'
         note?: string
     }[]
