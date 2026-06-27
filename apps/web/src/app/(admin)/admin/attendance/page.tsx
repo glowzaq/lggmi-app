@@ -24,7 +24,7 @@ interface Member {
 }
 
 interface AttendanceRecord {
-    memberId: string
+    userId: string
     status: 'PRESENT' | 'ABSENT' | 'EXCUSED'
 }
 
@@ -70,7 +70,7 @@ export default function AdminAttendancePage() {
         setLoadingMembers(true)
 
         const [membersRes, attendanceRes] = await Promise.all([
-            api.get('/members'),
+            api.get('/users'),
             api.get(`/attendance/event/${event.id}`),
         ])
 
@@ -82,9 +82,9 @@ export default function AdminAttendancePage() {
 
         const initialRecords: Record<string, AttendanceRecord> = {}
         memberList.forEach((m) => {
-            const found = existing.find((a) => a.memberId === m.id)
+            const found = existing.find((a) => a.userId === m.id)
             initialRecords[m.id] = {
-                memberId: m.id,
+                userId: m.id,
                 status: found ? found.status : 'PRESENT',
             }
         })
@@ -93,9 +93,9 @@ export default function AdminAttendancePage() {
         setLoadingMembers(false)
     }
 
-    const toggleStatus = (memberId: string) => {
+    const toggleStatus = (userId: string) => {
         setRecords((prev) => {
-            const current = prev[memberId]?.status || 'PRESENT'
+            const current = prev[userId]?.status || 'PRESENT'
             const cycle: Record<string, 'PRESENT' | 'ABSENT' | 'EXCUSED'> = {
                 PRESENT: 'ABSENT',
                 ABSENT: 'EXCUSED',
@@ -103,7 +103,7 @@ export default function AdminAttendancePage() {
             }
             return {
                 ...prev,
-                [memberId]: { memberId, status: cycle[current] },
+                [userId]: { userId, status: cycle[current] },
             }
         })
     }
@@ -111,7 +111,7 @@ export default function AdminAttendancePage() {
     const setAllPresent = () => {
         const updated: Record<string, AttendanceRecord> = {}
         members.forEach((m) => {
-            updated[m.id] = { memberId: m.id, status: 'PRESENT' }
+            updated[m.id] = { userId: m.id, status: 'PRESENT' }
         })
         setRecords(updated)
     }

@@ -40,13 +40,13 @@ export default function MembersPage() {
     }, [])
 
     const fetchMembers = async () => {
-        const { data } = await api.get('/members')
+        const { data } = await api.get('/users')
         setMembers(data.data)
         setLoading(false)
     }
 
     const handleDeactivate = async (id: string) => {
-        await api.delete(`/members/${id}`)
+        await api.delete(`/users/${id}`)
         setMembers((prev) =>
             prev.map((m) => (m.id === id ? { ...m, isActive: false } : m))
         )

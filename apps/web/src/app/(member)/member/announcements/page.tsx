@@ -52,8 +52,7 @@ export default function MemberAnnouncementsPage() {
                         {announcements.map((ann, index) => (
                             <Card
                                 key={ann.id}
-                                className="border-l-4 border-l-blue-500
-                  hover:shadow-md transition-shadow"
+                                className="border-l-4 border-l-blue-500 hover:shadow-md transition-shadow"
                             >
                                 <CardContent className="pt-4 space-y-2">
                                     <div className="flex items-start justify-between gap-3">

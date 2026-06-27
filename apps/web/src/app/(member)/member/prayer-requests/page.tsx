@@ -10,6 +10,7 @@ import Modal from '@/components/shared/Modal'
 import EmptyState from '@/components/shared/EmptyState'
 import Spinner from '@/components/shared/Spinner'
 import { Heart, Plus } from 'lucide-react'
+import { useCurrentUser } from '@/hooks/useCurrentUser'
 import api from '@/services/api'
 
 interface PrayerRequest {
@@ -24,12 +25,12 @@ interface PrayerRequest {
 const statusConfig = {
     PENDING: { label: 'Pending', badge: 'bg-orange-100 text-orange-700' },
     PRAYED: { label: 'Prayed For', badge: 'bg-blue-100 text-blue-700' },
-    ANSWERED: { label: 'Answered', badge: 'bg-green-100 text-green-700' },
+    ANSWERED: { label: 'Answered 🙏', badge: 'bg-green-100 text-green-700' },
 }
 
 export default function MemberPrayerPage() {
+    const { user, loading: userLoading } = useCurrentUser()
     const [requests, setRequests] = useState<PrayerRequest[]>([])
-    const [memberId, setMemberId] = useState<string | null>(null)
     const [loading, setLoading] = useState(true)
     const [modalOpen, setModalOpen] = useState(false)
     const [submitting, setSubmitting] = useState(false)
@@ -41,33 +42,26 @@ export default function MemberPrayerPage() {
     })
 
     useEffect(() => {
-        const stored = localStorage.getItem('user')
-        if (!stored) return
-        const u = JSON.parse(stored)
+        if (userLoading) return        // ← wait for hook to finish
+        if (!user || !user.id) return  // ← guard against undefined
 
-        api.get('/members/me').then(({ data }) => {
-            const memberProfile = data.data?.member || data.member || data.data
-            if (memberProfile?.id) {
-                setMemberId(memberProfile.Id)
-                return api.get(`/prayer-requests/member/${memberProfile.id}`)
-            } else {
-                throw new Error('No associated member profile found')
-            }
-            })
-
-            .then(({ data: d }) => {
-                setRequests(d.data)
+        api
+            .get(`/prayer-requests/member/${user.id}`)
+            .then(({ data }) => {
+                setRequests(data.data)
                 setLoading(false)
             })
-            .catch((err) => {
-                console.error("Dashboard data initialization failed:", err)
-                setLoading(false)
-            })
-    }, [])
+            .catch(() => setLoading(false))
+    }, [userLoading, user])          // ← depends on both
 
     const handleSubmit = async () => {
         if (!form.title || !form.content) {
             setError('Title and content are required')
+            return
+        }
+
+        if (!user?.id) {
+            setError('Could not identify your member profile. Please log in again.')
             return
         }
 
@@ -77,7 +71,7 @@ export default function MemberPrayerPage() {
         try {
             const { data } = await api.post('/prayer-requests', {
                 ...form,
-                memberId,
+                memberId: user.id,  // ← directly from the hook, always correct
             })
             setRequests((prev) => [data.data, ...prev])
             setModalOpen(false)
@@ -87,6 +81,16 @@ export default function MemberPrayerPage() {
         } finally {
             setSubmitting(false)
         }
+    }
+
+    if (userLoading || loading) {
+        return (
+            <DashboardLayout role="MEMBER">
+                <div className="p-6 py-16 flex justify-center">
+                    <Spinner text="Loading prayer requests..." />
+                </div>
+            </DashboardLayout>
+        )
     }
 
     return (
@@ -110,11 +114,7 @@ export default function MemberPrayerPage() {
                     </Button>
                 </div>
 
-                {loading ? (
-                    <div className="py-16 flex justify-center">
-                        <Spinner text="Loading prayer requests..." />
-                    </div>
-                ) : requests.length === 0 ? (
+                {requests.length === 0 ? (
                     <EmptyState
                         icon={Heart}
                         title="No prayer requests yet"
@@ -135,12 +135,14 @@ export default function MemberPrayerPage() {
                             <Card key={request.id}>
                                 <CardHeader className="pb-2">
                                     <div className="flex items-start justify-between gap-3">
-                                        <CardTitle className="text-base font-semibold text-slate-800">
+                                        <CardTitle className="text-base font-semibold
+                      text-slate-800">
                                             {request.title}
                                         </CardTitle>
                                         <div className="flex items-center gap-2 shrink-0">
                                             {request.isPrivate && (
-                                                <span className="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">
+                                                <span className="text-xs bg-slate-100 text-slate-500
+                          px-2 py-0.5 rounded-full">
                                                     Private
                                                 </span>
                                             )}
@@ -181,9 +183,7 @@ export default function MemberPrayerPage() {
                             <Label>Title *</Label>
                             <Input
                                 value={form.title}
-                                onChange={(e) =>
-                                    setForm({ ...form, title: e.target.value })
-                                }
+                                onChange={(e) => setForm({ ...form, title: e.target.value })}
                                 placeholder="Brief title for your request"
                             />
                         </div>
@@ -197,11 +197,12 @@ export default function MemberPrayerPage() {
                                 }
                                 placeholder="Share what you'd like the church to pray about..."
                                 rows={4}
-                                className="w-full px-3 py-2 border border-slate-200 rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 border border-slate-200 rounded-md
+                  text-sm resize-none focus:outline-none
+                  focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
 
-                        {/* Private toggle */}
                         <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg">
                             <input
                                 type="checkbox"

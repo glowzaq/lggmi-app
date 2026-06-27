@@ -22,6 +22,7 @@ export default function LoginPage() {
 
         try {
             const { data } = await api.post('/auth/login', formData)
+
             localStorage.setItem('token', data.data.token)
             localStorage.setItem('user', JSON.stringify(data.data.user))
 
@@ -29,8 +30,8 @@ export default function LoginPage() {
             if (role === 'PASTOR') router.push('/pastor/dashboard')
             else if (role === 'ADMIN') router.push('/admin/dashboard')
             else router.push('/member/dashboard')
-        } catch (error: any) {
-            setError(error.response?.data?.message || 'Login Failed')
+        } catch (err: any) {
+            setError(err.response?.data?.message || 'Login failed')
         } finally {
             setLoading(false)
         }
@@ -46,6 +47,7 @@ export default function LoginPage() {
                                 src="https://res.cloudinary.com/dfrfg6hk2/image/upload/q_auto/f_auto/v1781981549/lggmi-logo.jpg"
                                 alt="LGGMI Logo"
                                 fill
+                                sizes="64px"
                                 className="object-cover scale-105"
                                 priority
                             />
@@ -84,6 +86,16 @@ export default function LoginPage() {
                         <Button type="submit" className="w-full" disabled={loading}>
                             {loading ? 'Signing in...' : 'Sign In'}
                         </Button>
+                        <p className="text-center text-sm text-slate-500">
+                            New here?{' '}
+                            <button
+                                type="button"
+                                onClick={() => router.push('/register')}
+                                className="text-blue-600 hover:underline font-medium"
+                            >
+                                Create an account
+                            </button>
+                        </p>
                     </form>
                 </CardContent>
             </Card>

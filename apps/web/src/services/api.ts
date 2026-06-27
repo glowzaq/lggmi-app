@@ -1,24 +1,61 @@
-import axios from "axios";
+// import axios from "axios";
+
+// const api = axios.create({
+//     baseURL: process.env.NEXT_API_URL || 'http://localhost:5000/api',
+//     headers: { 'Content-Type': 'application/json'}
+// })
+
+// api.interceptors.request.use((config) => {
+//     const token = localStorage.getItem('token')
+//     if (token) {
+//         config.headers.Authorization = `Bearer ${token}`
+//     }
+
+//     return config
+// })
+
+// api.interceptors.response.use(
+//     (response) => response,
+//     (error) => {
+//         if (error.response?.status === 401) {
+//             localStorage.removeItem('token')
+//             window.location.href = '/login'
+//         }
+//         return Promise.reject(error)
+//     }
+// )
+
+// export default api
+
+import axios from 'axios'
 
 const api = axios.create({
-    baseURL: process.env.NEXT_API_URL || 'http://localhost:5000/api',
-    headers: { 'Content-Type': 'application/json'}
+    baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api',
+    headers: { 'Content-Type': 'application/json' },
 })
 
+// Attach token to every request
 api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token')
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`
+    // Guard against server-side rendering where localStorage doesn't exist
+    if (typeof window !== 'undefined') {
+        const token = localStorage.getItem('token')
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`
+        }
     }
-
     return config
 })
 
+// Handle auth errors globally
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response?.status === 401) {
+        if (
+            error.response?.status === 401 &&
+            typeof window !== 'undefined'
+        ) {
             localStorage.removeItem('token')
+            localStorage.removeItem('user')
             window.location.href = '/login'
         }
         return Promise.reject(error)

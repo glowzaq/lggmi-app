@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Modal from '@/components/shared/Modal'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -33,6 +33,16 @@ export default function AnnouncementModal({
 
     const set = (key: string, value: string) =>
         setForm((prev) => ({ ...prev, [key]: value }))
+
+    useEffect(() => {
+        if (isOpen) {
+            setForm({
+                title: announcement?.title ?? '',
+                content: announcement?.content ?? '',
+                expiresAt: announcement?.expiresAt ?? '',
+            })
+        }
+    }, [announcement, isOpen])
 
     const handleSubmit = async () => {
         if (!form.title || !form.content) {

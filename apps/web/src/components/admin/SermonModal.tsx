@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Modal from '@/components/shared/Modal'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -37,6 +37,20 @@ export default function SermonModal({
 
     const set = (key: string, value: string) =>
         setForm((prev) => ({ ...prev, [key]: value }))
+
+    useEffect(() => {
+        if (isOpen) {
+            setForm({
+                title: sermon?.title ?? '',
+                speaker: sermon?.speaker ?? '',
+                sermonDate: sermon?.sermonDate ?? '',
+                seriesName: sermon?.seriesName ?? '',
+                description: sermon?.description ?? '',
+                videoUrl: sermon?.videoUrl ?? '',
+                audioUrl: sermon?.audioUrl ?? '', 
+            })
+        }
+    }, [sermon, isOpen])
 
     const handleSubmit = async () => {
         if (!form.title || !form.speaker || !form.sermonDate) {

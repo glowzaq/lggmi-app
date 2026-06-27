@@ -19,7 +19,7 @@ const eventTypes = [
     'BIBLE_STUDY',
     'PRAYER_MEETING',
     'SPECIAL_PROGRAM',
-    'YOUTH_SERVICE',
+    // 'YOUTH_SERVICE',
     'OTHER',
 ]
 

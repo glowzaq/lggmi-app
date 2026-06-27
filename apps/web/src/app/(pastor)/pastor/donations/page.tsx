@@ -149,7 +149,7 @@ export default function PastorDonationsPage() {
                                             cx="50%"
                                             cy="50%"
                                             outerRadius={80}
-                                            label={({ type, percent }) =>
+                                            label={({ type, percent }: any) =>
                                                 `${type.replace('_', ' ')} ${(percent * 100).toFixed(0)}%`
                                             }
                                             labelLine={false}
