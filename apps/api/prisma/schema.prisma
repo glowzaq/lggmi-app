@@ -4,8 +4,8 @@ generator client {
 
 datasource db {
     provider = "postgresql"
-    url      = env("DATABASE_URL")
 }
+
 
 enum Role {
     PASTOR
@@ -21,12 +21,12 @@ enum Gender {
 enum MaritalStatus {
     SINGLE
     MARRIED
-    DIVORCED
     WIDOWED
+    DIVORCED
 }
 
 enum DonationType {
-    TITHES
+    TITHE
     OFFERING
     SPECIAL_SEED
     OTHER
@@ -40,8 +40,8 @@ enum AttendanceStatus {
 
 enum PrayerStatus {
     PENDING
-    ANSWERED
     PRAYED
+    ANSWERED
 }
 
 enum EventType {
@@ -52,23 +52,12 @@ enum EventType {
     OTHER
 }
 
+
 model User {
-    id        String   @id @default(uuid())
-    email     String   @unique
-    password  String
-    role      Role     @default(MEMBER)
-    isActive  Boolean  @default(true)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    member Member?
-
-    @@map("users")
-}
-
-model Member {
     id            String         @id @default(uuid())
-    userId        String         @unique
+    email         String         @unique
+    password      String
+    role          Role           @default(MEMBER)
     firstName     String
     lastName      String
     phone         String?
@@ -77,29 +66,27 @@ model Member {
     gender        Gender?
     maritalStatus MaritalStatus?
     occupation    String?
-    joinedAt      DateTime       @default(now())
     isActive      Boolean        @default(true)
+    joinedAt      DateTime       @default(now())
     createdAt     DateTime       @default(now())
     updatedAt     DateTime       @updatedAt
 
-    user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-    family         Family?         @relation(fields: [familyId], references: [id])
     familyId       String?
+    family         Family?         @relation(fields: [familyId], references: [id])
     attendances    Attendance[]
     donations      Donation[]
     prayerRequests PrayerRequest[]
 
-    @@map("members")
+    @@map("users")
 }
 
 model Family {
     id        String   @id @default(uuid())
-    name      String
+    name      String   @unique
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    // Relations
-    members Member[]
+    members User[]
 
     @@map("families")
 }
@@ -115,7 +102,6 @@ model Event {
     createdAt   DateTime  @default(now())
     updatedAt   DateTime  @updatedAt
 
-    // Relations
     attendances Attendance[]
 
     @@map("events")
@@ -128,13 +114,12 @@ model Attendance {
     createdAt DateTime         @default(now())
     updatedAt DateTime         @updatedAt
 
-    // Relations
-    member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
-    memberId String
-    event    Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
-    eventId  String
+    userId  String
+    user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    eventId String
+    event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
-    @@unique([memberId, eventId])
+    @@unique([userId, eventId])
     @@map("attendances")
 }
 
@@ -175,9 +160,8 @@ model Donation {
     createdAt DateTime     @default(now())
     updatedAt DateTime     @updatedAt
 
-    // Relations
-    member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
-    memberId String
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@map("donations")
 }
@@ -191,9 +175,8 @@ model PrayerRequest {
     createdAt DateTime     @default(now())
     updatedAt DateTime     @updatedAt
 
-    // Relations
-    member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
-    memberId String
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@map("prayer_requests")
 }
