@@ -1,19 +1,19 @@
 export interface RegisterInput {
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-    phone?: string;
-    role?: 'PASTOR' | 'ADMIN' | 'MEMBER';
+    email: string
+    password: string
+    firstName: string
+    lastName: string
+    phone?: string
+    role?: 'PASTOR' | 'ADMIN' | 'MEMBER'
 }
 
 export interface LoginInput {
-    email: string;
-    password: string;
+    email: string
+    password: string
 }
 
 export interface JwtPayload {
-    email: string;
-    userId: string;
-    role: string;
+    userId: string
+    email: string
+    role: string
 }
