@@ -1,6 +1,6 @@
 'use client'
 
-import { Bell, BookOpen, Calendar, CheckSquare, ChevronLeft, ChevronRight, Church, DollarSign, Heart, LayoutDashboard, LogOut, Users } from "lucide-react"
+import { Bell, BookOpen, Calendar, CheckSquare, ChevronLeft, ChevronRight, DollarSign, Heart, LayoutDashboard, LogOut, Users } from "lucide-react"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
@@ -18,7 +18,7 @@ interface SidebarProps {
 const navItems: Record<string, NavItem[]> = {
     ADMIN: [
         {label: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard},
-        {label: 'Members', href: '/admin/members', icon: Users},
+        {label: 'Users', href: '/admin/members', icon: Users},
         {label: 'Events', href: '/admin/events', icon: Calendar},
         {label: 'Attendance', href: '/admin/attendance', icon: CheckSquare},
         {label: 'Sermons', href: '/admin/sermons', icon: BookOpen},
@@ -28,7 +28,7 @@ const navItems: Record<string, NavItem[]> = {
     ],
     PASTOR: [
         {label: 'Dashboard', href: '/pastor/dashboard', icon: LayoutDashboard},
-        {label: 'Members', href: '/pastor/members', icon: Users},
+        {label: 'Users', href: '/pastor/users', icon: Users},
         {label: 'Attendance', href: '/pastor/attendance', icon: CheckSquare},
         {label: 'Donations', href: '/pastor/donations', icon: DollarSign},
         {label: 'Prayer Requests', href: '/pastor/prayer-requests', icon: Heart},

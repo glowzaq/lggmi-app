@@ -18,7 +18,8 @@ interface Member {
     maritalStatus: string | null
     occupation: string | null
     joinedAt: string
-    user: { email: string; role: string }
+    role: string
+    email: string
 }
 
 export default function PastorMembersPage() {
@@ -27,14 +28,14 @@ export default function PastorMembersPage() {
     const [search, setSearch] = useState('')
 
     useEffect(() => {
-        api.get('/members').then(({ data }) => {
+        api.get('/users').then(({ data }) => {
             setMembers(data.data)
             setLoading(false)
         })
     }, [])
 
     const filtered = members.filter((m) =>
-        `${m.firstName} ${m.lastName} ${m.user.email}`
+        `${m.firstName} ${m.lastName} ${m.email}`
             .toLowerCase()
             .includes(search.toLowerCase())
     )
@@ -89,7 +90,7 @@ export default function PastorMembersPage() {
                                                 {member.firstName} {member.lastName}
                                             </p>
                                             <p className="text-xs text-slate-400 truncate">
-                                                {member.user.email}
+                                                {member.email}
                                             </p>
                                         </div>
                                     </div>

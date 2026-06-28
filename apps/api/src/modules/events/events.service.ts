@@ -36,7 +36,7 @@ export const getEventById = async (id: string) => {
         include: {
             attendances: {
                 include: {
-                    member: {
+                    user: {
                         select: {firstName: true, lastName: true},
                     },
                 },

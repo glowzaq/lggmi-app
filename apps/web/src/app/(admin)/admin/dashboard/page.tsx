@@ -25,7 +25,7 @@ export default function AdminDashboard() {
 
     useEffect(() => {
         Promise.all([
-            api.get('/members/stats'),
+            api.get('/users/stats'),
             api.get('/donations/stats'),
             api.get('/attendance/stats'),
             api.get('/prayer-requests/stats'),

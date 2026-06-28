@@ -59,7 +59,7 @@ export default function AdminDonationsPage() {
     const [submitting, setSubmitting] = useState(false)
     const [formError, setFormError] = useState('')
     const [form, setForm] = useState({
-        memberId: '',
+        userId: '',
         amount: '',
         type: 'OFFERING',
         note: '',
@@ -70,7 +70,7 @@ export default function AdminDonationsPage() {
         const [statsRes, donationsRes, membersRes] = await Promise.all([
             api.get('/donations/stats'),
             api.get('/donations'),
-            api.get('/members'),
+            api.get('/users'),
         ])
         setStats(statsRes.data.data)
         setDonations(donationsRes.data.data)
@@ -81,7 +81,7 @@ export default function AdminDonationsPage() {
     useEffect(() => { fetchData() }, [])
 
     const handleSubmit = async () => {
-        if (!form.memberId || !form.amount) {
+        if (!form.userId || !form.amount) {
             setFormError('Member and amount are required')
             return
         }
@@ -100,7 +100,7 @@ export default function AdminDonationsPage() {
             })
             setModalOpen(false)
             setForm({
-                memberId: '',
+                userId: '',
                 amount: '',
                 type: 'OFFERING',
                 note: '',
@@ -304,8 +304,8 @@ export default function AdminDonationsPage() {
                     <div className="space-y-1.5">
                         <Label>Member *</Label>
                         <select
-                            value={form.memberId}
-                            onChange={(e) => setForm({ ...form, memberId: e.target.value })}
+                            value={form.userId}
+                            onChange={(e) => setForm({ ...form, userId: e.target.value })}
                             className="w-full px-3 py-2 border border-slate-200 rounded-md
                 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >

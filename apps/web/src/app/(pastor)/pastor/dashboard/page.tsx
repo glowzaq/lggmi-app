@@ -25,12 +25,12 @@ export default function PastorDashboard() {
 
     useEffect(() => {
         Promise.all([
-            api.get('/members/stats'),
+            api.get('/users/stats'),
             api.get('/donations/stats'),
             api.get('/attendance/stats'),
             api.get('/prayer-requests/stats'),
             api.get('/events/stats'),
-            api.get('/members'),
+            api.get('/users'),
         ]).then(([m, d, a, p, e, rm]) => {
             setMemberStats(m.data.data)
             setDonationStats(d.data.data)

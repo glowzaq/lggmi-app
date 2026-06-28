@@ -5,13 +5,14 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import path from 'path';
 import authRoutes from './modules/auth/auth.routes';
-import memberRoutes from './modules/members/members.routes';
+import userRoutes from './modules/users/users.routes';
 import eventRoutes from './modules/events/events.routes';
 import sermonRoutes from './modules/sermons/sermons.routes'
 import attendanceRoutes from './modules/attendance/attendance.routes';
 import donationRoutes from './modules/donations/donations.routes';
 import announcementRoutes from './modules/announcements/announcements.routes';
 import prayerRequestRoutes from './modules/prayer-requests/prayer-requests.routes';
+import familyRoutes from './modules/families/families.routes';
 
 dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 
@@ -29,13 +30,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/auth', authRoutes);
-app.use('/api/members', memberRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/attendance', attendanceRoutes);
 app.use('/api/sermons', sermonRoutes);
 app.use('/api/donations', donationRoutes);
 app.use('/api/announcements', announcementRoutes);
 app.use('/api/prayer-requests', prayerRequestRoutes);
+app.use('/api/families', familyRoutes);
 
 app.get('/health', (req: Request, res: Response) => {
     res.status(200).json({

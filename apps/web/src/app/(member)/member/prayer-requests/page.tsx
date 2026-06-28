@@ -46,7 +46,7 @@ export default function MemberPrayerPage() {
         if (!user || !user.id) return  // ← guard against undefined
 
         api
-            .get(`/prayer-requests/member/${user.id}`)
+            .get(`/prayer-requests/user/${user.id}`)
             .then(({ data }) => {
                 setRequests(data.data)
                 setLoading(false)
@@ -71,7 +71,7 @@ export default function MemberPrayerPage() {
         try {
             const { data } = await api.post('/prayer-requests', {
                 ...form,
-                memberId: user.id,  // ← directly from the hook, always correct
+                userId: user.id,  // ← directly from the hook, always correct
             })
             setRequests((prev) => [data.data, ...prev])
             setModalOpen(false)

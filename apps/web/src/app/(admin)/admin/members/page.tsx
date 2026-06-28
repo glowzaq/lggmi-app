@@ -14,12 +14,13 @@ interface Member {
     firstName: string
     lastName: string
     maritalStatus: string | null
+    email: string
+    role: string
     gender: string | null
     phone: string | null
     occupation: string | null
     isActive: boolean
     joinedAt: string
-    user: { email: string, role: string }
 }
 
 const roleColors: Record<string, string> = {
@@ -56,7 +57,7 @@ export default function MembersPage() {
     const filtered = useMemo(() => {
         return members.filter((m) => {
             const matchesSearch =
-                `${m.firstName} ${m.lastName} ${m.user.email}`
+                `${m.firstName} ${m.lastName} ${m.email}`
                     .toLowerCase()
                     .includes(search.toLowerCase())
 
@@ -173,7 +174,7 @@ export default function MembersPage() {
                                                 </td>
 
                                                 <td className="px-4 py-3">
-                                                    <p className="text-slate-600">{member.user.email}</p>
+                                                    <p className="text-slate-600">{member.email}</p>
                                                     {member.phone && (
                                                         <p className="text-xs text-slate-400">
                                                             {member.phone}
@@ -196,8 +197,8 @@ export default function MembersPage() {
 
                                                 <td className="px-4 py-3">
                                                     <span className={`text-xs px-2 py-1 rounded-full
-                            font-medium ${roleColors[member.user.role]}`}>
-                                                        {member.user.role}
+                            font-medium ${roleColors[member.role]}`}>
+                                                        {member.role}
                                                     </span>
                                                 </td>
 

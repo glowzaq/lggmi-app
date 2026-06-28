@@ -25,7 +25,7 @@ export default function RegisterPage() {
         email: '',
         password: '',
         confirmPassword: '',
-        phone: '',
+        phone: ''
     })
 
     const set = (key: string, value: string) =>

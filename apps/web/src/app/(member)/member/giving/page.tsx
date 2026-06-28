@@ -45,7 +45,7 @@ export default function MemberGivingPage() {
         if (!user || !user.id) return
 
         api
-            .get(`/donations/member/${user.id}`)
+            .get(`/donations/user/${user.id}`)
             .then(({ data }) => {
                 setDonations(data.data?.donations ?? [])
                 setTotal(Number(data.data?.total ?? 0))

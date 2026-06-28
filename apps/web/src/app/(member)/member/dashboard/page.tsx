@@ -29,8 +29,8 @@ export default function MemberDashboard() {
             api.get('/events/upcoming'),
             api.get('/sermons/latest'),
             api.get('/announcements/active'),
-            api.get(`/attendance/member/${user.id}`),
-            api.get(`/donations/member/${user.id}`),
+            api.get(`/attendance/user/${user.id}`),
+            api.get(`/donations/user/${user.id}`),
         ])
             .then(([e, s, a, att, don]) => {
                 setUpcomingEvents(e.data.data.slice(0, 3))

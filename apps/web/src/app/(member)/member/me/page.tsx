@@ -73,7 +73,7 @@ export default function MemberProfilePage() {
         setSaving(true)
         setError('')
         try {
-            await api.patch(`/members/${user.id}`, {
+            await api.patch(`/users/${user.id}`, {
                 ...form,
                 gender: form.gender || undefined,
                 maritalStatus: form.maritalStatus || undefined,
