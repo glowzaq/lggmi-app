@@ -25,16 +25,16 @@ PostgreSQL, Prisma, TypeScript, Docker, Next.js and Express.
 
 ## Features
 
-| Feature | Pastor | Admin | Member |
-|---|---|---|---|
-| Dashboard overview | ✅ | ✅ | ✅ |
-| Member management | 👁️ | ✅ | — |
-| Events management | 👁️ | ✅ | 👁️ |
-| Attendance tracking | 👁️ | ✅ | 👁️ |
-| Sermon archive | 👁️ | ✅ | 👁️ |
+| Feature | Pastor | Admin | Member | Worker |
+|---|---|---|---|---|
+| Dashboard overview | ✅ | ✅ | ✅ | ✅ |
+| Member management | 👁️ | ✅ | — | 👁️ |
+| Events management | 👁️ | ✅ | 👁️ | Create only |
+| Attendance tracking | 👁️ | ✅ | 👁️ | ✅ |
+| Sermon archive | 👁️ | ✅ | 👁️ | Create only |
 | Donation records | 👁️ | ✅ | Own only |
-| Announcements | 👁️ | ✅ | 👁️ |
-| Prayer requests | 👁️ | ✅ | ✅ |
+| Announcements | 👁️ | ✅ | 👁️ | Create only |
+| Prayer requests | 👁️ | ✅ | ✅ | 👁️
 
 ✅ Full access · 👁️ Read only · — No access
 
@@ -66,6 +66,7 @@ church-app/
 │           │   ├── (admin)/
 │           │   ├── (pastor)/
 │           │   └── (member)/
+│           │   └── (worker)/
 │           ├── components/
 │           │   ├── layout/
 │           │   ├── shared/
@@ -163,12 +164,13 @@ NEXT_PUBLIC_API_URL=http://localhost:5000/api
 |---|---|---|
 | POST | /api/auth/register | Public |
 | POST | /api/auth/login | Public |
+| POST | /api/auth/create-worker | Admin-only
 
 ### Members
 | Method | Endpoint | Access |
 |---|---|---|
-| GET | /api/members | Admin, Pastor |
-| GET | /api/members/stats | Admin, Pastor |
+| GET | /api/members | Admin, Pastor, Worker |
+| GET | /api/members/stats | Admin, Pastor, Worker |
 | GET | /api/members/:id | All |
 | PATCH | /api/members/:id | All |
 | DELETE | /api/members/:id | Admin |
@@ -176,21 +178,21 @@ NEXT_PUBLIC_API_URL=http://localhost:5000/api
 ### Events
 | Method | Endpoint | Access |
 |---|---|---|
-| GET | /api/events | Admin, Pastor |
+| GET | /api/events | Admin, Pastor, Worker |
 | GET | /api/events/upcoming | All |
-| GET | /api/events/stats | Admin, Pastor |
-| POST | /api/events | Admin |
+| GET | /api/events/stats | Admin, Pastor, Worker |
+| POST | /api/events | Admin, Worker |
 | PATCH | /api/events/:id | Admin |
 | DELETE | /api/events/:id | Admin |
 
 ### Attendance
 | Method | Endpoint | Access |
 |---|---|---|
-| POST | /api/attendance | Admin |
-| POST | /api/attendance/bulk | Admin |
-| GET | /api/attendance/event/:id | Admin, Pastor |
+| POST | /api/attendance | Admin, Worker |
+| POST | /api/attendance/bulk | Admin, Worker |
+| GET | /api/attendance/event/:id | Admin, Pastor, Worker |
 | GET | /api/attendance/member/:id | All |
-| GET | /api/attendance/stats | Admin, Pastor |
+| GET | /api/attendance/stats | Admin, Pastor, Worker |
 
 ### Sermons
 | Method | Endpoint | Access |
@@ -198,7 +200,7 @@ NEXT_PUBLIC_API_URL=http://localhost:5000/api
 | GET | /api/sermons | All |
 | GET | /api/sermons/latest | All |
 | GET | /api/sermons/series | All |
-| POST | /api/sermons | Admin |
+| POST | /api/sermons | Admin, Worker |
 | PATCH | /api/sermons/:id | Admin |
 | DELETE | /api/sermons/:id | Admin |
 
@@ -215,9 +217,9 @@ NEXT_PUBLIC_API_URL=http://localhost:5000/api
 ### Announcements
 | Method | Endpoint | Access |
 |---|---|---|
-| GET | /api/announcements | Admin, Pastor |
+| GET | /api/announcements | Admin, Pastor, Worker |
 | GET | /api/announcements/active | All |
-| POST | /api/announcements | Admin |
+| POST | /api/announcements | Admin, Worker |
 | PATCH | /api/announcements/:id | Admin |
 | PATCH | /api/announcements/:id/toggle | Admin |
 | DELETE | /api/announcements/:id | Admin |
@@ -225,9 +227,9 @@ NEXT_PUBLIC_API_URL=http://localhost:5000/api
 ### Prayer Requests
 | Method | Endpoint | Access |
 |---|---|---|
-| GET | /api/prayer-requests | Admin, Pastor |
+| GET | /api/prayer-requests | Admin, Pastor, Worker |
 | GET | /api/prayer-requests/public | All |
-| GET | /api/prayer-requests/stats | Admin, Pastor |
+| GET | /api/prayer-requests/stats | Admin, Pastor, Worker |
 | GET | /api/prayer-requests/member/:id | All |
 | POST | /api/prayer-requests | All |
 | PATCH | /api/prayer-requests/:id/status | Admin, Pastor |
@@ -249,6 +251,8 @@ donations, announcements and prayer requests. Includes live charts.
 Personal portal. View upcoming events, latest sermons, announcements,
 personal attendance rate, giving history and prayer requests.
 
+### Worker Dashboard
+Partial control center. Create events, sermons, announcements and prayer requests. Includes attendance live charts
 ---
 
 ## Useful Commands
