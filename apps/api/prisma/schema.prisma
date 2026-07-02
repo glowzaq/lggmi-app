@@ -1,0 +1,184 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+
+enum Role {
+    PASTOR
+    ADMIN
+    MEMBER
+    WORKER
+}
+
+enum Gender {
+    MALE
+    FEMALE
+}
+
+enum MaritalStatus {
+    SINGLE
+    MARRIED
+    WIDOWED
+    DIVORCED
+}
+
+enum DonationType {
+    TITHE
+    OFFERING
+    SPECIAL_SEED
+    OTHER
+}
+
+enum AttendanceStatus {
+    PRESENT
+    ABSENT
+    EXCUSED
+}
+
+enum PrayerStatus {
+    PENDING
+    PRAYED
+    ANSWERED
+}
+
+enum EventType {
+    SUNDAY_SERVICE
+    BIBLE_STUDY
+    PRAYER_MEETING
+    SPECIAL_PROGRAM
+    OTHER
+}
+
+
+model User {
+    id            String         @id @default(uuid())
+    email         String         @unique
+    password      String
+    role          Role           @default(MEMBER)
+    firstName     String
+    lastName      String
+    phone         String?
+    address       String?
+    dateOfBirth   DateTime?
+    gender        Gender?
+    maritalStatus MaritalStatus?
+    occupation    String?
+    isActive      Boolean        @default(true)
+    joinedAt      DateTime       @default(now())
+    createdAt     DateTime       @default(now())
+    updatedAt     DateTime       @updatedAt
+
+    familyId       String?
+    family         Family?         @relation(fields: [familyId], references: [id])
+    attendances    Attendance[]
+    donations      Donation[]
+    prayerRequests PrayerRequest[]
+
+    @@map("users")
+}
+
+model Family {
+    id        String   @id @default(uuid())
+    name      String   @unique
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    members User[]
+
+    @@map("families")
+}
+
+model Event {
+    id          String    @id @default(uuid())
+    title       String
+    description String?
+    type        EventType @default(SUNDAY_SERVICE)
+    location    String?
+    startTime   DateTime
+    endTime     DateTime?
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+
+    attendances Attendance[]
+
+    @@map("events")
+}
+
+model Attendance {
+    id        String           @id @default(uuid())
+    status    AttendanceStatus @default(PRESENT)
+    note      String?
+    createdAt DateTime         @default(now())
+    updatedAt DateTime         @updatedAt
+
+    userId  String
+    user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    eventId String
+    event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+    @@unique([userId, eventId])
+    @@map("attendances")
+}
+
+model Sermon {
+    id           String   @id @default(uuid())
+    title        String
+    speaker      String
+    description  String?
+    videoUrl     String?
+    audioUrl     String?
+    thumbnailUrl String?
+    sermonDate   DateTime
+    seriesName   String?
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+
+    @@map("sermons")
+}
+
+model Announcement {
+    id        String    @id @default(uuid())
+    title     String
+    content   String
+    isActive  Boolean   @default(true)
+    expiresAt DateTime?
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+
+    @@map("announcements")
+}
+
+model Donation {
+    id        String       @id @default(uuid())
+    amount    Decimal      @db.Decimal(10, 2)
+    type      DonationType @default(OFFERING)
+    note      String?
+    donatedAt DateTime     @default(now())
+    createdAt DateTime     @default(now())
+    updatedAt DateTime     @updatedAt
+
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@map("donations")
+}
+
+model PrayerRequest {
+    id        String       @id @default(uuid())
+    title     String
+    content   String
+    status    PrayerStatus @default(PENDING)
+    isPrivate Boolean      @default(false)
+    createdAt DateTime     @default(now())
+    updatedAt DateTime     @updatedAt
+
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@map("prayer_requests")
+}
