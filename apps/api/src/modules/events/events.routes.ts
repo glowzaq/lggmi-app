@@ -5,11 +5,11 @@ import { restrictTo } from "../../middleware/role.middleware";
 
 const router = Router()
 router.use(protect)
-router.get('/stats', restrictTo('PASTOR', 'ADMIN'), getStats)
+router.get('/stats', restrictTo('PASTOR', 'ADMIN', 'WORKER'), getStats)
 router.get('/upcoming', getUpcoming)
-router.get('/', restrictTo('PASTOR', 'ADMIN'), getEvents)
+router.get('/', restrictTo('PASTOR', 'ADMIN', 'WORKER'), getEvents)
 
-router.post('/', restrictTo('ADMIN'), create)
+router.post('/', restrictTo('ADMIN', 'WORKER'), create)
 router.get('/:id', getEvent)
 
 router.patch('/:id', restrictTo('ADMIN'), update)

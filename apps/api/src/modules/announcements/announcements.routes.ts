@@ -16,13 +16,13 @@ const router = Router()
 router.use(protect)
 
 router.get('/active', getActive)
-router.get('/', restrictTo('PASTOR', 'ADMIN'), getAll)
+router.get('/', restrictTo('PASTOR', 'ADMIN', 'WORKER'), getAll)
 
-router.post('/', restrictTo('ADMIN'), create)
+router.post('/', restrictTo('ADMIN', 'WORKER'), create)
 router.get('/:id', getOne)
 
 router.patch('/:id', restrictTo('ADMIN'), update)
-router.patch('/:id/toggle', restrictTo('ADMIN'), toggle)
+router.patch('/:id/toggle', restrictTo('ADMIN', 'WORKER'), toggle)
 router.delete('/:id', restrictTo('ADMIN'), remove)
 
 export default router

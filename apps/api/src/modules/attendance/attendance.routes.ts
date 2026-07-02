@@ -6,12 +6,12 @@ import { bulkMark, getByEvent, getByUser, getStats, mark } from "./attendance.co
 const router = Router()
 router.use(protect)
 
-router.get('/stats', restrictTo('ADMIN', 'PASTOR'), getStats)
+router.get('/stats', restrictTo('ADMIN', 'PASTOR', 'WORKER'), getStats)
 
-router.get('/event/:eventId', restrictTo('ADMIN', 'PASTOR'), getByEvent)
+router.get('/event/:eventId', restrictTo('ADMIN', 'PASTOR', 'WORKER'), getByEvent)
 router.get('/user/:userId', getByUser)
 
-router.post('/', restrictTo('ADMIN'), mark)
-router.post('/bulk', restrictTo('ADMIN'), bulkMark)
+router.post('/', restrictTo('ADMIN', 'WORKER'), mark)
+router.post('/bulk', restrictTo('ADMIN', 'WORKER'), bulkMark)
 
 export default router

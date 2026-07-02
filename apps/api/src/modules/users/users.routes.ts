@@ -7,8 +7,9 @@ const router = Router()
 
 router.use(protect)
 
-router.get('/stats', restrictTo('PASTOR', 'ADMIN'), getStats)
-router.get('/', restrictTo('PASTOR', 'ADMIN'), getUsers)
+router.get('/stats', restrictTo('PASTOR', 'ADMIN', 'WORKER'), getStats)
+router.get('/', restrictTo('PASTOR', 'ADMIN', 'WORKER'), getUsers)
+// router.post('/', restrictTo('ADMIN', 'WORKER'), createUser)
 
 router.delete('/:id', restrictTo('ADMIN'), removeUser)
 

@@ -58,6 +58,35 @@ export const loginUser = async (input: LoginInput) => {
     }
 }
 
+export const createWorkerAccount = async (
+    input: RegisterInput,
+    createdByRole: string
+) => {
+    if (createdByRole !== 'ADMIN') {
+        throw new Error('Only admins can create worker accounts')
+    }
+
+    const existing = await prisma.user.findUnique({
+        where: { email: input.email },
+    })
+    if (existing) throw new Error('A user with this email already exists')
+
+    const hashedPassword = await bcrypt.hash(input.password, 12)
+
+    const user = await prisma.user.create({
+        data: {
+            email: input.email,
+            password: hashedPassword,
+            role: input.role || 'WORKER',
+            firstName: input.firstName,
+            lastName: input.lastName,
+            phone: input.phone,
+        },
+    })
+
+    return formatUser(user)
+}
+
 export const getMyProfile = async (userId: string) => {
     const user = await prisma.user.findUnique({
         where: { id: userId },

@@ -8,7 +8,7 @@ router.use(protect)
 router.get('/latest', getLatest)
 router.get('/series', getSeries)
 router.get('/', getAll)
-router.post('/', restrictTo('ADMIN'), create)
+router.post('/', restrictTo('ADMIN', 'WORKER'), create)
 router.get('/:id', getOne)
 
 router.patch('/:id', restrictTo('ADMIN'), update)

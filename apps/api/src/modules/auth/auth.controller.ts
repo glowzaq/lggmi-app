@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { registerUser, loginUser, getMyProfile } from './auth.services'
+import { registerUser, loginUser, getMyProfile, createWorkerAccount } from './auth.services'
 
 export const register = async (req: Request, res: Response) => {
     try {
@@ -33,5 +33,18 @@ export const getMe = async (req: Request, res: Response) => {
         res.status(200).json({ status: 'success', data: profile })
     } catch (error: any) {
         res.status(404).json({ status: 'error', message: error.message })
+    }
+}
+
+export const createWorker = async (req: Request, res: Response) => {
+    try {
+        const result = await createWorkerAccount(req.body, req.user!.role)
+        res.status(201).json({
+            status: 'success',
+            message: 'Worker account created successfully',
+            data: result,
+        })
+    } catch (error: any) {
+        res.status(400).json({ status: 'error', message: error.message })
     }
 }
