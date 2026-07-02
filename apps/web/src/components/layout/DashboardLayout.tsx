@@ -6,7 +6,7 @@ import AuthGuard from '../shared/AuthGuard'
 
 interface DashboardLayoutProps {
     children: React.ReactNode
-    role: 'PASTOR' | 'ADMIN' | 'MEMBER'
+    role: 'PASTOR' | 'ADMIN' | 'MEMBER' | 'WORKER'
 }
 
 export default function DashboardLayout({ children, role }: DashboardLayoutProps) {

@@ -26,6 +26,7 @@ export default function AuthGuard({children, allowedRoles}: AuthGuardProps){
         if(allowedRoles && !allowedRoles.includes(user.role)) {
             if (user.role === 'PASTOR') router.replace('/pastor/dashboard')
             else if (user.role === 'ADMIN') router.replace('/admin/dashboard')
+            else if (user.role === 'WORKER') router.replace('/worker/dashboard')
             else router.replace('/member/dashboard')
             
             return

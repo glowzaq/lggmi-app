@@ -29,11 +29,11 @@ const eventTypeColors: Record<string, string> = {
     OTHER: 'bg-slate-100 text-slate-700',
 }
 
-export default function AdminEventsPage() {
+export default function WorkerEventsPage() {
     const [events, setEvents] = useState<Event[]>([])
     const [loading, setLoading] = useState(true)
     const [modalOpen, setModalOpen] = useState(false)
-    const [editingEvent, setEditingEvent] = useState<Event | null>(null)
+    // const [editingEvent, setEditingEvent] = useState<Event | null>(null)
 
     const fetchEvents = async () => {
         const { data } = await api.get('/events')
@@ -43,24 +43,12 @@ export default function AdminEventsPage() {
 
     useEffect(() => { fetchEvents() }, [])
 
-    const handleDelete = async (id: string) => {
-        if (!confirm('Delete this event?')) return
-        await api.delete(`/events/${id}`)
-        setEvents((prev) => prev.filter((e) => e.id !== id))
-    }
-
     const handleOpenCreate = () => {
-        setEditingEvent(null)
-        setModalOpen(true)
-    }
-
-    const handleOpenEdit = (event: Event) => {
-        setEditingEvent(event)
         setModalOpen(true)
     }
 
     return (
-        <DashboardLayout role="ADMIN">
+        <DashboardLayout role="WORKER">
             <div className="p-6 space-y-6">
                 <div className="flex items-center justify-between">
                     <div>
@@ -140,20 +128,6 @@ export default function AdminEventsPage() {
                                             </span>{' '}
                                             attendees
                                         </p>
-                                        <div className="flex gap-1">
-                                            <button
-                                                onClick={() => handleOpenEdit(event)}
-                                                className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"
-                                            >
-                                                <Pencil className="h-3.5 w-3.5 text-slate-500" />
-                                            </button>
-                                            <button
-                                                onClick={() => handleDelete(event.id)}
-                                                className="p-1.5 hover:bg-red-50 rounded-lg transition-colors"
-                                            >
-                                                <Trash2 className="h-3.5 w-3.5 text-red-500" />
-                                            </button>
-                                        </div>
                                     </div>
                                 </CardContent>
                             </Card>
@@ -166,7 +140,6 @@ export default function AdminEventsPage() {
                 isOpen={modalOpen}
                 onClose={() => setModalOpen(false)}
                 onSuccess={fetchEvents}
-                event={editingEvent}
             />
         </DashboardLayout>
     )

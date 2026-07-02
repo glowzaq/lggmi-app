@@ -109,11 +109,10 @@ export default function MemberProfilePage() {
                     </p>
                 </div>
 
-                {/* Avatar + basic info */}
                 <Card>
                     <CardContent className="pt-6">
                         <div className="flex items-center gap-4">
-                            <div className="h-16 w-16 rounded-full bg-blue-600 flex
+                            <div className="h-16 w-16 rounded-full bg-[#693565] flex
                 items-center justify-center text-white text-2xl font-bold shrink-0">
                                 {user?.firstName[0]}{user?.lastName[0]}
                             </div>
@@ -123,7 +122,7 @@ export default function MemberProfilePage() {
                                 </h2>
                                 <p className="text-slate-500 text-sm">{user?.email}</p>
                                 <div className="flex items-center gap-2 mt-1">
-                                    <span className="text-xs bg-blue-100 text-blue-700
+                                    <span className="text-xs bg-purple-900 text-white
                     px-2 py-0.5 rounded-full font-medium">
                                         {user?.role}
                                     </span>

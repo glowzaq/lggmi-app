@@ -58,7 +58,6 @@ export default function AdminDashboard() {
                     <p className="text-slate-500">Full control center</p>
                 </div>
 
-                {/* Stats grid */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     <StatCard
                         title="Total Members"
@@ -161,7 +160,7 @@ export default function AdminDashboard() {
                                     >
                                         <div>
                                             <p className="text-sm font-medium text-slate-800">
-                                                {d.member.firstName} {d.member.lastName}
+                                                {d.user.firstName} {d.user.lastName}
                                             </p>
                                             <p className="text-xs text-slate-400">
                                                 {d.type.replace('_', ' ')} ·{' '}

@@ -25,7 +25,7 @@ interface PrayerRequest {
 const statusConfig = {
     PENDING: { label: 'Pending', badge: 'bg-orange-100 text-orange-700' },
     PRAYED: { label: 'Prayed For', badge: 'bg-blue-100 text-blue-700' },
-    ANSWERED: { label: 'Answered 🙏', badge: 'bg-green-100 text-green-700' },
+    ANSWERED: { label: 'Answered', badge: 'bg-green-100 text-green-700' },
 }
 
 export default function MemberPrayerPage() {
@@ -42,8 +42,8 @@ export default function MemberPrayerPage() {
     })
 
     useEffect(() => {
-        if (userLoading) return        // ← wait for hook to finish
-        if (!user || !user.id) return  // ← guard against undefined
+        if (userLoading) return
+        if (!user || !user.id) return
 
         api
             .get(`/prayer-requests/user/${user.id}`)
@@ -52,7 +52,7 @@ export default function MemberPrayerPage() {
                 setLoading(false)
             })
             .catch(() => setLoading(false))
-    }, [userLoading, user])          // ← depends on both
+    }, [userLoading, user])
 
     const handleSubmit = async () => {
         if (!form.title || !form.content) {
@@ -61,7 +61,7 @@ export default function MemberPrayerPage() {
         }
 
         if (!user?.id) {
-            setError('Could not identify your member profile. Please log in again.')
+            setError('Error, Please log in again.')
             return
         }
 
@@ -71,7 +71,7 @@ export default function MemberPrayerPage() {
         try {
             const { data } = await api.post('/prayer-requests', {
                 ...form,
-                userId: user.id,  // ← directly from the hook, always correct
+                userId: user.id,
             })
             setRequests((prev) => [data.data, ...prev])
             setModalOpen(false)
@@ -107,7 +107,7 @@ export default function MemberPrayerPage() {
                     </div>
                     <Button
                         onClick={() => setModalOpen(true)}
-                        className="flex items-center gap-2"
+                        className="flex items-center gap-2 bg-[#693565]"
                     >
                         <Plus className="h-4 w-4" />
                         New Request

@@ -29,6 +29,7 @@ export default function LoginPage() {
             const role = data.data.user.role
             if (role === 'PASTOR') router.push('/pastor/dashboard')
             else if (role === 'ADMIN') router.push('/admin/dashboard')
+            else if (role === 'WORKER') router.push('/worker/dashboard')
             else router.push('/member/dashboard')
         } catch (err: any) {
             setError(err.response?.data?.message || 'Login failed')

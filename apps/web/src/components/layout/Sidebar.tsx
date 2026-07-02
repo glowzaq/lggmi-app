@@ -12,7 +12,7 @@ interface NavItem {
 }
 
 interface SidebarProps {
-    role: 'PASTOR' | 'ADMIN' | 'MEMBER'
+    role: 'PASTOR' | 'ADMIN' | 'MEMBER' | 'WORKER'
 }
 
 const navItems: Record<string, NavItem[]> = {
@@ -28,10 +28,13 @@ const navItems: Record<string, NavItem[]> = {
     ],
     PASTOR: [
         {label: 'Dashboard', href: '/pastor/dashboard', icon: LayoutDashboard},
-        {label: 'Users', href: '/pastor/users', icon: Users},
+        {label: 'Users', href: '/pastor/members', icon: Users},
         {label: 'Attendance', href: '/pastor/attendance', icon: CheckSquare},
         {label: 'Donations', href: '/pastor/donations', icon: DollarSign},
         {label: 'Prayer Requests', href: '/pastor/prayer-requests', icon: Heart},
+        {label: 'Announcements', href: '/pastor/announcements', icon: Bell},
+        {label: 'Sermons', href: '/pastor/sermons', icon: BookOpen},
+        {label: 'Events', href: '/pastor/events', icon: Calendar},
     ],
     MEMBER: [
         {label: 'Dashboard', href: '/member/dashboard', icon: LayoutDashboard},
@@ -41,6 +44,16 @@ const navItems: Record<string, NavItem[]> = {
         {label: 'Announcements', href: '/member/announcements', icon: Bell},
         {label: 'My Giving', href: '/member/giving', icon: DollarSign},
         {label: 'Prayer Requests', href: '/member/prayer-requests', icon: Heart},
+    ],
+    WORKER: [
+        { label: 'Dashboard', href: '/worker/dashboard', icon: LayoutDashboard },
+        { label: 'Members', href: '/worker/members', icon: Users },
+        { label: 'Events', href: '/worker/events', icon: Calendar },
+        { label: 'Attendance', href: '/worker/attendance', icon: CheckSquare },
+        { label: 'Sermons', href: '/worker/sermons', icon: BookOpen },
+        { label: 'Donations', href: '/worker/donations', icon: DollarSign },
+        { label: 'Announcements', href: '/worker/announcements', icon: Bell },
+        { label: 'Prayer Requests', href: '/worker/prayer-requests', icon: Heart },
     ],
 }
 

@@ -43,9 +43,8 @@ export default function MemberDashboard() {
                 console.error('Dashboard data error:', err)
             })
             .finally(() => setDataLoading(false))
-    }, [userLoading, user]) // ← depends on BOTH — fires only after user is ready
+    }, [userLoading, user])
 
-    // Show spinner while user profile is loading
     if (userLoading) {
         return (
             <DashboardLayout role="MEMBER">
@@ -70,11 +69,10 @@ export default function MemberDashboard() {
             <div className="p-6 space-y-6">
 
                 {/* Welcome header */}
-                <div className="bg-gradient-to-r from-blue-600 to-blue-700
-          rounded-xl p-6 text-white">
+                <div className="bg-gradient-to-r from-[#693565] to-[#1a1110] rounded-xl p-6 text-white">
                     <p className="text-blue-200 text-sm">Welcome back</p>
                     <h1 className="text-2xl font-bold mt-1">
-                        {user?.firstName} {user?.lastName} 🙏
+                        {user?.firstName} {user?.lastName}
                     </h1>
                     <p className="text-blue-200 text-sm mt-2">
                         Attendance rate:{' '}

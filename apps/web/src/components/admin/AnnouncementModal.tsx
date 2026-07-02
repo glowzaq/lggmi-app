@@ -113,7 +113,7 @@ export default function AnnouncementModal({
                     <Button variant="outline" onClick={onClose}>
                         Cancel
                     </Button>
-                    <Button onClick={handleSubmit} disabled={loading}>
+                    <Button onClick={handleSubmit} disabled={loading} className='bg-[#693565]'>
                         {loading ? 'Saving...' : isEdit ? 'Save Changes' : 'Post Announcement'}
                     </Button>
                 </div>

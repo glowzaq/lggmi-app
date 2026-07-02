@@ -6,7 +6,8 @@ import StatCard from '@/components/shared/StatCard'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
     Users, TrendingUp, DollarSign, Heart,
-    Calendar, CheckSquare
+    Calendar, CheckSquare,
+    Bell
 } from 'lucide-react'
 import {
     LineChart, Line, XAxis, YAxis, Tooltip,
@@ -17,6 +18,7 @@ import api from '@/services/api'
 export default function PastorDashboard() {
     const [memberStats, setMemberStats] = useState<any>(null)
     const [donationStats, setDonationStats] = useState<any>(null)
+    const [announcementStats, setAnnouncementStats] = useState<any>(null)
     const [attendanceStats, setAttendanceStats] = useState<any>(null)
     const [prayerStats, setPrayerStats] = useState<any>(null)
     const [eventStats, setEventStats] = useState<any>(null)
@@ -27,13 +29,15 @@ export default function PastorDashboard() {
         Promise.all([
             api.get('/users/stats'),
             api.get('/donations/stats'),
+            api.get('/announcements'),
             api.get('/attendance/stats'),
             api.get('/prayer-requests/stats'),
             api.get('/events/stats'),
             api.get('/users'),
-        ]).then(([m, d, a, p, e, rm]) => {
+        ]).then(([m, d, ann, a, p, e, rm]) => {
             setMemberStats(m.data.data)
             setDonationStats(d.data.data)
+            setAnnouncementStats(ann.data.data.slice(0, 3))
             setAttendanceStats(a.data.data)
             setPrayerStats(p.data.data)
             setEventStats(e.data.data)
@@ -92,10 +96,19 @@ export default function PastorDashboard() {
                         title="Prayer Requests"
                         value={prayerStats?.pending ?? '—'}
                         icon={Heart}
-                        iconColor="text-red-600"
-                        iconBg="bg-red-50"
+                        iconColor="text-pink-600"
+                        iconBg="bg-pink-50"
                         subtitle={`${prayerStats?.answered} answered`}
                         subtitleColor="text-green-600"
+                    />
+                    <StatCard
+                        title="Announcements"
+                        value={announcementStats?.length ?? '_'}
+                        icon={Bell}
+                        iconColor='text-red-600'
+                        iconBg='bg-red-50'
+                        subtitle={`${announcementStats?.length} this month`}
+                        subtitleColor='text-red-600'
                     />
                 </div>
 

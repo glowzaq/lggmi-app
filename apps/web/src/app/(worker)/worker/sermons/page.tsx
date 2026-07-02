@@ -24,13 +24,12 @@ interface Sermon {
     description: string | null
 }
 
-export default function AdminSermonsPage() {
+export default function WorkerSermonsPage() {
     const [sermons, setSermons] = useState<Sermon[]>([])
     const [series, setSeries] = useState<string[]>([])
     const [activeSeries, setActiveSeries] = useState<string | null>(null)
     const [loading, setLoading] = useState(true)
     const [modalOpen, setModalOpen] = useState(false)
-    const [editingSermon, setEditingSermon] = useState<Sermon | null>(null)
 
     const fetchSermons = async () => {
         const [sermonsRes, seriesRes] = await Promise.all([
@@ -44,19 +43,7 @@ export default function AdminSermonsPage() {
 
     useEffect(() => { fetchSermons() }, [])
 
-    const handleDelete = async (id: string) => {
-        if (!confirm('Delete this sermon?')) return
-        await api.delete(`/sermons/${id}`)
-        setSermons((prev) => prev.filter((s) => s.id !== id))
-    }
-
     const handleOpenCreate = () => {
-        setEditingSermon(null)
-        setModalOpen(true)
-    }
-
-    const handleOpenEdit = (sermon: Sermon) => {
-        setEditingSermon(sermon)
         setModalOpen(true)
     }
 
@@ -65,7 +52,7 @@ export default function AdminSermonsPage() {
         : sermons
 
     return (
-        <DashboardLayout role="ADMIN">
+        <DashboardLayout role="WORKER">
             <div className="p-6 space-y-6">
                 <div className="flex items-center justify-between">
                     <div>
@@ -201,22 +188,6 @@ export default function AdminSermonsPage() {
                                                 </a>
                                             )}
                                         </div>
-
-                                        {/* Actions */}
-                                        <div className="flex gap-1">
-                                            <button
-                                                onClick={() => handleOpenEdit(sermon)}
-                                                className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"
-                                            >
-                                                <Pencil className="h-3.5 w-3.5 text-slate-500" />
-                                            </button>
-                                            <button
-                                                onClick={() => handleDelete(sermon.id)}
-                                                className="p-1.5 hover:bg-red-50 rounded-lg transition-colors"
-                                            >
-                                                <Trash2 className="h-3.5 w-3.5 text-red-500" />
-                                            </button>
-                                        </div>
                                     </div>
                                 </CardContent>
                             </Card>
@@ -226,12 +197,10 @@ export default function AdminSermonsPage() {
                 }
             </div >
 
-            {/* Modal — wired correctly */}
             < SermonModal
                 isOpen={modalOpen}
                 onClose={() => setModalOpen(false)}
                 onSuccess={fetchSermons}
-                sermon={editingSermon}
             />
         </DashboardLayout >
     )

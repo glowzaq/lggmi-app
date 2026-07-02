@@ -15,7 +15,8 @@ interface PrayerRequest {
     status: 'ANSWERED' | 'PENDING' | 'PRAYED'
     isPrivate: boolean
     createdAt: string
-    member: {firstName: string, lastName: string}
+    firstName: string
+    lastName: string
 }
 
 const statusConfig = {
@@ -116,7 +117,7 @@ export default function PastorPrayerPage() {
                                                 {request.title}
                                             </CardTitle>
                                             <p className="text-sm text-slate-500 mt-0.5">
-                                                {request.member.firstName} {request.member.lastName}
+                                                {request.firstName} {request.lastName}
                                                 {request.isPrivate && (
                                                     <span className="ml-2 text-xs bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded-full">
                                                         Private

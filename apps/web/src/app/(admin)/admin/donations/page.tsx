@@ -25,7 +25,7 @@ interface Donation {
     type: string
     donatedAt: string
     note: string | null
-    member: { firstName: string; lastName: string }
+    user: {firstName: string; lastName: string}
 }
 
 interface DonationStats {
@@ -40,14 +40,11 @@ const typeColors: Record<string, string> = {
     TITHE: 'bg-blue-100 text-blue-700',
     OFFERING: 'bg-green-100 text-green-700',
     SPECIAL_SEED: 'bg-purple-100 text-purple-700',
-    BUILDING_FUND: 'bg-orange-100 text-orange-700',
-    MISSIONS: 'bg-pink-100 text-pink-700',
     OTHER: 'bg-slate-100 text-slate-700',
 }
 
 const donationTypes = [
-    'TITHE', 'OFFERING', 'SPECIAL_SEED',
-    'BUILDING_FUND', 'MISSIONS', 'OTHER',
+    'TITHE', 'OFFERING', 'SPECIAL_SEED', 'OTHER',
 ]
 
 export default function AdminDonationsPage() {
@@ -134,7 +131,7 @@ export default function AdminDonationsPage() {
                     </div>
                     <Button
                         onClick={() => setModalOpen(true)}
-                        className="flex items-center gap-2"
+                        className="flex items-center gap-2 bg-[#693565]"
                     >
                         <Plus className="h-4 w-4" />
                         Record Donation
@@ -222,7 +219,6 @@ export default function AdminDonationsPage() {
                             </CardContent>
                         </Card>
 
-                        {/* Recent donations table */}
                         <Card>
                             <CardHeader>
                                 <CardTitle className="text-base font-semibold text-slate-800">
@@ -245,8 +241,7 @@ export default function AdminDonationsPage() {
                                                 <tr className="border-b bg-slate-50">
                                                     <th className="text-left px-4 py-3 font-medium
                             text-slate-600">Member</th>
-                                                    <th className="text-left px-4 py-3 font-medium
-                            text-slate-600">Type</th>
+                                                    <th className="text-left px-4 py-3 font-medium text-slate-600">Type</th>
                                                     <th className="text-left px-4 py-3 font-medium
                             text-slate-600">Amount</th>
                                                     <th className="text-left px-4 py-3 font-medium
@@ -262,11 +257,10 @@ export default function AdminDonationsPage() {
                                                         className="border-b last:border-0 hover:bg-slate-50"
                                                     >
                                                         <td className="px-4 py-3 font-medium text-slate-800">
-                                                            {d.member.firstName} {d.member.lastName}
+                                                            {d.user.firstName} {d.user.lastName}
                                                         </td>
                                                         <td className="px-4 py-3">
-                                                            <span className={`text-xs px-2 py-1
-                                rounded-full font-medium ${typeColors[d.type]}`}>
+                                                            <span className={`text-xs px-2 py-1 rounded-full font-medium ${typeColors[d.type]}`}>
                                                                 {d.type.replace(/_/g, ' ')}
                                                             </span>
                                                         </td>

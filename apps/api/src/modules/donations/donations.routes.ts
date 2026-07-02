@@ -6,9 +6,9 @@ import { create, getAll, getByUser, getOne, getStats, remove, update } from "./d
 const router = Router()
 router.use(protect)
 
-router.get('/stats', restrictTo('PASTOR', 'ADMIN', 'WORKER'), getStats)
+router.get('/stats', restrictTo('PASTOR', 'ADMIN'), getStats)
 router.get('/user/:userId', getByUser)
-router.get('/', restrictTo('PASTOR', 'ADMIN', 'WORKER'), getAll)
+router.get('/', restrictTo('PASTOR', 'ADMIN'), getAll)
 router.post('/', restrictTo('ADMIN', 'WORKER'), create)
 router.get('/:id', restrictTo('PASTOR', 'ADMIN', 'WORKER'), getOne)
 

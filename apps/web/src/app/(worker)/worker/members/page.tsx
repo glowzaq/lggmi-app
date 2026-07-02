@@ -35,7 +35,6 @@ const roleColors: Record<string, string> = {
 
 export default function MembersPage() {
     const [members, setMembers] = useState<Member[]>([])
-    const [workerModalOpen, setWorkerModalOpen] = useState(false)
     const [loading, setLoading] = useState(false)
     const [search, setSearch] = useState('')
     const [genderFilter, setGenderFilter] = useState<string>('ALL')
@@ -49,14 +48,6 @@ export default function MembersPage() {
         const { data } = await api.get('/users')
         setMembers(data.data)
         setLoading(false)
-    }
-
-    const handleDeactivate = async (id: string) => {
-        await api.delete(`/users/${id}`)
-        setMembers((prev) =>
-            prev.map((m) => (m.id === id ? { ...m, isActive: false } : m))
-        )
-        setActiveMenu(null)
     }
 
     const filtered = useMemo(() => {
@@ -74,7 +65,7 @@ export default function MembersPage() {
     }, [members, search, genderFilter])
 
     return (
-        <DashboardLayout role="ADMIN">
+        <DashboardLayout role="WORKER">
             <div className="p-6 space-y-6">
                 <div className="flex items-center justify-between">
                     <div>
@@ -82,16 +73,6 @@ export default function MembersPage() {
                         <p className="text-slate-500">
                             {members.length} total members registered
                         </p>
-                    </div>
-                    <div className="flex gap-2">
-                        <Button
-                            variant="outline"
-                            onClick={() => setWorkerModalOpen(true)}
-                            className="flex items-center gap-2"
-                        >
-                            <Plus className="h-4 w-4" />
-                            Add Worker
-                        </Button>
                     </div>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-3">
@@ -200,8 +181,8 @@ export default function MembersPage() {
                                                 <td className="px-4 py-3">
                                                     {member.gender ? (
                                                         <span className={`text-xs px-2 py-1 rounded-full font-medium ${member.gender === 'MALE'
-                                                                ? 'bg-blue-100 text-blue-700'
-                                                                : 'bg-pink-100 text-pink-700'
+                                                            ? 'bg-blue-100 text-blue-700'
+                                                            : 'bg-pink-100 text-pink-700'
                                                             }`}>
                                                             {member.gender[0] + member.gender.slice(1).toLowerCase()}
                                                         </span>
@@ -243,20 +224,11 @@ export default function MembersPage() {
                                                         }
                                                         className="p-1 hover:bg-slate-100 rounded"
                                                     >
-                                                        <MoreVertical className="h-4 w-4 text-slate-400" />
                                                     </button>
 
                                                     {activeMenu === member.id && (
                                                         <div className="absolute right-8 top-8 bg-white border border-slate-200 rounded-lg shadow-lg z-10 min-w-[140px] overflow-hidden">
-                                                            {member.isActive && (
-                                                                <button
-                                                                    onClick={() => handleDeactivate(member.id)}
-                                                                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50"
-                                                                >
-                                                                    <UserX className="h-4 w-4" />
-                                                                    Deactivate
-                                                                </button>
-                                                            )}
+                                                            {member.isActive}
                                                         </div>
                                                     )}
                                                 </td>
@@ -273,12 +245,6 @@ export default function MembersPage() {
                     </Card>
                 )}
             </div>
-
-            <WorkerModal
-                isOpen={workerModalOpen}
-                onClose={() => setWorkerModalOpen(false)}
-                onSuccess={fetchMembers}
-            />
         </DashboardLayout>
     )
 }

@@ -75,16 +75,15 @@ export default function MemberGivingPage() {
                 </div>
 
                 {/* Total card */}
-                <Card className="bg-gradient-to-r from-green-600 to-green-700 text-white border-0">
+                <Card className="bg-gradient-to-r from-[#693565] to-[#1a1114] text-white border-0">
                     <CardContent className="pt-6 pb-5">
                         <div className="flex items-center gap-3 mb-1">
-                            <DollarSign className="h-5 w-5 text-green-200" />
-                            <p className="text-green-200 text-sm">Total Given</p>
+                            <p className="text-purple-200 text-sm">Total Given</p>
                         </div>
                         <p className="text-4xl font-bold">
                             ₦{total.toLocaleString()}
                         </p>
-                        <p className="text-green-200 text-sm mt-1">
+                        <p className="text-purple-200 text-sm mt-1">
                             Across {donations.length} records
                         </p>
                     </CardContent>

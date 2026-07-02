@@ -37,7 +37,7 @@ const statusConfig = {
     },
 }
 
-export default function AdminPrayerRequestsPage() {
+export default function WorkerPrayerRequestsPage() {
     const [requests, setRequests] = useState<PrayerRequest[]>([])
     const [stats, setStats] = useState<any>(null)
     const [filter, setFilter] = useState<string>('ALL')
@@ -55,37 +55,21 @@ export default function AdminPrayerRequestsPage() {
 
     useEffect(() => { fetchData() }, [])
 
-    const handleStatusUpdate = async (
-        id: string,
-        status: 'PENDING' | 'PRAYED' | 'ANSWERED'
-    ) => {
-        await api.patch(`/prayer-requests/${id}/status`, { status })
-        setRequests((prev) =>
-            prev.map((r) => (r.id === id ? { ...r, status } : r))
-        )
-    }
-
-    const handleDelete = async (id: string) => {
-        if (!confirm('Delete this prayer request?')) return
-        await api.delete(`/prayer-requests/${id}`)
-        setRequests((prev) => prev.filter((r) => r.id !== id))
-    }
-
     const filtered =
         filter === 'ALL'
             ? requests
             : requests.filter((r) => r.status === filter)
 
     return (
-        <DashboardLayout role="ADMIN">
+        <DashboardLayout role="WORKER">
             <div className="p-6 space-y-6">
                 <div>
                     <h1 className="text-2xl font-bold text-slate-800">
                         Prayer Requests
                     </h1>
-                    <p className="text-slate-500">
+                    {/* <p className="text-slate-500">
                         Manage congregation prayer needs
-                    </p>
+                    </p> */}
                 </div>
 
                 {stats && (
@@ -175,18 +159,6 @@ export default function AdminPrayerRequestsPage() {
                                                     )}
                                                 </p>
                                             </div>
-                                            <div className="flex items-center gap-2 shrink-0">
-                                                <span className={`text-xs px-2 py-1 rounded-full font-medium ${config.badge}`}>
-                                                    {config.label}
-                                                </span>
-                                                <button
-                                                    onClick={() => handleDelete(request.id)}
-                                                    className="p-1.5 hover:bg-red-50 rounded-lg
-                            transition-colors"
-                                                >
-                                                    <Trash2 className="h-3.5 w-3.5 text-red-500" />
-                                                </button>
-                                            </div>
                                         </div>
                                     </CardHeader>
                                     <CardContent className="space-y-3">
@@ -195,28 +167,6 @@ export default function AdminPrayerRequestsPage() {
                                             <p className="text-xs text-slate-400">
                                                 {new Date(request.createdAt).toLocaleDateString()}
                                             </p>
-                                            <div className="flex gap-2">
-                                                {request.status !== 'PRAYED' && (
-                                                    <button
-                                                        onClick={() =>
-                                                            handleStatusUpdate(request.id, 'PRAYED')
-                                                        }
-                                                        className="text-xs px-2 py-1 bg-blue-50 text-blue-700 rounded hover:bg-blue-100 transition-colors"
-                                                    >
-                                                        Mark Prayed
-                                                    </button>
-                                                )}
-                                                {request.status !== 'ANSWERED' && (
-                                                    <button
-                                                        onClick={() =>
-                                                            handleStatusUpdate(request.id, 'ANSWERED')
-                                                        }
-                                                        className="text-xs px-2 py-1 bg-green-50 text-green-700 rounded hover:bg-green-100 transition-colors"
-                                                    >
-                                                        Mark Answered
-                                                    </button>
-                                                )}
-                                            </div>
                                         </div>
                                     </CardContent>
                                 </Card>
