@@ -12,6 +12,7 @@ enum Role {
     PASTOR
     ADMIN
     MEMBER
+    WORKER
 }
 
 enum Gender {
