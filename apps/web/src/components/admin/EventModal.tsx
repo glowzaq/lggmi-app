@@ -72,6 +72,23 @@ export default function EventModal({
             return
         }
 
+        const selectedDate = new Date(form.startTime)
+        const now = new Date()
+        if (selectedDate < now) {
+            setError(
+                'Event start time cannot be in the past. Please choose a future date and time.'
+            )
+            return
+        }
+
+        if (form.endTime) {
+            const endTime = new Date(form.endTime)
+            if (endTime <= selectedDate) {
+                setError('End time must be after start time.')
+                return
+            }
+        }
+
         setLoading(true)
         setError('')
 
@@ -130,23 +147,21 @@ export default function EventModal({
                     />
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-1.5">
-                        <Label>Start Time *</Label>
-                        <Input
-                            type="datetime-local"
-                            value={form.startTime}
-                            onChange={(e) => set('startTime', e.target.value)}
-                        />
-                    </div>
-                    <div className="space-y-1.5">
-                        <Label>End Time</Label>
-                        <Input
-                            type="datetime-local"
-                            value={form.endTime}
-                            onChange={(e) => set('endTime', e.target.value)}
-                        />
-                    </div>
+                <div className="space-y-1.5">
+                    <Label>Start Time *</Label>
+                    <Input
+                        type="datetime-local"
+                        value={form.startTime}
+                        onChange={(e) => set('startTime', e.target.value)}
+                    />
+                </div>
+                <div className="space-y-1.5">
+                    <Label>End Time</Label>
+                    <Input
+                        type="datetime-local"
+                        value={form.endTime}
+                        onChange={(e) => set('endTime', e.target.value)}
+                    />
                 </div>
 
                 <div className="space-y-1.5">

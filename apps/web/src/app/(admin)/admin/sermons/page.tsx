@@ -225,8 +225,7 @@ export default function AdminSermonsPage() {
                 )
                 }
             </div >
-
-            {/* Modal — wired correctly */}
+            
             < SermonModal
                 isOpen={modalOpen}
                 onClose={() => setModalOpen(false)}

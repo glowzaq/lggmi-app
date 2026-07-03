@@ -1,6 +1,6 @@
 'use client'
 
-import { Bell, BookOpen, Calendar, CheckSquare, ChevronLeft, ChevronRight, DollarSign, Flame, Heart, LayoutDashboard, LogOut, Users } from "lucide-react"
+import { Bell, BookOpen, Calendar, CheckSquare, ChevronLeft, ChevronRight, DollarSign, Flame, Heart, Home, LayoutDashboard, LogOut, Users } from "lucide-react"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
@@ -26,6 +26,8 @@ const navItems: Record<string, NavItem[]> = {
         {label: 'Announcements', href: '/admin/announcements', icon: Bell},
         {label: 'Prayer Requests', href: '/admin/prayer-requests', icon: Heart},
         {label: 'Spiritual Growth', href: '/admin/spiritual-growth', icon: Flame},
+        {label: 'My Profile', href: '/admin/profile', icon: Users},
+        {label: 'Family Group', href: '/admin/families', icon: Home},
     ],
     PASTOR: [
         {label: 'Dashboard', href: '/pastor/dashboard', icon: LayoutDashboard},
@@ -37,6 +39,7 @@ const navItems: Record<string, NavItem[]> = {
         {label: 'Sermons', href: '/pastor/sermons', icon: BookOpen},
         {label: 'Events', href: '/pastor/events', icon: Calendar},
         {label: 'Spiritual Growth', href: '/pastor/spiritual-growth', icon: Flame},
+        {label: 'My Profile', href: '/pastor/profile', icon: Users},
     ],
     MEMBER: [
         {label: 'Dashboard', href: '/member/dashboard', icon: LayoutDashboard},
@@ -54,9 +57,10 @@ const navItems: Record<string, NavItem[]> = {
         { label: 'Events', href: '/worker/events', icon: Calendar },
         { label: 'Attendance', href: '/worker/attendance', icon: CheckSquare },
         { label: 'Sermons', href: '/worker/sermons', icon: BookOpen },
-        { label: 'Donations', href: '/worker/donations', icon: DollarSign },
+        { label: 'My Giving', href: '/worker/giving', icon: DollarSign },
         { label: 'Announcements', href: '/worker/announcements', icon: Bell },
         { label: 'Prayer Requests', href: '/worker/prayer-requests', icon: Heart },
+        {label: 'My Profile', href: '/worker/profile', icon: Users},
     ],
 }
 

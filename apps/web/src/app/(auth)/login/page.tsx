@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { AlertCircle } from "lucide-react";
 
 export default function LoginPage() {
     const router = useRouter()
@@ -17,8 +18,9 @@ export default function LoginPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        setLoading(true)
+        e.stopPropagation()
         setError('')
+        setLoading(true)
 
         try {
             const { data } = await api.post('/auth/login', formData)
@@ -33,8 +35,8 @@ export default function LoginPage() {
             else router.push('/member/dashboard')
         } catch (err: any) {
             setError(err.response?.data?.message || 'Login failed')
-        } finally {
             setLoading(false)
+            setTimeout(() => setError(err), 1000)
         }
     }
 
@@ -82,7 +84,10 @@ export default function LoginPage() {
                             />
                         </div>
                         {error && (
-                            <p className="text-sm text-red-500 text-center">{error}</p>
+                            <div className="flex items-start gap-2 bg-red-50 border border-red-200 rounded-lg px-4 py-3">
+                                <AlertCircle className="h-4 w-4 text-red-500 shrink-0 mt-0.5" />
+                                <p className="text-sm text-red-700">{error}</p>
+                            </div>
                         )}
                         <Button type="submit" className="w-full" disabled={loading}>
                             {loading ? 'Signing in...' : 'Sign In'}

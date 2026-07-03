@@ -5,7 +5,7 @@ import DashboardLayout from '@/components/layout/DashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import EmptyState from '@/components/shared/EmptyState'
 import Spinner from '@/components/shared/Spinner'
-import { Heart, Clock, CheckCircle, Star, Trash2 } from 'lucide-react'
+import { Heart, Clock, CheckCircle, Star, } from 'lucide-react'
 import api from '@/services/api'
 
 interface PrayerRequest {
