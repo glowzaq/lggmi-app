@@ -7,7 +7,6 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-
 enum Role {
     PASTOR
     ADMIN
@@ -54,7 +53,6 @@ enum EventType {
     OTHER
 }
 
-
 model User {
     id            String         @id @default(uuid())
     email         String         @unique
@@ -78,6 +76,7 @@ model User {
     attendances    Attendance[]
     donations      Donation[]
     prayerRequests PrayerRequest[]
+    spiritualLogs  SpiritualLog[]
 
     @@map("users")
 }
@@ -181,4 +180,20 @@ model PrayerRequest {
     user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@map("prayer_requests")
+}
+
+model SpiritualLog {
+    id           String   @id @default(uuid())
+    prayed       Boolean  @default(false)
+    studiedBible Boolean  @default(false)
+    note         String?
+    logDate      DateTime @default(now())
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([userId, logDate])
+    @@map("spiritual_logs")
 }

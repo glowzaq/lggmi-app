@@ -13,6 +13,7 @@ import donationRoutes from './modules/donations/donations.routes';
 import announcementRoutes from './modules/announcements/announcements.routes';
 import prayerRequestRoutes from './modules/prayer-requests/prayer-requests.routes';
 import familyRoutes from './modules/families/families.routes';
+import spiritualGrowthRoutes from './modules/spiritual-growth/spiritual-growth.routes';
 
 dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 
@@ -39,6 +40,7 @@ app.use('/api/donations', donationRoutes);
 app.use('/api/announcements', announcementRoutes);
 app.use('/api/prayer-requests', prayerRequestRoutes);
 app.use('/api/families', familyRoutes);
+app.use('/api/spiritual-growth', spiritualGrowthRoutes);
 
 app.get('/health', (req: Request, res: Response) => {
     res.status(200).json({

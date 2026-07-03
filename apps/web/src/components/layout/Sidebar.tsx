@@ -1,6 +1,6 @@
 'use client'
 
-import { Bell, BookOpen, Calendar, CheckSquare, ChevronLeft, ChevronRight, DollarSign, Heart, LayoutDashboard, LogOut, Users } from "lucide-react"
+import { Bell, BookOpen, Calendar, CheckSquare, ChevronLeft, ChevronRight, DollarSign, Flame, Heart, LayoutDashboard, LogOut, Users } from "lucide-react"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
@@ -25,6 +25,7 @@ const navItems: Record<string, NavItem[]> = {
         {label: 'Donations', href: '/admin/donations', icon: DollarSign},
         {label: 'Announcements', href: '/admin/announcements', icon: Bell},
         {label: 'Prayer Requests', href: '/admin/prayer-requests', icon: Heart},
+        {label: 'Spiritual Growth', href: '/admin/spiritual-growth', icon: Flame},
     ],
     PASTOR: [
         {label: 'Dashboard', href: '/pastor/dashboard', icon: LayoutDashboard},
@@ -35,6 +36,7 @@ const navItems: Record<string, NavItem[]> = {
         {label: 'Announcements', href: '/pastor/announcements', icon: Bell},
         {label: 'Sermons', href: '/pastor/sermons', icon: BookOpen},
         {label: 'Events', href: '/pastor/events', icon: Calendar},
+        {label: 'Spiritual Growth', href: '/pastor/spiritual-growth', icon: Flame},
     ],
     MEMBER: [
         {label: 'Dashboard', href: '/member/dashboard', icon: LayoutDashboard},
@@ -44,6 +46,7 @@ const navItems: Record<string, NavItem[]> = {
         {label: 'Announcements', href: '/member/announcements', icon: Bell},
         {label: 'My Giving', href: '/member/giving', icon: DollarSign},
         {label: 'Prayer Requests', href: '/member/prayer-requests', icon: Heart},
+        {label: 'Spiritual Growth', href: '/member/spiritual-growth', icon: Flame}
     ],
     WORKER: [
         { label: 'Dashboard', href: '/worker/dashboard', icon: LayoutDashboard },
