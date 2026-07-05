@@ -172,7 +172,6 @@ model PrayerRequest {
     title     String
     content   String
     status    PrayerStatus @default(PENDING)
-    isPrivate Boolean      @default(false)
     createdAt DateTime     @default(now())
     updatedAt DateTime     @updatedAt
 

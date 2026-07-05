@@ -31,17 +31,17 @@ interface AttendanceRecord {
 const statusConfig = {
     PRESENT: {
         label: 'Present',
-        style: 'bg-green-600 text-white border-green-600',
+        style: 'bg-green-50 text-green-600 border-green-600',
         icon: Check,
     },
     ABSENT: {
         label: 'Absent',
-        style: 'bg-red-500 text-white border-red-500',
+        style: 'bg-red-50 text-red-500 border-red-500',
         icon: X,
     },
     EXCUSED: {
         label: 'Excused',
-        style: 'bg-orange-400 text-white border-orange-400',
+        style: 'bg-orange-50 text-orange-400 border-orange-400',
         icon: Clock,
     },
 }
@@ -217,24 +217,21 @@ export default function AdminAttendancePage() {
                                         {
                                             label: 'Present',
                                             value: summary.present,
-                                            color: 'text-emerald-700',
-                                            bg: 'bg-emerald-50/60',
+                                            color: 'text-green-600',
                                         },
                                         {
                                             label: 'Absent',
                                             value: summary.absent,
-                                            color: 'text-rose-700',
-                                            bg: 'bg-rose-50/60',
+                                            color: 'text-red-500',
                                         },
                                         {
                                             label: 'Excused',
                                             value: summary.excused,
-                                            color: 'text-amber-700',
-                                            bg: 'bg-amber-100',
+                                            color: 'text-orange-400',
                                         },
                                     ].map((s) => (
                                         <Card key={s.label}>
-                                            <CardContent className={`pt-4 pb-3 ${s.bg}`}>
+                                            <CardContent className='pt-4 pb-3'>
                                                 <p className={`text-2xl font-bold ${s.color}`}>
                                                     {s.value}
                                                 </p>
@@ -263,6 +260,7 @@ export default function AdminAttendancePage() {
                                             size="sm"
                                             onClick={handleSave}
                                             disabled={saving || saved}
+                                            className='bg-[#693565]'
                                         >
                                             {saving
                                                 ? 'Saving...'
@@ -287,7 +285,7 @@ export default function AdminAttendancePage() {
                                                         className="flex items-center justify-between px-4 py-3 hover:bg-slate-50"
                                                     >
                                                         <div className="flex items-center gap-3">
-                                                            <div className="h-8 w-8 rounded-full bg-[#683565] flex items-center justify-center text-white text-xs font-semibold shrink-0">
+                                                            <div className="h-8 w-8 rounded-full bg-[#7d4178] flex items-center justify-center text-white text-xs font-semibold shrink-0">
                                                                 {member.firstName[0]}{member.lastName[0]}
                                                             </div>
                                                             <div>

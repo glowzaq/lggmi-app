@@ -39,7 +39,7 @@ interface DonationStats {
 
 const typeColors: Record<string, string> = {
     TITHE: 'bg-blue-100 text-blue-700',
-    OFFERING: 'bg-green-100 text-green-700',
+    OFFERING: 'bg-emerald-50 text-black',
     SPECIAL_SEED: 'bg-purple-100 text-purple-700',
     OTHER: 'bg-slate-100 text-slate-700',
 }
@@ -186,10 +186,10 @@ export default function AdminDonationsPage() {
                             })
                             setModalOpen(true)
                         }}
-                        className="flex items-center gap-2 bg-[#693565]"
+                        className="flex items-center gap-2 hover:bg-[#9c5e96] bg-[#693565]"
                     >
                         <Plus className="h-4 w-4" />
-                        Record Donation
+                        Add Donation
                     </Button>
                 </div>
 
@@ -266,7 +266,7 @@ export default function AdminDonationsPage() {
                                         />
                                         <Bar
                                             dataKey="total"
-                                            fill="#3b82f6"
+                                            fill="#7d4178"
                                             radius={[4, 4, 0, 0]}
                                         />
                                     </BarChart>
@@ -312,11 +312,11 @@ export default function AdminDonationsPage() {
                                                             {d.user.firstName} {d.user.lastName}
                                                         </td>
                                                         <td className="px-4 py-3">
-                                                            <span className={`text-xs px-2 py-1 rounded-full font-medium ${typeColors[d.type]}`}>
+                                                            <span className={`text-s px-2 py-1 rounded-full font-medium ${typeColors[d.type]}`}>
                                                                 {d.type.replace(/_/g, ' ')}
                                                             </span>
                                                         </td>
-                                                        <td className="px-4 py-3 font-semibold text-green-700">
+                                                        <td className="px-4 py-3 font-semibold text-[#3f2039]">
                                                             ₦{Number(d.amount).toLocaleString()}
                                                         </td>
                                                         <td className="px-4 py-3 text-slate-500">
@@ -327,7 +327,7 @@ export default function AdminDonationsPage() {
                                                         </td>
                                                         <td className='px-4 py-3 text-slate-400 text-xs'>
                                                             <button onClick={()=> handleEdit(d)}>
-                                                            <Pencil className='h-4 w-4'/>
+                                                            <Pencil className='h-3.5 w-3.5'/>
 
                                                             </button>
                                                         </td>

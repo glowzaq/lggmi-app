@@ -13,7 +13,6 @@ interface PrayerRequest {
     title: string
     content: string
     status: 'PENDING' | 'PRAYED' | 'ANSWERED'
-    isPrivate: boolean
     createdAt: string
     firstName: string
     lastName: string
@@ -152,11 +151,6 @@ export default function WorkerPrayerRequestsPage() {
                                                 </CardTitle>
                                                 <p className="text-sm text-slate-500 mt-0.5">
                                                     {request.firstName} {request.lastName}
-                                                    {request.isPrivate && (
-                                                        <span className="ml-2 text-xs bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded-full">
-                                                            Private
-                                                        </span>
-                                                    )}
                                                 </p>
                                             </div>
                                         </div>

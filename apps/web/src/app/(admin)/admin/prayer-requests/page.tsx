@@ -13,7 +13,6 @@ interface PrayerRequest {
     title: string
     content: string
     status: 'PENDING' | 'PRAYED' | 'ANSWERED'
-    isPrivate: boolean
     createdAt: string
     firstName: string
     lastName: string
@@ -168,11 +167,6 @@ export default function AdminPrayerRequestsPage() {
                                                 </CardTitle>
                                                 <p className="text-sm text-slate-500 mt-0.5">
                                                     {request.firstName} {request.lastName}
-                                                    {request.isPrivate && (
-                                                        <span className="ml-2 text-xs bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded-full">
-                                                            Private
-                                                        </span>
-                                                    )}
                                                 </p>
                                             </div>
                                             <div className="flex items-center gap-2 shrink-0">
@@ -181,8 +175,7 @@ export default function AdminPrayerRequestsPage() {
                                                 </span>
                                                 <button
                                                     onClick={() => handleDelete(request.id)}
-                                                    className="p-1.5 hover:bg-red-50 rounded-lg
-                            transition-colors"
+                                                    className="p-1.5 hover:bg-red-50 rounded-lg transition-colors"
                                                 >
                                                     <Trash2 className="h-3.5 w-3.5 text-red-500" />
                                                 </button>

@@ -110,7 +110,7 @@ export default function MemberGivingPage() {
                                     </div>
                                     <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
                                         <div
-                                            className="h-full bg-green-500 rounded-full"
+                                            className="h-full bg-[#3f2039] rounded-full"
                                             style={{
                                                 width: total ? `${(amount / total) * 100}%` : '0%',
                                             }}
@@ -165,7 +165,7 @@ export default function MemberGivingPage() {
                                                 </p>
                                             )}
                                         </div>
-                                        <p className="font-bold text-green-600">
+                                        <p className="font-bold text-[#3f2039]">
                                             ₦{Number(d.amount).toLocaleString()}
                                         </p>
                                     </div>

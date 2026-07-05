@@ -6,6 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
     Calendar, BookOpen, Bell,
     DollarSign, CheckSquare, ChevronRight,
+    Play,
+    Headphones,
 } from 'lucide-react'
 import Spinner from '@/components/shared/Spinner'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
@@ -69,7 +71,7 @@ export default function MemberDashboard() {
             <div className="p-6 space-y-6">
 
                 {/* Welcome header */}
-                <div className="bg-gradient-to-r from-[#693565] to-[#1a1110] rounded-xl p-6 text-white">
+                <div className="bg-gradient-to-r from-[#693565] to-[#3f2039] rounded-xl p-6 text-white">
                     <p className="text-blue-200 text-sm">Welcome back</p>
                     <h1 className="text-2xl font-bold mt-1">
                         {user?.firstName} {user?.lastName}
@@ -154,18 +156,15 @@ export default function MemberDashboard() {
                                         upcomingEvents.map((event) => (
                                             <div
                                                 key={event.id}
-                                                className="flex items-start gap-3 p-3 rounded-lg
-                          bg-slate-50 hover:bg-slate-100 transition-colors"
+                                                className="flex items-start gap-3 p-3 rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors"
                                             >
-                                                <div className="text-center min-w-[48px] bg-white
-                          rounded-lg border border-slate-200 p-1">
+                                                <div className="text-center min-w-[48px] bg-white rounded-lg border border-slate-200 p-1">
                                                     <p className="text-xs text-slate-500 leading-none">
                                                         {new Date(event.startTime).toLocaleString(
                                                             'default', { month: 'short' }
                                                         )}
                                                     </p>
-                                                    <p className="text-lg font-bold text-blue-600
-                            leading-none">
+                                                    <p className="text-lg font-bold text-blue-600 leading-none">
                                                         {new Date(event.startTime).getDate()}
                                                     </p>
                                                 </div>
@@ -260,16 +259,30 @@ export default function MemberDashboard() {
                                                     </p>
                                                 )}
                                                 {(sermon.videoUrl || sermon.audioUrl) && (
-                                                    <a
-                                                        href={sermon.videoUrl || sermon.audioUrl}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="text-xs text-blue-600 hover:underline
-                          flex items-center gap-1 mt-2"
-                                                    >
-                                                        Watch / Listen
-                                                        <ChevronRight className="h-3 w-3" />
-                                                    </a>
+                                                    <div className='flex gap-2 pt-2 border-t mt-auto'>
+                                                        {sermon.videoUrl && (
+                                                            <a
+                                                                href={sermon.videoUrl}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="flex items-center gap-1.5 text-xs bg-blue-100 text-blue-900 px-3 py-1.5 rounded-lg hover:text-white hover:bg-blue-700 transition-colors"
+                                                            >
+                                                                <Play className="h-3 w-3" />
+                                                                Watch
+                                                            </a>
+                                                        )}
+                                                        {sermon.audioUrl && (
+                                                            <a 
+                                                                href={sermon.audioUrl}
+                                                                target="_blank"
+                                                                rel='noopener noreferrer'
+                                                                className='flex items-center gap-1.5 text-xs bg-pink-100 px-3 py-1.5 text-pink-900 hover:text-white hover:bg-pink-900 rounded-lg transition-colors'
+                                                            >
+                                                                <Headphones className='h-3 w-3'/>
+                                                                Listen
+                                                            </a>
+                                                        )}
+                                                    </div>
                                                 )}
                                             </div>
                                         ))

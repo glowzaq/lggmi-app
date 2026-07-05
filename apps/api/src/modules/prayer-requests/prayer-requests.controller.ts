@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 import {
     createPrayerRequest,
     getAllPrayerRequests,
-    getPublicPrayerRequests,
     getUserPrayerRequests,
     getPrayerRequestById,
     updatePrayerRequest,
@@ -28,15 +27,6 @@ export const getAll = async (req: Request, res: Response) => {
     try {
         const { status } = req.query
         const requests = await getAllPrayerRequests(status as string)
-        res.status(200).json({ status: 'success', data: requests })
-    } catch (error: any) {
-        res.status(500).json({ status: 'error', message: error.message })
-    }
-}
-
-export const getPublic = async (req: Request, res: Response) => {
-    try {
-        const requests = await getPublicPrayerRequests()
         res.status(200).json({ status: 'success', data: requests })
     } catch (error: any) {
         res.status(500).json({ status: 'error', message: error.message })

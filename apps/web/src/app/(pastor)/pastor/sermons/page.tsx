@@ -142,8 +142,8 @@ export default function PastorSermonsPage() {
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="flex items-center gap-1.5 text-xs
-                                            bg-blue-600 text-white px-3 py-1.5 rounded-lg
-                                            hover:bg-blue-700 transition-colors"
+                                            bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg
+                                            hover:bg-slate-200 transition-colors"
                                                 >
                                                     <Play className="h-3 w-3" />
                                                     Watch
@@ -154,9 +154,8 @@ export default function PastorSermonsPage() {
                                                     href={sermon.audioUrl}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="flex items-center gap-1.5 text-xs
-                                    bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg
-                                    hover:bg-slate-200 transition-colors"
+                                                    className="flex items-center gap-1.5 text-xs bg-[#9c5e96] text-white px-3 py-1.5 rounded-lg
+                                    hover:bg-[#d4b0d1] transition-colors"
                                                 >
                                                     <Headphones className="h-3 w-3" />
                                                     Listen

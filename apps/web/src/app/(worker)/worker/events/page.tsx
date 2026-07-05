@@ -33,7 +33,6 @@ export default function WorkerEventsPage() {
     const [events, setEvents] = useState<Event[]>([])
     const [loading, setLoading] = useState(true)
     const [modalOpen, setModalOpen] = useState(false)
-    // const [editingEvent, setEditingEvent] = useState<Event | null>(null)
 
     const fetchEvents = async () => {
         const { data } = await api.get('/events')
@@ -59,10 +58,10 @@ export default function WorkerEventsPage() {
                     </div>
                     <Button
                         onClick={handleOpenCreate}
-                        className="flex items-center gap-2 bg-[#693565]"
+                        className="flex items-center gap-2 bg-[#693565] hover:bg-[#9c5e96]"
                     >
                         <Plus className="h-4 w-4" />
-                        New Event
+                        Add Event
                     </Button>
                 </div>
 

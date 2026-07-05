@@ -63,7 +63,7 @@ export default function WorkerSermonsPage() {
                     </div>
                     <Button
                         onClick={handleOpenCreate}
-                        className="flex items-center gap-2 bg-[#693565]"
+                        className="flex items-center gap-2 bg-[#693565] hover:bg-[#9c5e96]"
                     >
                         <Plus className="h-4 w-4" />
                         Add Sermon
@@ -109,7 +109,7 @@ export default function WorkerSermonsPage() {
                         action={
                             <Button
                                 onClick={handleOpenCreate}
-                                className="flex items-center gap-2 bg-[#693565]"
+                                className="flex items-center gap-2 bg-[#693565] hover:bg-[#9c5e96]"
                             >
                                 <Plus className="h-4 w-4" /> Add Sermon
                             </Button>
@@ -169,7 +169,7 @@ export default function WorkerSermonsPage() {
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="flex items-center gap-1 text-xs
-                                            text-blue-600 hover:underline"
+                                            text-slate-900 hover:underline"
                                                 >
                                                     <Play className="h-3 w-3" />
                                                     Watch
@@ -181,7 +181,7 @@ export default function WorkerSermonsPage() {
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="flex items-center gap-1 text-xs
-                                        text-green-600 hover:underline"
+                                        text-[#9c5e96] hover:underline"
                                                 >
                                                     <Headphones className="h-3 w-3" />
                                                     Listen

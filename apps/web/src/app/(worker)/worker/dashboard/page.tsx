@@ -99,7 +99,7 @@ export default function WorkerDashboard() {
                                     <Line
                                         type="monotone"
                                         dataKey="present"
-                                        stroke="#10b981"
+                                        stroke="#9c5e96"
                                         strokeWidth={2}
                                         dot={{ r: 3 }}
                                     />

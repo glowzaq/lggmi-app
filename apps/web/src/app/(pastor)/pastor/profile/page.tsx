@@ -122,7 +122,7 @@ export default function PastorProfilePage() {
                                 </h2>
                                 <p className="text-slate-500 text-sm">{user?.email}</p>
                                 <div className="flex items-center gap-2 mt-1">
-                                    <span className="text-xs bg-purple-900 text-white
+                                    <span className="text-xs bg-[#f0e4ef] text-[#693565]
                     px-2 py-0.5 rounded-full font-medium">
                                         {user?.role}
                                     </span>
@@ -291,7 +291,7 @@ export default function PastorProfilePage() {
                 <Button
                     onClick={handleSave}
                     disabled={saving || saved}
-                    className="flex items-center gap-2 w-full sm:w-auto"
+                    className="flex items-center gap-2 w-full sm:w-auto hover:bg-[#3f2039] bg-[#3f2039] text-white hover:text-white cursor-pointer"
                 >
                     <Save className="h-4 w-4" />
                     {saving ? 'Saving...' : saved ? '✓ Profile Updated' : 'Save Changes'}

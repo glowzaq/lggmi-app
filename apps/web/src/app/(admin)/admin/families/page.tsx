@@ -83,10 +83,10 @@ export default function AdminFamiliesPage() {
                     </div>
                     <Button
                         onClick={() => setModalOpen(true)}
-                        className="flex items-center gap-2"
+                        className="flex items-center gap-2 bg-[#693565] hover:bg-[#9c5e96]"
                     >
                         <Plus className="h-4 w-4" />
-                        New Family Group
+                        Add Family Group
                     </Button>
                 </div>
 
@@ -102,10 +102,10 @@ export default function AdminFamiliesPage() {
                         action={
                             <Button
                                 onClick={() => setModalOpen(true)}
-                                className="flex items-center gap-2"
+                                className="flex items-center gap-2 bg-[#693565] hover:bg-[#9c5e96]"
                             >
                                 <Plus className="h-4 w-4" />
-                                New Family Group
+                                Add Family Group
                             </Button>
                         }
                     />

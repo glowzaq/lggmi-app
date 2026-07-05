@@ -31,17 +31,17 @@ interface AttendanceRecord {
 const statusConfig = {
     PRESENT: {
         label: 'Present',
-        style: 'bg-green-600 text-white border-green-600',
+        style: 'bg-green-100 text-green-600 border-green-600',
         icon: Check,
     },
     ABSENT: {
         label: 'Absent',
-        style: 'bg-red-500 text-white border-red-500',
+        style: 'bg-red-100 text-red-500 border-red-500',
         icon: X,
     },
     EXCUSED: {
         label: 'Excused',
-        style: 'bg-orange-400 text-white border-orange-400',
+        style: 'bg-orange-100 text-orange-400 border-orange-400',
         icon: Clock,
     },
 }
@@ -218,23 +218,20 @@ export default function WorkerAttendancePage() {
                                             label: 'Present',
                                             value: summary.present,
                                             color: 'text-emerald-700',
-                                            bg: 'bg-emerald-50/60',
                                         },
                                         {
                                             label: 'Absent',
                                             value: summary.absent,
                                             color: 'text-rose-700',
-                                            bg: 'bg-rose-50/60',
                                         },
                                         {
                                             label: 'Excused',
                                             value: summary.excused,
                                             color: 'text-amber-700',
-                                            bg: 'bg-amber-100',
                                         },
                                     ].map((s) => (
                                         <Card key={s.label}>
-                                            <CardContent className={`pt-4 pb-3 ${s.bg}`}>
+                                            <CardContent className={'pt-4 pb-3'}>
                                                 <p className={`text-2xl font-bold ${s.color}`}>
                                                     {s.value}
                                                 </p>

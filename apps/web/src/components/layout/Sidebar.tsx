@@ -80,7 +80,7 @@ export default function Sidebar({role}: SidebarProps) {
     return (
         <aside
             className={`
-        relative flex flex-col h-screen bg-[#1a1118] text-white
+        relative flex flex-col h-screen bg-[#1a0d18] text-white
         transition-all duration-300 ease-in-out
         ${collapsed ? 'w-16' : 'w-64'}
     `}
@@ -101,7 +101,7 @@ export default function Sidebar({role}: SidebarProps) {
                 {!collapsed && (
                     <div>
                         <p className="font-bold text-sm leading-tight tracking-wide text-white">LGGMI</p>
-                        <p className="text-xs text-slate-400 capitalize">
+                        <p className="text-xs text-slate-300 capitalize">
                             {role.toLowerCase()} portal
                         </p>
                     </div>
@@ -119,8 +119,8 @@ export default function Sidebar({role}: SidebarProps) {
                             className={`
                 w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors rounded-none
                 ${isActive
-                                ? 'bg-[#693465] text-white border-l-4 border-[#693465]'
-                                : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+                                ? 'bg-[#693565] text-white border-l-10 border-[#3f2039]'
+                                : 'text-slate-300 hover:text-slate-200 hover:bg-[#693565]'
                                 }
             `}
                         >
@@ -133,7 +133,7 @@ export default function Sidebar({role}: SidebarProps) {
 
             <button
                 onClick={() => setCollapsed(!collapsed)}
-                className="absolute -right-3 top-20 bg-[#1a1118] border border-slate-700 rounded-full p-1 text-slate-400 hover:text-white"
+                className="absolute -right-3 top-20 bg-[#693565] border border-slate-700 rounded-full p-1 text-white hover:text-white"
             >
                 {collapsed
                     ? <ChevronRight className="h-3 w-3" />
@@ -144,8 +144,8 @@ export default function Sidebar({role}: SidebarProps) {
             <div className="border-t border-slate-800 p-4">
                 <button
                     onClick={handleLogout}
-                    className="w-full flex items-center gap-3 text-l text-white
-            hover:text-red-400 transition-colors"
+                    className="w-full flex items-center gap-3 text-xl text-white
+            hover:text-[#b885b2] transition-colors cursor-pointer"
                 >
                     <LogOut className="h-4 w-4 shrink-0" />
                     {!collapsed && <span>Logout</span>}

@@ -339,14 +339,14 @@ export default function SpiritualGrowthPage() {
                                                     ? 'bg-purple-100 text-purple-700'
                                                     : 'bg-slate-100 text-slate-400'
                                                 }`}>
-                                                {log.prayed ? '🙏 Prayed' : '🙏 No prayer'}
+                                                {log.prayed ? 'Prayed' : 'No prayer'}
                                             </span>
                                             <span className={`text-xs px-2 py-0.5 rounded-full
                         font-medium ${log.studiedBible
                                                     ? 'bg-blue-100 text-blue-700'
                                                     : 'bg-slate-100 text-slate-400'
                                                 }`}>
-                                                {log.studiedBible ? '📖 Studied' : '📖 No study'}
+                                                {log.studiedBible ? 'Studied' : 'No study'}
                                             </span>
                                         </div>
 

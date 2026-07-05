@@ -18,7 +18,6 @@ interface PrayerRequest {
     title: string
     content: string
     status: 'PENDING' | 'PRAYED' | 'ANSWERED'
-    isPrivate: boolean
     createdAt: string
 }
 
@@ -38,7 +37,6 @@ export default function MemberPrayerPage() {
     const [form, setForm] = useState({
         title: '',
         content: '',
-        isPrivate: false,
     })
 
     useEffect(() => {
@@ -75,7 +73,7 @@ export default function MemberPrayerPage() {
             })
             setRequests((prev) => [data.data, ...prev])
             setModalOpen(false)
-            setForm({ title: '', content: '', isPrivate: false })
+            setForm({ title: '', content: ''})
         } catch (err: any) {
             setError(err.response?.data?.message || 'Failed to submit request')
         } finally {
@@ -107,10 +105,10 @@ export default function MemberPrayerPage() {
                     </div>
                     <Button
                         onClick={() => setModalOpen(true)}
-                        className="flex items-center gap-2 bg-[#693565]"
+                        className="flex items-center gap-2 bg-[#693565] hover:bg-[#9c5e96]"
                     >
                         <Plus className="h-4 w-4" />
-                        New Request
+                        Add Request
                     </Button>
                 </div>
 
@@ -131,41 +129,31 @@ export default function MemberPrayerPage() {
                     />
                 ) : (
                     <div className="space-y-4">
-                        {requests.map((request) => (
-                            <Card key={request.id}>
-                                <CardHeader className="pb-2">
-                                    <div className="flex items-start justify-between gap-3">
-                                        <CardTitle className="text-base font-semibold
-                      text-slate-800">
-                                            {request.title}
-                                        </CardTitle>
-                                        <div className="flex items-center gap-2 shrink-0">
-                                            {request.isPrivate && (
-                                                <span className="text-xs bg-slate-100 text-slate-500
-                          px-2 py-0.5 rounded-full">
-                                                    Private
-                                                </span>
-                                            )}
-                                            <span className={`text-xs px-2 py-1 rounded-full
-                        font-medium ${statusConfig[request.status].badge}`}>
+                            {requests.map((request) => (
+                                <Card key={request.id}>
+                                    <CardHeader className="pb-2">
+                                        <div className="flex items-start justify-between gap-3">
+                                            <CardTitle className="text-base font-semibold text-slate-800">
+                                                {request.title}
+                                            </CardTitle>
+                                            <span className={`text-xs px-2 py-1 rounded-full font-medium shrink-0 ${statusConfig[request.status].badge}`}>
                                                 {statusConfig[request.status].label}
                                             </span>
                                         </div>
-                                    </div>
-                                </CardHeader>
-                                <CardContent className="space-y-2">
-                                    <p className="text-sm text-slate-600">{request.content}</p>
-                                    <p className="text-xs text-slate-400">
-                                        Submitted{' '}
-                                        {new Date(request.createdAt).toLocaleDateString('en-US', {
-                                            month: 'long',
-                                            day: 'numeric',
-                                            year: 'numeric',
-                                        })}
-                                    </p>
-                                </CardContent>
-                            </Card>
-                        ))}
+                                    </CardHeader>
+                                    <CardContent className="space-y-2">
+                                        <p className="text-sm text-slate-600">{request.content}</p>
+                                        <p className="text-xs text-slate-400">
+                                            Submitted{' '}
+                                            {new Date(request.createdAt).toLocaleDateString('en-US', {
+                                                month: 'long',
+                                                day: 'numeric',
+                                                year: 'numeric',
+                                            })}
+                                        </p>
+                                    </CardContent>
+                                </Card>
+                            ))}
                     </div>
                 )}
 
@@ -179,6 +167,15 @@ export default function MemberPrayerPage() {
                     title="Submit Prayer Request"
                 >
                     <div className="space-y-4">
+
+                        {/* Confidentiality notice */}
+                        <div className="flex items-start gap-3 bg-purple-50 border border-purple-200 rounded-lg px-4 py-3">
+                            <p className="text-sm text-purple-800 leading-relaxed">
+                                Your prayer request is <span className="font-semibold">completely confidential</span>.
+                                Only the Pastor, Admin and yourself will be able to see it.
+                            </p>
+                        </div>
+
                         <div className="space-y-1.5">
                             <Label>Title *</Label>
                             <Input
@@ -192,38 +189,13 @@ export default function MemberPrayerPage() {
                             <Label>Prayer Need *</Label>
                             <textarea
                                 value={form.content}
-                                onChange={(e) =>
-                                    setForm({ ...form, content: e.target.value })
-                                }
-                                placeholder="Share what you'd like the church to pray about..."
+                                onChange={(e) => setForm({ ...form, content: e.target.value })}
+                                placeholder="Share what you'd like the Pastor and Admin to pray about..."
                                 rows={4}
                                 className="w-full px-3 py-2 border border-slate-200 rounded-md
-                  text-sm resize-none focus:outline-none
-                  focus:ring-2 focus:ring-blue-500"
+          text-sm resize-none focus:outline-none
+          focus:ring-2 focus:ring-blue-500"
                             />
-                        </div>
-
-                        <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg">
-                            <input
-                                type="checkbox"
-                                id="isPrivate"
-                                checked={form.isPrivate}
-                                onChange={(e) =>
-                                    setForm({ ...form, isPrivate: e.target.checked })
-                                }
-                                className="h-4 w-4 rounded border-slate-300 text-blue-600"
-                            />
-                            <div>
-                                <label
-                                    htmlFor="isPrivate"
-                                    className="text-sm font-medium text-slate-800 cursor-pointer"
-                                >
-                                    Keep this private
-                                </label>
-                                <p className="text-xs text-slate-400">
-                                    Only Pastor and Admin will see private requests
-                                </p>
-                            </div>
                         </div>
 
                         {error && <p className="text-sm text-red-500">{error}</p>}
@@ -238,7 +210,7 @@ export default function MemberPrayerPage() {
                             >
                                 Cancel
                             </Button>
-                            <Button onClick={handleSubmit} disabled={submitting}>
+                            <Button onClick={handleSubmit} disabled={submitting} className='bg-[#693565] hover:bg-[#9c5e96] text-white'>
                                 {submitting ? 'Submitting...' : 'Submit Request'}
                             </Button>
                         </div>

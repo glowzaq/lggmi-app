@@ -70,10 +70,10 @@ export default function AdminAnnouncementsPage() {
                     </div>
                     <Button
                         onClick={handleOpenCreate}
-                        className="flex items-center gap-2 bg-[#693565]"
+                        className="flex items-center gap-2 bg-[#693565] hover:bg-[#9c5e96]"
                     >
                         <Plus className="h-4 w-4" />
-                        New Announcement
+                        Add Announcement
                     </Button>
                 </div>
 
@@ -91,7 +91,7 @@ export default function AdminAnnouncementsPage() {
                                 onClick={handleOpenCreate}
                                 className="flex items-center gap-2 bg-[#693565]"
                             >
-                                <Plus className="h-4 w-4" /> New Announcement
+                                <Plus className="h-4 w-4" /> Add Announcement
                             </Button>
                         }
                     />
@@ -113,7 +113,7 @@ export default function AdminAnnouncementsPage() {
                                         <div className="flex items-center gap-2 shrink-0">
                                             <span className={`text-xs px-2 py-1 rounded-full
                         font-medium ${ann.isActive
-                                                    ? 'bg-green-100 text-green-700'
+                                                    ? 'bg-green-50 text-green-900'
                                                     : 'bg-slate-100 text-slate-500'
                                                 }`}>
                                                 {ann.isActive ? 'Active' : 'Inactive'}
