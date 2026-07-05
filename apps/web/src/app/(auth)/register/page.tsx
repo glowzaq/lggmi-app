@@ -45,6 +45,11 @@ export default function RegisterPage() {
             return
         }
 
+        if (!form.phone) {
+            setError('Phone number is required')
+            return
+        }
+
         setLoading(true)
 
         try {
@@ -135,6 +140,7 @@ export default function RegisterPage() {
                                 value={form.phone}
                                 onChange={(e) => set('phone', e.target.value)}
                                 placeholder="+234 000 000 0000"
+                                required
                             />
                         </div>
 

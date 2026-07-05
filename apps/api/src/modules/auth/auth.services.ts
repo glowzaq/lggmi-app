@@ -9,6 +9,12 @@ export const registerUser = async (input: RegisterInput) => {
     const existing = await prisma.user.findUnique({ where: { email } })
     if (existing) throw new Error('A user with this email already exists')
 
+    if (!phone) throw new Error('Phone number is required')
+
+    const phoneExists = await prisma.user.findUnique({ where: { phone } })
+    if (phoneExists) throw new Error('This phone number is already registered')
+
+
     const hashedPassword = await bcrypt.hash(password, 12)
 
     const user = await prisma.user.create({
@@ -70,6 +76,15 @@ export const createWorkerAccount = async (
         where: { email: input.email },
     })
     if (existing) throw new Error('A user with this email already exists')
+
+    if (!input.phone) throw new Error('Phone number is required')
+
+    const phoneExists = await prisma.user.findUnique({
+        where: { phone: input.phone },
+    })
+    if (phoneExists) {
+        throw new Error('This phone number is already registered')
+    }
 
     const hashedPassword = await bcrypt.hash(input.password, 12)
 

@@ -53,6 +53,12 @@ enum EventType {
     OTHER
 }
 
+enum TestimonyStatus {
+    PENDING
+    APPROVED
+    REJECTED
+}
+
 model User {
     id            String         @id @default(uuid())
     email         String         @unique
@@ -60,7 +66,7 @@ model User {
     role          Role           @default(MEMBER)
     firstName     String
     lastName      String
-    phone         String?
+    phone         String         @unique
     address       String?
     dateOfBirth   DateTime?
     gender        Gender?
@@ -71,12 +77,18 @@ model User {
     createdAt     DateTime       @default(now())
     updatedAt     DateTime       @updatedAt
 
-    familyId       String?
-    family         Family?         @relation(fields: [familyId], references: [id])
-    attendances    Attendance[]
-    donations      Donation[]
-    prayerRequests PrayerRequest[]
-    spiritualLogs  SpiritualLog[]
+    familyId            String?
+    family              Family?         @relation(fields: [familyId], references: [id])
+    attendances         Attendance[]
+    donations           Donation[]
+    prayerRequests      PrayerRequest[]
+    spiritualLogs       SpiritualLog[]
+    evangelismConducted Evangelism[]    @relation("EvangelismConductedBy")
+    welfareCreated      Welfare[]       @relation("WelfareCreatedBy")
+    testimonies         Testimony[]     @relation("TestimonyUser")
+    testimoniesApproved Testimony[]     @relation("TestimonyApprovedBy")
+    themesCreated       MonthlyTheme[]  @relation("ThemeCreatedBy")
+    reportsCreated      MonthlyReport[] @relation("ReportCreatedBy")
 
     @@map("users")
 }
@@ -195,4 +207,95 @@ model SpiritualLog {
 
     @@unique([userId, logDate])
     @@map("spiritual_logs")
+}
+
+model Evangelism {
+    id                   String   @id @default(uuid())
+    title                String
+    date                 DateTime
+    location             String?
+    numberOfReached      Int      @default(0)
+    numberOfConverted    Int      @default(0)
+    numberOfFilledSpirit Int      @default(0)
+    followedUp           Boolean  @default(false)
+    followUpNote         String?
+    assimilated          Int      @default(0)
+    notes                String?
+    createdAt            DateTime @default(now())
+    updatedAt            DateTime @updatedAt
+
+    conductedById String
+    conductedBy   User   @relation("EvangelismConductedBy", fields: [conductedById], references: [id])
+
+    @@map("evangelism")
+}
+
+model Welfare {
+    id          String   @id @default(uuid())
+    title       String
+    description String
+    amount      Decimal  @db.Decimal(10, 2)
+    date        DateTime @default(now())
+    recipient   String?
+    notes       String?
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    createdById String
+    createdBy   User   @relation("WelfareCreatedBy", fields: [createdById], references: [id])
+
+    @@map("welfare")
+}
+
+model Testimony {
+    id         String          @id @default(uuid())
+    title      String
+    content    String
+    status     TestimonyStatus @default(PENDING)
+    approvedAt DateTime?
+    createdAt  DateTime        @default(now())
+    updatedAt  DateTime        @updatedAt
+
+    userId String
+    user   User   @relation("TestimonyUser", fields: [userId], references: [id], onDelete: Cascade)
+
+    approvedById String?
+    approvedBy   User?   @relation("TestimonyApprovedBy", fields: [approvedById], references: [id])
+
+    @@map("testimonies")
+}
+
+model MonthlyTheme {
+    id          String   @id @default(uuid())
+    title       String
+    scripture   String?
+    month       Int
+    year        Int
+    isActive    Boolean  @default(false)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    createdById String
+    createdBy   User     @relation("ThemeCreatedBy", fields: [createdById], references: [id])
+
+    @@unique([month, year])
+    @@map("monthly_themes")
+}
+
+model MonthlyReport {
+    id                String   @id @default(uuid())
+    month             Int
+    year              Int
+    themeTitle        String?
+    totalMeetings     Int      @default(0)
+    regularAttendance Int      @default(0)
+    inviteesCount     Int      @default(0)
+    notes             String?
+    createdAt         DateTime @default(now())
+    updatedAt         DateTime @updatedAt
+
+    createdById String
+    createdBy   User   @relation("ReportCreatedBy", fields: [createdById], references: [id])
+
+    @@unique([month, year])
+    @@map("monthly_reports")
 }
