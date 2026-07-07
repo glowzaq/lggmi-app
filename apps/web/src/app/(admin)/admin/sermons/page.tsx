@@ -182,7 +182,7 @@ export default function AdminSermonsPage() {
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="flex items-center gap-1 text-xs
-                                            text-blue-600 hover:underline"
+                                            text-slate-900 hover:underline"
                                                 >
                                                     <Play className="h-3 w-3" />
                                                     Watch
@@ -194,7 +194,7 @@ export default function AdminSermonsPage() {
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="flex items-center gap-1 text-xs
-                                        text-green-600 hover:underline"
+                                        text-[#693565] hover:underline"
                                                 >
                                                     <Headphones className="h-3 w-3" />
                                                     Listen
@@ -226,7 +226,6 @@ export default function AdminSermonsPage() {
                 }
             </div >
 
-            {/* Modal — wired correctly */}
             < SermonModal
                 isOpen={modalOpen}
                 onClose={() => setModalOpen(false)}

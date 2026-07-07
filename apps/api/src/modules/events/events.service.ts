@@ -2,6 +2,15 @@ import prisma from "../../utils/prisma"
 import { CreateEventInput, UpdateEventInput } from "./events.types"
 
 export const createEvent = async (input: CreateEventInput) => {
+    const startTime = new Date(input.startTime)
+    const now = new Date()
+    if (startTime < now) throw new Error('Start time cannot be in the past')
+
+    if (input.endTime) {
+        const endTime = new Date(input.endTime)
+        if (endTime < startTime) throw new Error('End time cannot be before start time')
+    }
+
     return prisma.event.create({
         data: {
             ...input,

@@ -5,7 +5,7 @@ import DashboardLayout from '@/components/layout/DashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import EmptyState from '@/components/shared/EmptyState'
 import Spinner from '@/components/shared/Spinner'
-import { Heart, Clock, CheckCircle, Star, Trash2 } from 'lucide-react'
+import { Heart, Clock, CheckCircle, Star, } from 'lucide-react'
 import api from '@/services/api'
 
 interface PrayerRequest {
@@ -13,7 +13,6 @@ interface PrayerRequest {
     title: string
     content: string
     status: 'PENDING' | 'PRAYED' | 'ANSWERED'
-    isPrivate: boolean
     createdAt: string
     firstName: string
     lastName: string
@@ -152,11 +151,6 @@ export default function WorkerPrayerRequestsPage() {
                                                 </CardTitle>
                                                 <p className="text-sm text-slate-500 mt-0.5">
                                                     {request.firstName} {request.lastName}
-                                                    {request.isPrivate && (
-                                                        <span className="ml-2 text-xs bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded-full">
-                                                            Private
-                                                        </span>
-                                                    )}
                                                 </p>
                                             </div>
                                         </div>

@@ -13,7 +13,6 @@ interface PrayerRequest {
     title: string
     content: string
     status: 'ANSWERED' | 'PENDING' | 'PRAYED'
-    isPrivate: boolean
     createdAt: string
     firstName: string
     lastName: string
@@ -118,11 +117,6 @@ export default function PastorPrayerPage() {
                                             </CardTitle>
                                             <p className="text-sm text-slate-500 mt-0.5">
                                                 {request.firstName} {request.lastName}
-                                                {request.isPrivate && (
-                                                    <span className="ml-2 text-xs bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded-full">
-                                                        Private
-                                                    </span>
-                                                )}
                                             </p>
                                         </div>
                                         <span className={`text-xs px-2 py-1 rounded-full font-medium shrink-0

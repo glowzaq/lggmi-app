@@ -122,7 +122,7 @@ export default function MemberProfilePage() {
                                 </h2>
                                 <p className="text-slate-500 text-sm">{user?.email}</p>
                                 <div className="flex items-center gap-2 mt-1">
-                                    <span className="text-xs bg-purple-900 text-white
+                                    <span className="text-xs bg-[#f0e4ef] text-[#3f2039]
                     px-2 py-0.5 rounded-full font-medium">
                                         {user?.role}
                                     </span>
@@ -302,7 +302,7 @@ export default function MemberProfilePage() {
                 <Button
                     onClick={handleSave}
                     disabled={saving || saved}
-                    className="flex items-center gap-2 w-full sm:w-auto"
+                    className="flex items-center gap-2 w-full sm:w-auto text-white hover:bg-[#9c5e96] bg-[#3f2039]"
                 >
                     <Save className="h-4 w-4" />
                     {saving ? 'Saving...' : saved ? '✓ Profile Updated' : 'Save Changes'}

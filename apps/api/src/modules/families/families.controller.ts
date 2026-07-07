@@ -30,7 +30,7 @@ export const create = async (req: Request, res: Response) => {
 
 export const remove = async (req: Request, res: Response) => {
     try {
-        const id = req.params.id
+        const { id } = req.params as { id: string }
         await deleteFamily(String(id))
         res.status(200).json({
             status: 'success',

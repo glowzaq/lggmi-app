@@ -55,7 +55,7 @@ export default function AdminDashboard() {
             <div className="p-6 space-y-6">
                 <div>
                     <h1 className="text-2xl font-bold text-slate-800">Admin Dashboard</h1>
-                    <p className="text-slate-500">Full control center</p>
+                    <p className="text-slate-500">App Management Center</p>
                 </div>
 
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -66,7 +66,7 @@ export default function AdminDashboard() {
                         iconColor="text-blue-600"
                         iconBg="bg-blue-50"
                         subtitle={`+${memberStats?.newThisMonth} this month`}
-                        subtitleColor="text-green-600"
+                        subtitleColor="text-[#693565]"
                     />
                     <StatCard
                         title="Upcoming Events"
@@ -108,7 +108,7 @@ export default function AdminDashboard() {
                                     <Tooltip
                                         formatter={(v: any) => `₦${v.toLocaleString()}`}
                                     />
-                                    <Bar dataKey="total" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                                    <Bar dataKey="total" fill="#b885b2" radius={[4, 4, 0, 0]} />
                                 </BarChart>
                             </ResponsiveContainer>
                         </CardContent>
@@ -133,7 +133,7 @@ export default function AdminDashboard() {
                                     <Line
                                         type="monotone"
                                         dataKey="present"
-                                        stroke="#10b981"
+                                        stroke="#b885b2"
                                         strokeWidth={2}
                                         dot={{ r: 3 }}
                                     />
@@ -167,7 +167,7 @@ export default function AdminDashboard() {
                                                 {new Date(d.donatedAt).toLocaleDateString()}
                                             </p>
                                         </div>
-                                        <p className="text-sm font-bold text-green-600">
+                                        <p className="text-sm font-bold text-[#2d1729]">
                                             ₦{Number(d.amount).toLocaleString()}
                                         </p>
                                     </div>
@@ -199,7 +199,7 @@ export default function AdminDashboard() {
                                         </div>
                                         <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
                                             <div
-                                                className="h-full bg-blue-500 rounded-full"
+                                                className="h-full bg-[#3f2039] rounded-full"
                                                 style={{
                                                     width: donationStats.allTime
                                                         ? `${(item.total / donationStats.allTime) * 100}%`

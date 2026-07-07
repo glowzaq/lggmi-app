@@ -81,7 +81,7 @@ export default function PastorAttendancePage() {
                                     <Line
                                         type="monotone"
                                         dataKey="present"
-                                        stroke="#3b82f6"
+                                        stroke="#9c5e96"
                                         strokeWidth={2}
                                         dot={{ r: 4 }}
                                     />
@@ -113,7 +113,7 @@ export default function PastorAttendancePage() {
                                             className={`w-full text-left px-4 py-3 transition-colors
                         hover:bg-slate-50
                         ${selectedEventId === event.id
-                                                    ? 'bg-blue-50 border-l-2 border-blue-600'
+                                                    ? 'bg-blue-50 border-l-2 border-[#d4b0d1]'
                                                     : ''
                                                 }`}
                                         >
@@ -184,7 +184,7 @@ export default function PastorAttendancePage() {
                                         </div>
                                         <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
                                             <div
-                                                className="h-full bg-green-500 rounded-full transition-all"
+                                                className="h-full bg-[#9c5e96] rounded-full transition-all"
                                                 style={{
                                                     width:
                                                         detail.summary.total > 0
@@ -206,11 +206,11 @@ export default function PastorAttendancePage() {
                                                     className="flex items-center justify-between px-4 py-3"
                                                 >
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-7 w-7 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 text-xs font-semibold">
-                                                            {a.member.firstName[0]}{a.member.lastName[0]}
+                                                        <div className="h-7 w-7 rounded-full bg-[#9c5e96] flex items-center justify-center text-white text-xs font-semibold">
+                                                            {a.user.firstName[0]}{a.user.lastName[0]}
                                                         </div>
                                                         <p className="text-sm text-slate-800">
-                                                            {a.member.firstName} {a.member.lastName}
+                                                            {a.user.firstName} {a.user.lastName}
                                                         </p>
                                                     </div>
                                                     <span className={`text-xs px-2 py-1 rounded-full font-medium ${a.status === 'PRESENT'

@@ -2,7 +2,6 @@ import { Router } from 'express'
 import {
     create,
     getAll,
-    getPublic,
     getByUser,
     getOne,
     update,
@@ -17,7 +16,6 @@ const router = Router()
 
 router.use(protect)
 
-router.get('/public', getPublic)
 router.get('/stats', restrictTo('PASTOR', 'ADMIN', 'WORKER'), getStats)
 router.get('/user/:userId', getByUser)
 router.get('/', restrictTo('PASTOR', 'ADMIN', 'WORKER'), getAll)

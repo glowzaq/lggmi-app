@@ -8,6 +8,5 @@ export interface CreatePrayerRequestInput {
 export interface UpdatePrayerRequestInput {
     title?: string
     content?: string
-    isPrivate?: boolean
     status?: 'PENDING' | 'PRAYED' | 'ANSWERED'
 }

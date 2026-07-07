@@ -13,6 +13,13 @@ import donationRoutes from './modules/donations/donations.routes';
 import announcementRoutes from './modules/announcements/announcements.routes';
 import prayerRequestRoutes from './modules/prayer-requests/prayer-requests.routes';
 import familyRoutes from './modules/families/families.routes';
+import spiritualGrowthRoutes from './modules/spiritual-growth/spiritual-growth.routes';
+import evangelismRoutes from './modules/evangelism/evangelism.routes'
+import welfareRoutes from './modules/welfare/welfare.routes'
+import testimoniesRoutes from './modules/testimonies/testimonies.routes'
+import monthlyThemeRoutes from './modules/monthly-theme/monthly-theme.routes'
+import monthlyReportRoutes from './modules/monthly-report/monthly-report.routes'
+
 
 dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 
@@ -39,6 +46,12 @@ app.use('/api/donations', donationRoutes);
 app.use('/api/announcements', announcementRoutes);
 app.use('/api/prayer-requests', prayerRequestRoutes);
 app.use('/api/families', familyRoutes);
+app.use('/api/spiritual-growth', spiritualGrowthRoutes);
+app.use('/api/evangelism', evangelismRoutes)
+app.use('/api/welfare', welfareRoutes)
+app.use('/api/testimonies', testimoniesRoutes)
+app.use('/api/monthly-theme', monthlyThemeRoutes)
+app.use('/api/monthly-report', monthlyReportRoutes)
 
 app.get('/health', (req: Request, res: Response) => {
     res.status(200).json({

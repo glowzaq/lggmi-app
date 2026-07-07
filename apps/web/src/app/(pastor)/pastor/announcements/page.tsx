@@ -5,7 +5,7 @@ import DashboardLayout from '@/components/layout/DashboardLayout'
 import { Card, CardContent } from '@/components/ui/card'
 import EmptyState from '@/components/shared/EmptyState'
 import Spinner from '@/components/shared/Spinner'
-import { Bell, Clock } from 'lucide-react'
+import { Bell, Clock, Sparkle, } from 'lucide-react'
 import api from '@/services/api'
 
 interface Announcement {
@@ -52,7 +52,7 @@ export default function PastorAnnouncementsPage() {
                         {announcements.map((ann, index) => (
                             <Card
                                 key={ann.id}
-                                className="border-l-4 border-l-blue-500 hover:shadow-md transition-shadow"
+                                className="border-l-4 border-l-[#9c5e96] hover:shadow-md transition-shadow"
                             >
                                 <CardContent className="pt-4 space-y-2">
                                     <div className="flex items-start justify-between gap-3">
@@ -60,10 +60,7 @@ export default function PastorAnnouncementsPage() {
                                             {ann.title}
                                         </h3>
                                         {index === 0 && (
-                                            <span className="text-xs bg-blue-100 text-blue-700
-                        px-2 py-0.5 rounded-full font-medium shrink-0">
-                                                Latest
-                                            </span>
+                                            <Sparkle/>
                                         )}
                                     </div>
                                     <p className="text-sm text-slate-600 leading-relaxed">

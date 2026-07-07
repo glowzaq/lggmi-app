@@ -167,7 +167,7 @@ export default function PastorDashboard() {
                                         />
                                         <Bar
                                             dataKey="total"
-                                            fill="#10b981"
+                                            fill="#9c5e96"
                                             radius={[4, 4, 0, 0]}
                                         />
                                     </BarChart>

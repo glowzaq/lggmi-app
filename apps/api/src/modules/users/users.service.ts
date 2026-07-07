@@ -34,6 +34,15 @@ export const updateUser = async (id: string, input: UpdateUserInput) => {
     const user = await prisma.user.findUnique({ where: { id } })
     if (!user) throw new Error('User not found')
 
+    if (input.phone && input.phone !== user.phone) {
+        const phoneExists = await prisma.user.findUnique({
+            where: { phone: input.phone },
+        })
+        if (phoneExists) {
+            throw new Error('This phone number is already registered to another member')
+        }
+    }
+
     return prisma.user.update({
         where: { id },
         data: {

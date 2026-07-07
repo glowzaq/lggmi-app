@@ -47,13 +47,7 @@ export const getSeries = async (req: Request, res: Response) => {
 
 export const getOne = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params
-        if(typeof id !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid sermon ID'
-            })
-        }
+        const { id } = req.params as { id: string }
         const sermon = await getSermonById(id)
         res.status(200).json({ status: 'success', data: sermon })
     } catch (error: any) {
@@ -63,13 +57,7 @@ export const getOne = async (req: Request, res: Response) => {
 
 export const update = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params
-        if (typeof id !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid sermon ID'
-            })
-        }
+        const { id } = req.params as { id: string }
         const sermon = await updateSermon(id, req.body)
         res.status(200).json({
             status: 'success',
@@ -83,13 +71,7 @@ export const update = async (req: Request, res: Response) => {
 
 export const remove = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params
-        if (typeof id !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid sermon ID'
-            })
-        }
+        const { id } = req.params as { id: string }
         await deleteSermon(id)
         res.status(200).json({
             status: 'success',

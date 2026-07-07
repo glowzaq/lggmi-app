@@ -85,12 +85,11 @@ export default function MembersPage() {
                     </div>
                     <div className="flex gap-2">
                         <Button
-                            variant="outline"
                             onClick={() => setWorkerModalOpen(true)}
-                            className="flex items-center gap-2"
+                            className="flex items-center gap-2 bg-[#693565] hover:bg-[#9c5e96]"
                         >
                             <Plus className="h-4 w-4" />
-                            Add Worker
+                            Add User
                         </Button>
                     </div>
                 </div>

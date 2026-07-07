@@ -7,16 +7,15 @@ import {
 export const createPrayerRequest = async (
     input: CreatePrayerRequestInput
 ) => {
-    if(!input.userId) {
-        throw new Error('User ID must be provided')
-    }
-    const user = await prisma.user.findUnique({
-        where: { id: input.userId },
-    })
-    if (!user) throw new Error('User not found')
+    const user = await prisma.user.findUnique({ where: { id: input.userId } })
+    if (!user) throw new Error('Member not found')
 
     return prisma.prayerRequest.create({
-        data: input,
+        data: {
+            userId: input.userId,
+            title: input.title,
+            content: input.content,
+        },
         include: {
             user: { select: { firstName: true, lastName: true } },
         },
@@ -26,16 +25,6 @@ export const createPrayerRequest = async (
 export const getAllPrayerRequests = async (status?: string) => {
     return prisma.prayerRequest.findMany({
         where: status ? { status: status as any } : undefined,
-        include: {
-            user: { select: { firstName: true, lastName: true } },
-        },
-        orderBy: { createdAt: 'desc' },
-    })
-}
-
-export const getPublicPrayerRequests = async () => {
-    return prisma.prayerRequest.findMany({
-        where: { isPrivate: false },
         include: {
             user: { select: { firstName: true, lastName: true } },
         },

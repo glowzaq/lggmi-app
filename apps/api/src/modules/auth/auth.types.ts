@@ -3,7 +3,7 @@ export interface RegisterInput {
     password: string
     firstName: string
     lastName: string
-    phone?: string
+    phone: string
     role?: 'PASTOR' | 'ADMIN' | 'MEMBER'
 }
 

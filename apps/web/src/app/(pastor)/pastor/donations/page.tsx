@@ -13,8 +13,8 @@ import {
 import api from '@/services/api'
 
 const PIE_COLORS = [
-    '#3b82f6', '#10b981', '#f59e0b',
-    '#ef4444', '#8b5cf6', '#64748b',
+    '#b885b2', '#2d1729', '#7d4178',
+    '#a06ab4', '#8b5cf6', '#64748b',
 ]
 
 export default function PastorDonationsPage() {
@@ -123,7 +123,7 @@ export default function PastorDonationsPage() {
                                     />
                                     <Bar
                                         dataKey="total"
-                                        fill="#3b82f6"
+                                        fill="#9c5e96"
                                         radius={[4, 4, 0, 0]}
                                     />
                                 </BarChart>

@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 import {
     createPrayerRequest,
     getAllPrayerRequests,
-    getPublicPrayerRequests,
     getUserPrayerRequests,
     getPrayerRequestById,
     updatePrayerRequest,
@@ -34,25 +33,9 @@ export const getAll = async (req: Request, res: Response) => {
     }
 }
 
-export const getPublic = async (req: Request, res: Response) => {
-    try {
-        const requests = await getPublicPrayerRequests()
-        res.status(200).json({ status: 'success', data: requests })
-    } catch (error: any) {
-        res.status(500).json({ status: 'error', message: error.message })
-    }
-}
-
 export const getByUser = async (req: Request, res: Response) => {
     try {
-        const {userId} = req.params
-        if(typeof userId !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid ID'
-            })
-        }
-
+        const {userId} = req.params as {userId: string}
         const requests = await getUserPrayerRequests(userId)
         res.status(200).json({ status: 'success', data: requests })
     } catch (error: any) {
@@ -62,14 +45,7 @@ export const getByUser = async (req: Request, res: Response) => {
 
 export const getOne = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params
-        if (typeof id !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid ID'
-            })
-        }
-
+        const { id } = req.params as { id: string }
         const request = await getPrayerRequestById(id)
         res.status(200).json({ status: 'success', data: request })
     } catch (error: any) {
@@ -79,13 +55,7 @@ export const getOne = async (req: Request, res: Response) => {
 
 export const update = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params
-        if (typeof id !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid ID'
-            })
-        }
+        const { id } = req.params as { id: string }
 
         const request = await updatePrayerRequest(id, req.body)
         res.status(200).json({
@@ -100,13 +70,7 @@ export const update = async (req: Request, res: Response) => {
 
 export const remove = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params
-        if (typeof id !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid ID'
-            })
-        }
+        const { id } = req.params as { id: string }
 
         await deletePrayerRequest(id)
         res.status(200).json({
@@ -120,14 +84,7 @@ export const remove = async (req: Request, res: Response) => {
 
 export const updateStatus = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params
-        if (typeof id !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid ID'
-            })
-        }
-
+        const { id } = req.params as { id: string }
         const { status } = req.body
         const request = await updatePrayerStatus(id, status)
         res.status(200).json({

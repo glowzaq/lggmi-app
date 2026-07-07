@@ -12,13 +12,7 @@ export const getEvents = async (req: Request, res: Response) => {
 
 export const getEvent = async (req: Request, res: Response) => {
     try {
-        const {id} = req.params
-        if (typeof id !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid event ID'
-            })
-        }
+        const { id } = req.params as { id: string }
         const event = await getEventById(id)
         res.status(200).json({status: 'success', data: event})
     }catch (error: any) {
@@ -59,13 +53,7 @@ export const getUpcoming = async (req: Request, res: Response) => {
 
 export const update = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params
-        if (typeof id !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid event ID'
-            })
-        }
+        const { id } = req.params as { id: string }
         const event = await updateEvent(id, req.body)
         res.status(200).json({
             status: 'success',
@@ -82,14 +70,7 @@ export const update = async (req: Request, res: Response) => {
 
 export const remove = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params
-        if (typeof id !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid event ID'
-            })
-        }
-
+        const { id } = req.params as { id: string }
         await deleteEvent(id)
         res.status(200).json({
             status: 'success',
