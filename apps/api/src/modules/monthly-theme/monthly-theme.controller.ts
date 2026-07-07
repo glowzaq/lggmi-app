@@ -44,10 +44,7 @@ export const getAll = async (req: Request, res: Response) => {
 
 export const update = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params
-        if (typeof id !== 'string') {
-            throw new Error('Invalid theme ID')
-        }
+        const { id } = req.params as { id: string }
         const theme = await updateMonthlyTheme(id, req.body)
         res.status(200).json({
             status: 'success',
@@ -61,10 +58,7 @@ export const update = async (req: Request, res: Response) => {
 
 export const activate = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params
-        if (typeof id !== 'string') {
-            throw new Error('Invalid theme ID')
-        }
+        const { id } = req.params as { id: string }
         const theme = await setActiveTheme(id)
         res.status(200).json({
             status: 'success',
@@ -78,10 +72,7 @@ export const activate = async (req: Request, res: Response) => {
 
 export const remove = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params
-        if (typeof id !== 'string') {
-            throw new Error('Invalid theme ID')
-        }
+        const { id } = req.params as { id: string }
         await deleteMonthlyTheme(id)
         res.status(200).json({
             status: 'success',

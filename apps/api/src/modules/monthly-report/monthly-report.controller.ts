@@ -34,10 +34,7 @@ export const getAll = async (req: Request, res: Response) => {
 
 export const getOne = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params
-        if (typeof id !== 'string') {
-            throw new Error('Invalid report ID')
-        }
+        const { id } = req.params as { id: string }
         const report = await getReportById(id)
         res.status(200).json({ status: 'success', data: report })
     } catch (error: any) {
@@ -47,10 +44,7 @@ export const getOne = async (req: Request, res: Response) => {
 
 export const update = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params
-        if (typeof id !== 'string') {
-            throw new Error('Invalid report ID')
-        }
+        const { id } = req.params as { id: string }
         const report = await updateReport(id, req.body)
         res.status(200).json({
             status: 'success',
@@ -64,10 +58,7 @@ export const update = async (req: Request, res: Response) => {
 
 export const remove = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params
-        if (typeof id !== 'string') {
-            throw new Error('Invalid report ID')
-        }
+        const { id } = req.params as { id: string }
         await deleteReport(id)
         res.status(200).json({
             status: 'success',

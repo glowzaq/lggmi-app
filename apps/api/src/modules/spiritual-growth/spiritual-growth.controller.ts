@@ -22,13 +22,7 @@ export const logToday = async (req: Request, res: Response) => {
 
 export const getToday = async (req: Request, res: Response) => {
     try {
-        const { userId } = req.params
-        if (typeof userId !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid ID'
-            })
-        }
+        const { userId } = req.params as { userId: string }
         const log = await getTodayLog(userId)
         res.status(200).json({
             status: 'success',
@@ -41,14 +35,7 @@ export const getToday = async (req: Request, res: Response) => {
 
 export const getLogs = async (req: Request, res: Response) => {
     try {
-        const { userId } = req.params
-        if (typeof userId !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid ID'
-            })
-        }
-
+        const { userId } = req.params as { userId: string }
         const days = req.query.days ? Number(req.query.days) : 30
         const logs = await getUserLogs(userId, days)
         res.status(200).json({ status: 'success', data: logs })
@@ -59,14 +46,7 @@ export const getLogs = async (req: Request, res: Response) => {
 
 export const getStats = async (req: Request, res: Response) => {
     try {
-        const { userId } = req.params
-        if (typeof userId !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid ID'
-            })
-        }
-
+        const { userId } = req.params as { userId: string }
         const stats = await getUserSpiritualStats(userId)
         res.status(200).json({ status: 'success', data: stats })
     } catch (error: any) {

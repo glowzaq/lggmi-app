@@ -37,13 +37,7 @@ export const getActive = async (req: Request, res: Response) => {
 
 export const getOne = async (req: Request, res: Response) => {
     try {
-        const {id} = req.params
-        if (typeof id !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid ID'
-            })
-        }
+        const {id} = req.params as { id: string }
         const announcement = await getAnnouncementById(id)
         res.status(200).json({ status: 'success', data: announcement })
     } catch (error: any) {
@@ -53,13 +47,7 @@ export const getOne = async (req: Request, res: Response) => {
 
 export const update = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params
-        if (typeof id !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid ID'
-            })
-        }
+        const { id } = req.params as { id: string }
         const announcement = await updateAnnouncement(id, req.body)
         res.status(200).json({
             status: 'success',
@@ -73,13 +61,7 @@ export const update = async (req: Request, res: Response) => {
 
 export const remove = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params
-        if (typeof id !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid ID'
-            })
-        }
+        const { id } = req.params as { id: string }
         await deleteAnnouncement(id)
         res.status(200).json({
             status: 'success',
@@ -92,13 +74,7 @@ export const remove = async (req: Request, res: Response) => {
 
 export const toggle = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params
-        if (typeof id !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid ID'
-            })
-        }
+        const { id } = req.params as { id: string }
         const announcement = await toggleAnnouncement(id)
         res.status(200).json({
             status: 'success',

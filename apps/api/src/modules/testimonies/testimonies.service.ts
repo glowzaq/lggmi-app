@@ -13,7 +13,6 @@ export const createTestimony = async (input: CreateTestimonyInput) => {
             userId: input.userId,
             title: input.title,
             content: input.content,
-            date: new Date(input.date),
             status: 'PENDING',
         },
         include: {
@@ -46,10 +45,15 @@ export const getAllTestimonies = async () => {
 
 // Member's own testimonies
 export const getUserTestimonies = async (userId: string) => {
-    return prisma.testimony.findMany({
-        where: { userId },
-        orderBy: { createdAt: 'desc' },
-    })
+    try {
+        return await prisma.testimony.findMany({
+            where: { userId },
+            orderBy: { createdAt: 'desc' },
+        })
+    } catch (error: any) {
+        console.error('getUserTestimonies Prisma error:', error.message)
+        throw error
+    }
 }
 
 export const getTestimonyById = async (id: string) => {

@@ -35,13 +35,7 @@ export const bulkMark = async (req: Request, res: Response) => {
 
 export const getByEvent = async (req: Request, res: Response) => {
     try {
-        const { eventId } = req.params
-        if(typeof eventId !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid event ID'
-            })
-        }
+        const { eventId } = req.params as { eventId: string }
         const data = await getAttendanceByEvent(eventId)
         res.status(200).json({
             status: 'success',
@@ -57,13 +51,7 @@ export const getByEvent = async (req: Request, res: Response) => {
 
 export const getByUser = async (req: Request, res: Response) => {
     try {
-        const { userId } = req.params
-        if (typeof userId !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid event ID'
-            })
-        }
+        const { userId } = req.params as { userId: string }
         const data = await getUserAttendance(userId)
         res.status(200).json({ status: 'success', data })
     } catch (error: any) {

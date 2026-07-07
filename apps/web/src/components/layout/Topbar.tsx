@@ -1,12 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Bell } from 'lucide-react'
+import { Bell, SparklesIcon } from 'lucide-react'
 import api from '@/services/api'
 
 export default function Topbar() {
     const [user, setUser] = useState<any>(null)
     const [announcements, setAnnouncements] = useState(0)
+    const [theme, setTheme] = useState<any>(null)
 
     useEffect(() => {
         const stored = localStorage.getItem('user')
@@ -14,6 +15,10 @@ export default function Topbar() {
 
         api.get('/announcements/active').then(({ data }) => {
             setAnnouncements(data.data.length)
+        })
+
+        api.get('/monthly-theme/active').then(({ data }) => {
+            setTheme(data.data)
         })
     }, [])
 
@@ -28,6 +33,15 @@ export default function Topbar() {
                 })}
             </p>
             <div className="flex items-center gap-4">
+                {theme && (
+                    <div className="hidden md:flex items-center gap-2 px-3 py-1.5
+    bg-purple-50 rounded-lg border border-purple-200">
+                        <SparklesIcon className="h-3.5 w-3.5 text-purple-600 shrink-0" />
+                        <p className="text-xs text-purple-700 font-medium truncate max-w-[200px]">
+                            {theme.title}
+                        </p>
+                    </div>
+                )}
                 <div className="relative">
                     <Bell className="h-5 w-5 text-slate-500" />
                     {announcements > 0 && (

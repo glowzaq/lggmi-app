@@ -39,13 +39,7 @@ export const getAll = async (req: Request, res: Response) => {
 
 export const getByUser = async (req: Request, res: Response) => {
     try {
-        const {userId} = req.params
-        if (typeof userId !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid member ID'
-            })
-        }
+        const { userId } = req.params as { userId: string }
         const data = await getUserDonations(userId)
         res.status(200).json({ status: 'success', data })
     } catch (error: any) {
@@ -55,13 +49,7 @@ export const getByUser = async (req: Request, res: Response) => {
 
 export const getOne = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params
-        if (typeof id !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid ID'
-            })
-        }
+        const { id } = req.params as { id: string }
         const donation = await getDonationById(id)
         res.status(200).json({ status: 'success', data: donation })
     } catch (error: any) {
@@ -71,13 +59,7 @@ export const getOne = async (req: Request, res: Response) => {
 
 export const update = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params
-        if (typeof id !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid ID'
-            })
-        }
+        const { id } = req.params as { id: string }
         const donation = await updateDonation(id, req.body)
         res.status(200).json({
             status: 'success',
@@ -91,13 +73,7 @@ export const update = async (req: Request, res: Response) => {
 
 export const remove = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params
-        if (typeof id !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid ID'
-            })
-        }
+        const { id } = req.params as { id: string }
         await deleteDonation(id)
         res.status(200).json({
             status: 'success',

@@ -131,17 +131,17 @@ export default function SpiritualGrowthPage() {
                 </div>
 
                 {stats && stats.currentStreak > 0 && (
-                    <div className="bg-gradient-to-r from-orange-500 to-amber-500
+                    <div className="bg-gradient-to-r from-[#693565] to-[#3f2039]
             rounded-xl p-5 text-white flex items-center gap-4">
                         <div className="p-3 bg-white/20 rounded-xl">
                             <Flame className="h-8 w-8" />
                         </div>
                         <div>
-                            <p className="text-orange-100 text-sm">Current Streak</p>
+                            <p className="text-[#d4b0d1] text-sm">Current Streak</p>
                             <p className="text-3xl font-bold">
                                 {stats.currentStreak} day{stats.currentStreak !== 1 ? 's' : ''}
                             </p>
-                            <p className="text-orange-100 text-xs mt-0.5">
+                            <p className="text-[#b885b2] text-xs mt-0.5">
                                 Longest: {stats.longestStreak} days — keep it going!
                             </p>
                         </div>
@@ -240,7 +240,7 @@ export default function SpiritualGrowthPage() {
                         <Button
                             onClick={handleSave}
                             disabled={saving || saved}
-                            className="w-full"
+                            className="w-full hover:bg-[#693565] bg-[#3f2039] text-white"
                         >
                             {saving
                                 ? 'Saving...'

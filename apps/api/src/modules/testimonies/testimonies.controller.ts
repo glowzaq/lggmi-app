@@ -45,13 +45,7 @@ export const getAll = async (req: Request, res: Response) => {
 
 export const getByUser = async (req: Request, res: Response) => {
     try {
-        const userId = req.params
-        if (typeof userId !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid user ID',
-            })
-        }
+        const { userId } = req.params as {userId: string}
         const testimonies = await getUserTestimonies(userId)
         res.status(200).json({ status: 'success', data: testimonies })
     } catch (error: any) {
@@ -61,13 +55,7 @@ export const getByUser = async (req: Request, res: Response) => {
 
 export const getOne = async (req: Request, res: Response) => {
     try {
-        const id = req.params
-        if (typeof id !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid user ID',
-            })
-        }
+        const { id } = req.params as {id: string}
         const testimony = await getTestimonyById(id)
         res.status(200).json({ status: 'success', data: testimony })
     } catch (error: any) {
@@ -77,13 +65,7 @@ export const getOne = async (req: Request, res: Response) => {
 
 export const update = async (req: Request, res: Response) => {
     try {
-        const id = req.params
-        if (typeof id !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid user ID',
-            })
-        }
+        const { id } = req.params as {id: string}
         const testimony = await updateTestimony(id, req.body)
         res.status(200).json({
             status: 'success',
@@ -97,17 +79,8 @@ export const update = async (req: Request, res: Response) => {
 
 export const approve = async (req: Request, res: Response) => {
     try {
-        const id = req.params
-        if (typeof id !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid user ID',
-            })
-        }
-        const testimony = await approveTestimony(
-            id,
-            req.user!.userId
-        )
+        const { id } = req.params as {id: string}
+        const testimony = await approveTestimony(id, req.user!.userId)
         res.status(200).json({
             status: 'success',
             message: 'Testimony approved',
@@ -120,13 +93,7 @@ export const approve = async (req: Request, res: Response) => {
 
 export const reject = async (req: Request, res: Response) => {
     try {
-        const id = req.params
-        if (typeof id !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid user ID',
-            })
-        }
+        const { id } = req.params as {id: string}
         const testimony = await rejectTestimony(id)
         res.status(200).json({
             status: 'success',
@@ -140,13 +107,7 @@ export const reject = async (req: Request, res: Response) => {
 
 export const remove = async (req: Request, res: Response) => {
     try {
-        const id = req.params
-        if (typeof id !== 'string') {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid user ID',
-            })
-        }
+        const { id } = req.params as {id: string}
         await deleteTestimony(id)
         res.status(200).json({
             status: 'success',

@@ -28,14 +28,7 @@ export const getUser = async (req: Request, res: Response) => {
 
 export const updateUserProfile = async (req: Request, res: Response) => {
     try {
-        const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id
-        if (typeof id !== 'string' || !id) {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid User ID',
-            })
-        }
-
+        const { id } = req.params as { id: string }
         const user = await updateUser(id, req.body)
         res.status(200).json({
             status: 'success',
@@ -49,14 +42,7 @@ export const updateUserProfile = async (req: Request, res: Response) => {
 
 export const removeUser = async (req: Request, res: Response) => {
     try {
-        const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id
-        if (typeof id !== 'string' || !id) {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid User ID',
-            })
-        }
-
+        const { id } = req.params as { id: string }
         await deactivateUser(id)
         res.status(200).json({
             status: 'success',

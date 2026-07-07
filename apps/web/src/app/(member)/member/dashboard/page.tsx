@@ -4,8 +4,7 @@ import { useEffect, useState } from 'react'
 import DashboardLayout from '@/components/layout/DashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
-    Calendar, BookOpen, Bell,
-    DollarSign, CheckSquare, ChevronRight,
+    Calendar, BookOpen, Bell, Star, Flame,
     Play,
     Headphones,
 } from 'lucide-react'
@@ -20,8 +19,10 @@ export default function MemberDashboard() {
     const [latestSermons, setLatestSermons] = useState<any[]>([])
     const [announcements, setAnnouncements] = useState<any[]>([])
     const [attendance, setAttendance] = useState<any>(null)
-    const [donations, setDonations] = useState<any>(null)
+    const [spiritualGrowth, setSpiritualGrowth] = useState<any>(null)
     const [dataLoading, setDataLoading] = useState(true)
+    const [myTestimonyCount, setMyTestimonyCount] = useState(0)
+    const [theme, setTheme] = useState<any>(null)
 
     useEffect(() => {
         if (userLoading) return
@@ -32,14 +33,18 @@ export default function MemberDashboard() {
             api.get('/sermons/latest'),
             api.get('/announcements/active'),
             api.get(`/attendance/user/${user.id}`),
-            api.get(`/donations/user/${user.id}`),
+            api.get(`/spiritual-growth/stats/${user.id}`),
+            api.get(`/testimonies/user/${user.id}`),
+            api.get('/monthly-theme/active'),
         ])
-            .then(([e, s, a, att, don]) => {
+            .then(([e, s, a, att, sp, test, th]) => {
                 setUpcomingEvents(e.data.data.slice(0, 3))
                 setLatestSermons(s.data.data.slice(0, 3))
                 setAnnouncements(a.data.data.slice(0, 3))
                 setAttendance(att.data.data)
-                setDonations(don.data.data)
+                setSpiritualGrowth(sp.data.data)
+                setMyTestimonyCount(test.data.data.length)
+                setTheme(th.data.data)
             })
             .catch((err) => {
                 console.error('Dashboard data error:', err)
@@ -72,53 +77,67 @@ export default function MemberDashboard() {
 
                 {/* Welcome header */}
                 <div className="bg-gradient-to-r from-[#693565] to-[#3f2039] rounded-xl p-6 text-white">
-                    <p className="text-blue-200 text-sm">Welcome back</p>
+                    <p className="text-purple-200 text-sm">Welcome back</p>
                     <h1 className="text-2xl font-bold mt-1">
                         {user?.firstName} {user?.lastName}
                     </h1>
-                    <p className="text-blue-200 text-sm mt-2">
+                    {theme && (
+                        <div className="mt-3 pt-3 border-t border-[#9c5e96]/40">
+                            <p className="text-[#d4b0d1] text-xs uppercase tracking-wider font-medium">
+                                Theme of the Month
+                            </p>
+                            <p className="text-white font-semibold mt-0.5">
+                                {theme.title}
+                            </p>
+                            {theme.scripture && (
+                                <p className="text-[#b885b2] text-xs mt-0.5 italic">
+                                    {theme.scripture}
+                                </p>
+                            )}
+                        </div>
+                    )}
+                    <p className="text-purple-200 text-sm mt-2">
                         Attendance rate:{' '}
                         <span className="text-white font-semibold">
                             {attendance?.summary?.attendanceRate ?? 0}%
                         </span>
                         {' · '}
-                        Total giving:{' '}
+                        Prayer streak:{' '}
                         <span className="text-white font-semibold">
-                            ₦{donations?.total?.toLocaleString() ?? 0}
+                            {spiritualGrowth?.currentStreak ?? 0} days
                         </span>
                     </p>
                 </div>
-
                 {/* Quick stats */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     {[
                         {
-                            label: 'Services Attended',
-                            value: attendance?.summary?.present ?? 0,
-                            icon: CheckSquare,
-                            color: 'text-blue-600',
-                            bg: 'bg-blue-50',
+                            label: 'My Testimonies',
+                            value: myTestimonyCount,
+                            icon: Star,
+                            color: 'text-purple-600',
+                            bg: 'bg-purple-50',
                         },
                         {
-                            label: 'Total Donations',
-                            value: `₦${(donations?.total ?? 0).toLocaleString()}`,
-                            icon: DollarSign,
-                            color: 'text-green-600',
-                            bg: 'bg-green-50',
+                            label: 'Prayer Streak',
+                            value: `${spiritualGrowth?.currentStreak ?? 0} days`,
+                            icon: Flame,
+                            color: 'text-orange-600',
+                            bg: 'bg-orange-50',
                         },
                         {
                             label: 'Upcoming Events',
                             value: upcomingEvents.length,
                             icon: Calendar,
-                            color: 'text-purple-600',
-                            bg: 'bg-purple-50',
+                            color: 'text-blue-600',
+                            bg: 'bg-blue-50',
                         },
                         {
                             label: 'Announcements',
                             value: announcements.length,
                             icon: Bell,
-                            color: 'text-orange-600',
-                            bg: 'bg-orange-50',
+                            color: 'text-green-600',
+                            bg: 'bg-green-50',
                         },
                     ].map((stat) => (
                         <Card key={stat.label}>
