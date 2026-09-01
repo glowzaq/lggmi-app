@@ -17,14 +17,7 @@ interface PrayerRequest {
     id: string
     title: string
     content: string
-    status: 'PENDING' | 'PRAYED' | 'ANSWERED'
     createdAt: string
-}
-
-const statusConfig = {
-    PENDING: { label: 'Pending', badge: 'bg-orange-100 text-orange-700' },
-    PRAYED: { label: 'Prayed For', badge: 'bg-blue-100 text-blue-700' },
-    ANSWERED: { label: 'Answered', badge: 'bg-green-100 text-green-700' },
 }
 
 export default function MemberPrayerPage() {
@@ -105,7 +98,7 @@ export default function MemberPrayerPage() {
                     </div>
                     <Button
                         onClick={() => setModalOpen(true)}
-                        className="flex items-center gap-2 bg-[#693565] hover:bg-[#9c5e96]"
+                        className="flex items-center gap-2 hover:bg-[#693565] bg-[#3f2039]"
                     >
                         <Plus className="h-4 w-4" />
                         Add Request
@@ -120,7 +113,7 @@ export default function MemberPrayerPage() {
                         action={
                             <Button
                                 onClick={() => setModalOpen(true)}
-                                className="flex items-center gap-2"
+                                className="flex items-center gap-2 hover:bg-[#693565] bg-[#3f2039]"
                             >
                                 <Plus className="h-4 w-4" />
                                 Submit Request
@@ -136,9 +129,6 @@ export default function MemberPrayerPage() {
                                             <CardTitle className="text-base font-semibold text-slate-800">
                                                 {request.title}
                                             </CardTitle>
-                                            <span className={`text-xs px-2 py-1 rounded-full font-medium shrink-0 ${statusConfig[request.status].badge}`}>
-                                                {statusConfig[request.status].label}
-                                            </span>
                                         </div>
                                     </CardHeader>
                                     <CardContent className="space-y-2">
@@ -192,9 +182,7 @@ export default function MemberPrayerPage() {
                                 onChange={(e) => setForm({ ...form, content: e.target.value })}
                                 placeholder="Share what you'd like the Pastor and Admin to pray about..."
                                 rows={4}
-                                className="w-full px-3 py-2 border border-slate-200 rounded-md
-          text-sm resize-none focus:outline-none
-          focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 border border-slate-200 rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
 
@@ -210,7 +198,7 @@ export default function MemberPrayerPage() {
                             >
                                 Cancel
                             </Button>
-                            <Button onClick={handleSubmit} disabled={submitting} className='bg-[#693565] hover:bg-[#9c5e96] text-white'>
+                            <Button onClick={handleSubmit} disabled={submitting} className='hover:bg-[#693565] bg-[#3f2039] text-white'>
                                 {submitting ? 'Submitting...' : 'Submit Request'}
                             </Button>
                         </div>

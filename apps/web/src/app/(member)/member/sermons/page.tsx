@@ -145,8 +145,7 @@ export default function MemberSermonsPage() {
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="flex items-center gap-1.5 text-xs
-                                            bg-slate-100 text-slate-900 px-3 py-1.5 rounded-lg
-                                            hover:bg-slate-700 hover:text-white transition-colors"
+                                            bg-slate-100 text-slate-900 px-3 py-1.5 rounded-lg hover:text-black transition-colors"
                                                 >
                                                     <Play className="h-3 w-3" />
                                                     Watch
@@ -158,7 +157,7 @@ export default function MemberSermonsPage() {
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="flex items-center gap-1.5 text-xs
-                                    bg-[#693565] text-white px-3 py-1.5 rounded-lg
+                                    hover:bg-[#693565] bg-[#3f2039] cursor-pointer text-white px-3 py-1.5 rounded-lg
                                     hover:bg-[#3f2039] transition-colors"
                                                 >
                                                     <Headphones className="h-3 w-3" />

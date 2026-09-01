@@ -119,7 +119,7 @@ export default function AdminMonthlyReportPage() {
                         className="flex bg-[#3f2039] hover:bg-[#693565] text-white items-center gap-2"
                     >
                         <Plus className="h-4 w-4" />
-                        New Report
+                        Add Report
                     </Button>
                 </div>
 

@@ -3,9 +3,8 @@ export interface CreateEventInput {
     description?: string;
     type?:
     |'SUNDAY_SERVICE'
-    | 'BIBLE_STUDY'
-    | 'PRAYER_MEETING'
-    | 'SPECIAL_PROGRAM'
+    |'MOMENT_OF_LIFTING'
+    |'LET_THE_FIRE_FALL'
     | 'OTHER'
     location?: string;
     startTime: string;

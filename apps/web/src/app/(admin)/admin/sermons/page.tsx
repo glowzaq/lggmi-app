@@ -76,7 +76,7 @@ export default function AdminSermonsPage() {
                     </div>
                     <Button
                         onClick={handleOpenCreate}
-                        className="flex items-center gap-2 bg-[#693565]"
+                        className="flex items-center gap-2 bg-[#3f2039] hover:bg-[#693565]"
                     >
                         <Plus className="h-4 w-4" />
                         Add Sermon
@@ -122,7 +122,7 @@ export default function AdminSermonsPage() {
                         action={
                             <Button
                                 onClick={handleOpenCreate}
-                                className="flex items-center gap-2 bg-[#693565]"
+                                className="flex items-center gap-2 bg-[#3f2039] hover:bg-[#693565]"
                             >
                                 <Plus className="h-4 w-4" /> Add Sermon
                             </Button>

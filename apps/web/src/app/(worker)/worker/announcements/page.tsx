@@ -87,7 +87,7 @@ export default function WorkerAnnouncementsPage() {
                         {announcements.map((ann) => (
                             <Card
                                 key={ann.id}
-                                className={`border-l-4 transition-opacity ${ann.isActive ? 'border-l-purple-400' : 'border-l-slate-300 opacity-60'
+                                className={`border-r-4 transition-opacity ${ann.isActive ? 'border-r-purple-400' : 'border-r-slate-300 opacity-60'
 
                                 }`}
                             >
@@ -97,7 +97,7 @@ export default function WorkerAnnouncementsPage() {
                                             {ann.title}
                                         </CardTitle>
                                         <div className="flex items-center gap-2 shrink-0">
-                                            <span className={`text-xs px-2 py-1 rounded-full font-medium ${ann.isActive ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'}`}>
+                                            <span className={`text-xs px-2 py-1 rounded-full font-medium ${ann.isActive ? 'bg-purple-100 text-purple-900' : 'bg-slate-100 text-slate-500'}`}>
                                                 {ann.isActive ? 'Active' : 'Inactive'}
                                             </span>
                                             <button

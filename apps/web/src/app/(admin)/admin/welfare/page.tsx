@@ -61,7 +61,7 @@ export default function AdminWelfarePage() {
                     </div>
                     <Button
                         onClick={() => { setEditingRecord(null); setModalOpen(true) }}
-                        className="flex items-center bg-[#3f2039] text-white gap-2"
+                        className="flex items-center bg-[#3f2039] hover:bg-[#693565] text-white gap-2"
                     >
                         <Plus className="h-4 w-4" />
                         New Record
@@ -106,7 +106,7 @@ export default function AdminWelfarePage() {
                         action={
                             <Button
                                 onClick={() => setModalOpen(true)}
-                                className="flex bg-[#3f2039] text-white items-center gap-2"
+                                className="flex bg-[#3f2039] hover:bg-[#693565] text-white items-center gap-2"
                             >
                                 <Plus className="h-4 w-4" /> New Record
                             </Button>
@@ -132,7 +132,7 @@ export default function AdminWelfarePage() {
                                             </p>
                                         </div>
                                         <div className="flex items-center gap-2 shrink-0">
-                                            <span className="text-lg font-bold text-green-600">
+                                            <span className="text-lg font-bold text-black">
                                                 ₦{Number(record.amount).toLocaleString()}
                                             </span>
                                             <button

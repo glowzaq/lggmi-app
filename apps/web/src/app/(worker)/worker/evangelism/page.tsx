@@ -69,7 +69,7 @@ export default function WorkerEvangelismPage() {
                     </div>
                     <Button
                         onClick={handleOpenCreate}
-                        className="flex items-center gap-2 bg-[#3f2039] text-white"
+                        className="flex items-center gap-2 bg-[#3f2039] text-white hover:bg-[#693565]"
                     >
                         <Plus className="h-4 w-4" />
                         New Record
@@ -83,8 +83,8 @@ export default function WorkerEvangelismPage() {
                             title="Total Outreaches"
                             value={stats.totalOutreaches}
                             icon={Globe}
-                            iconColor="text-blue-600"
-                            iconBg="bg-blue-50"
+                            iconColor="text-[#2d332d]"
+                            iconBg="bg-[#a8b8a6]"
                         />
                         <StatCard
                             title="Total Reached"
@@ -97,15 +97,15 @@ export default function WorkerEvangelismPage() {
                             title="Converted"
                             value={stats.totalConverted}
                             icon={Heart}
-                            iconColor="text-red-600"
-                            iconBg="bg-red-50"
+                            iconColor="text-[#4a261a]"
+                            iconBg="bg-[#d4afa0]"
                         />
                         <StatCard
                             title="Filled with Spirit"
                             value={stats.totalFilledSpirit}
                             icon={Flame}
-                            iconColor="text-orange-600"
-                            iconBg="bg-orange-50"
+                            iconColor="text-[#473723]"
+                            iconBg="bg-[#d6b68d]"
                         />
                         <StatCard
                             title="Assimilated"
@@ -127,7 +127,7 @@ export default function WorkerEvangelismPage() {
                         title="No evangelism records yet"
                         description="Start recording your outreach activities"
                         action={
-                            <Button onClick={handleOpenCreate} className="flex items-center gap-2 bg-[#3f2039] text-white">
+                            <Button onClick={handleOpenCreate} className="flex items-center gap-2 bg-[#3f2039] text-white hover:bg-[#693565]">
                                 <Plus className="h-4 w-4" /> New Record
                             </Button>
                         }

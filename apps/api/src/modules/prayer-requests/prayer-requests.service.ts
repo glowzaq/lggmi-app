@@ -22,9 +22,8 @@ export const createPrayerRequest = async (
     })
 }
 
-export const getAllPrayerRequests = async (status?: string) => {
+export const getAllPrayerRequests = async () => {
     return prisma.prayerRequest.findMany({
-        where: status ? { status: status as any } : undefined,
         include: {
             user: { select: { firstName: true, lastName: true } },
         },
@@ -70,26 +69,10 @@ export const deletePrayerRequest = async (id: string) => {
     return prisma.prayerRequest.delete({ where: { id } })
 }
 
-export const updatePrayerStatus = async (
-    id: string,
-    status: 'PENDING' | 'PRAYED' | 'ANSWERED'
-) => {
-    const request = await prisma.prayerRequest.findUnique({ where: { id } })
-    if (!request) throw new Error('Prayer request not found')
-
-    return prisma.prayerRequest.update({
-        where: { id },
-        data: { status },
-    })
-}
-
 export const getPrayerStats = async () => {
-    const [total, pending, prayed, answered] = await Promise.all([
+    const [total] = await Promise.all([
         prisma.prayerRequest.count(),
-        prisma.prayerRequest.count({ where: { status: 'PENDING' } }),
-        prisma.prayerRequest.count({ where: { status: 'PRAYED' } }),
-        prisma.prayerRequest.count({ where: { status: 'ANSWERED' } }),
     ])
 
-    return { total, pending, prayed, answered }
+    return { total }
 }

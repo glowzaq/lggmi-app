@@ -23,9 +23,9 @@ interface Event {
 
 const eventTypeColors: Record<string, string> = {
     SUNDAY_SERVICE: 'bg-blue-100 text-blue-700',
-    BIBLE_STUDY: 'bg-green-100 text-green-700',
-    PRAYER_MEETING: 'bg-purple-100 text-purple-700',
-    SPECIAL_PROGRAM: 'bg-orange-100 text-orange-700',
+    MOMENT_OF_LIFTING: 'bg-green-100 text-green-700',
+    LET_THE_FIRE_FALL: 'bg-purple-100 text-purple-700',
+    // SPECIAL_PROGRAM: 'bg-orange-100 text-orange-700',
     OTHER: 'bg-slate-100 text-slate-700',
 }
 
@@ -71,10 +71,10 @@ export default function AdminEventsPage() {
                     </div>
                     <Button
                         onClick={handleOpenCreate}
-                        className="flex items-center gap-2 bg-[#693565]"
+                        className="flex items-center gap-2 bg-[#3f2039] hover:bg-[#693565]"
                     >
                         <Plus className="h-4 w-4" />
-                        New Event
+                        Add Event
                     </Button>
                 </div>
 
@@ -88,8 +88,8 @@ export default function AdminEventsPage() {
                         title="No events yet"
                         description="Create your first church event"
                         action={
-                            <Button onClick={handleOpenCreate} className="flex items-center gap-2 bg-[#693565]">
-                                <Plus className="h-4 w-4" /> New Event
+                            <Button onClick={handleOpenCreate} className="flex items-center gap-2 bg-[#3f2039] hover:bg-[#693565]">
+                                <Plus className="h-4 w-4" /> Add Event
                             </Button>
                         }
                     />

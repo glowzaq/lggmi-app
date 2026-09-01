@@ -83,7 +83,7 @@ export default function AdminFamiliesPage() {
                     </div>
                     <Button
                         onClick={() => setModalOpen(true)}
-                        className="flex items-center gap-2 bg-[#693565] hover:bg-[#9c5e96]"
+                        className="flex items-center gap-2 bg-[#3f2039] hover:bg-[#693565]"
                     >
                         <Plus className="h-4 w-4" />
                         Add Family Group
@@ -98,11 +98,11 @@ export default function AdminFamiliesPage() {
                     <EmptyState
                         icon={Users}
                         title="No family groups yet"
-                        description="Create family groups to organise your congregation"
+                        description="Create family groups to organize your congregation"
                         action={
                             <Button
                                 onClick={() => setModalOpen(true)}
-                                className="flex items-center gap-2 bg-[#693565] hover:bg-[#9c5e96]"
+                                className="flex items-center gap-2 bg-[#3f2039] hover:bg-[#693565]"
                             >
                                 <Plus className="h-4 w-4" />
                                 Add Family Group
@@ -172,7 +172,7 @@ export default function AdminFamiliesPage() {
                         <Input
                             value={familyName}
                             onChange={(e) => setFamilyName(e.target.value)}
-                            placeholder="e.g. The Akintokun Family"
+                            placeholder="e.g. The Adefolus"
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter') handleCreate()
                             }}
@@ -198,7 +198,7 @@ export default function AdminFamiliesPage() {
                         >
                             Cancel
                         </Button>
-                        <Button onClick={handleCreate} disabled={submitting}>
+                        <Button onClick={handleCreate} disabled={submitting} className='bg-[#3f2039] hover:bg-[#693565]'>
                             {submitting ? 'Creating...' : 'Create Group'}
                         </Button>
                     </div>

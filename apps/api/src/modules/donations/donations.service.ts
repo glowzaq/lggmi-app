@@ -1,39 +1,39 @@
 import prisma from '../../utils/prisma'
-import { CreateDonationInput, UpdateDonationInput, DonationReportFilter } from './donations.types'
+import {
+    CreateDonationInput,
+    UpdateDonationInput,
+    DonationReportFilter,
+} from './donations.types'
 
 export const createDonation = async (input: CreateDonationInput) => {
-    const { userId, amount, type, note, donatedAt } = input
-
-    const user = await prisma.user.findUnique({ where: { id: userId } })
-    if (!user) throw new Error('User not found')
-    if (amount <= 0) throw new Error('Amount must be greater than zero')
+    if (!input.amount || input.amount <= 0) {
+        throw new Error('Amount must be greater than zero')
+    }
 
     return prisma.donation.create({
         data: {
-            userId,
-            amount,
-            type: type || 'OFFERING',
-            note,
-            donatedAt: donatedAt ? new Date(donatedAt) : new Date(),
+            amount: input.amount,
+            type: input.type || 'OFFERING',
+            note: input.note,
+            date: input.date ? new Date(input.date) : new Date(),
+            eventId: input.eventId || undefined,
         },
         include: {
-            user: {
-                select: { firstName: true, lastName: true },
-            },
+            event: { select: { title: true, type: true } },
         },
     })
 }
 
 export const getAllDonations = async (filter: DonationReportFilter = {}) => {
-    const { startDate, endDate, type, userId } = filter
+    const { startDate, endDate, type, eventId } = filter
 
     return prisma.donation.findMany({
         where: {
-            ...(userId && { userId }),
+            ...(eventId && { eventId }),
             ...(type && { type: type as any }),
             ...(startDate || endDate
                 ? {
-                    donatedAt: {
+                    date: {
                         ...(startDate && { gte: new Date(startDate) }),
                         ...(endDate && { lte: new Date(endDate) }),
                     },
@@ -41,41 +41,19 @@ export const getAllDonations = async (filter: DonationReportFilter = {}) => {
                 : {}),
         },
         include: {
-            user: {
-                select: { firstName: true, lastName: true },
-            },
+            event: { select: { title: true, type: true } },
         },
-        orderBy: { donatedAt: 'desc' },
+        orderBy: { date: 'desc' },
     })
-}
-
-export const getUserDonations = async (userId: string) => {
-    const user = await prisma.user.findUnique({ where: { id: userId } })
-    if (!user) throw new Error('User not found')
-
-    const donations = await prisma.donation.findMany({
-        where: { userId },
-        orderBy: { donatedAt: 'desc' },
-    })
-
-    const total = donations.reduce(
-        (sum, d) => sum + Number(d.amount),
-        0
-    )
-
-    return { donations, total }
 }
 
 export const getDonationById = async (id: string) => {
     const donation = await prisma.donation.findUnique({
         where: { id },
         include: {
-            user: {
-                select: { firstName: true, lastName: true },
-            },
+            event: { select: { title: true, type: true } },
         },
     })
-
     if (!donation) throw new Error('Donation not found')
     return donation
 }
@@ -90,8 +68,11 @@ export const updateDonation = async (
     return prisma.donation.update({
         where: { id },
         data: {
-            ...input,
-            donatedAt: input.donatedAt ? new Date(input.donatedAt) : undefined,
+            amount: input.amount,
+            type: input.type as any,
+            note: input.note,
+            date: input.date ? new Date(input.date) : undefined,
+            eventId: input.eventId,
         },
     })
 }
@@ -99,7 +80,6 @@ export const updateDonation = async (
 export const deleteDonation = async (id: string) => {
     const donation = await prisma.donation.findUnique({ where: { id } })
     if (!donation) throw new Error('Donation not found')
-
     return prisma.donation.delete({ where: { id } })
 }
 
@@ -111,19 +91,14 @@ export const getDonationStats = async () => {
 
     const [allTime, thisMonth, lastMonth, byType] = await Promise.all([
         prisma.donation.aggregate({ _sum: { amount: true } }),
-
         prisma.donation.aggregate({
             _sum: { amount: true },
-            where: { donatedAt: { gte: startOfMonth } },
+            where: { date: { gte: startOfMonth } },
         }),
-
         prisma.donation.aggregate({
             _sum: { amount: true },
-            where: {
-                donatedAt: { gte: startOfLastMonth, lte: endOfLastMonth },
-            },
+            where: { date: { gte: startOfLastMonth, lte: endOfLastMonth } },
         }),
-
         prisma.donation.groupBy({
             by: ['type'],
             _sum: { amount: true },
@@ -138,10 +113,13 @@ export const getDonationStats = async () => {
             return prisma.donation
                 .aggregate({
                     _sum: { amount: true },
-                    where: { donatedAt: { gte: start, lte: end } },
+                    where: { date: { gte: start, lte: end } },
                 })
                 .then((res) => ({
-                    month: start.toLocaleString('default', { month: 'short', year: 'numeric' }),
+                    month: start.toLocaleString('default', {
+                        month: 'short',
+                        year: 'numeric',
+                    }),
                     total: Number(res._sum.amount || 0),
                 }))
         })

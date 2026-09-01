@@ -138,15 +138,15 @@ export default function AdminMonthlyThemePage() {
 
                 {/* Active theme banner */}
                 {activeTheme && (
-                    <div className="bg-gradient-to-r from-purple-600 to-purple-700
+                    <div className="bg-gradient-to-r from-[#693565] to-[#3f2039]
             rounded-xl p-5 text-white">
-                        <p className="text-purple-200 text-xs font-medium uppercase tracking-wider">
-                            Current Theme — {MONTHS[activeTheme.month - 1]} {activeTheme.year}
+                        <p className="text-purple-100 text-xs font-medium uppercase tracking-wider">
+                            {MONTHS[activeTheme.month - 1]} {activeTheme.year}
                         </p>
                         <h2 className="text-2xl font-bold mt-1">{activeTheme.title}</h2>
                         {activeTheme.scripture && (
                             <p className="text-purple-200 text-sm mt-1 italic">
-                                "{activeTheme.scripture}"
+                                {activeTheme.scripture}
                             </p>
                         )}
                     </div>
@@ -172,7 +172,7 @@ export default function AdminMonthlyThemePage() {
                         {themes.map((theme) => (
                             <Card
                                 key={theme.id}
-                                className={`hover:shadow-md transition-shadow ${theme.isActive ? 'border-purple-400 border-2' : ''
+                                className={`hover:shadow-md transition-shadow ${theme.isActive ? 'border-slate-500 border-2' : ''
                                     }`}
                             >
                                 <CardHeader className="pb-2">

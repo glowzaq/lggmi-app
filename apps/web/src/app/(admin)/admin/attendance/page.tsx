@@ -4,327 +4,417 @@ import { useEffect, useState } from 'react'
 import DashboardLayout from '@/components/layout/DashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import Spinner from '@/components/shared/Spinner'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import Modal from '@/components/shared/Modal'
 import EmptyState from '@/components/shared/EmptyState'
-import { CheckSquare, Check, X, Clock } from 'lucide-react'
+import Spinner from '@/components/shared/Spinner'
+import { CheckSquare, Plus, Pencil, Trash2, Users } from 'lucide-react'
+import {
+    BarChart, Bar, XAxis, YAxis,
+    Tooltip, ResponsiveContainer, Legend,
+} from 'recharts'
 import api from '@/services/api'
 
-interface Event {
-    id: string
-    title: string
-    type: string
-    startTime: string
-}
-
-interface Member {
-    id: string
-    firstName: string
-    lastName: string
-    gender: string | null
-}
-
 interface AttendanceRecord {
-    userId: string
-    status: 'PRESENT' | 'ABSENT' | 'EXCUSED'
-}
-
-const statusConfig = {
-    PRESENT: {
-        label: 'Present',
-        style: 'bg-green-50 text-green-600 border-green-600',
-        icon: Check,
-    },
-    ABSENT: {
-        label: 'Absent',
-        style: 'bg-red-50 text-red-500 border-red-500',
-        icon: X,
-    },
-    EXCUSED: {
-        label: 'Excused',
-        style: 'bg-orange-50 text-orange-400 border-orange-400',
-        icon: Clock,
-    },
+    id: string
+    date: string
+    maleCount: number
+    femaleCount: number
+    childrenCount: number
+    newcomersCount: number
+    totalCount: number
+    note: string | null
+    event: { title: string; type: string } | null
 }
 
 export default function AdminAttendancePage() {
-    const [events, setEvents] = useState<Event[]>([])
-    const [members, setMembers] = useState<Member[]>([])
-    const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
-    const [records, setRecords] = useState<Record<string, AttendanceRecord>>({})
-    const [existingAttendance, setExistingAttendance] = useState<any[]>([])
-    const [loadingEvents, setLoadingEvents] = useState(true)
-    const [loadingMembers, setLoadingMembers] = useState(false)
-    const [saving, setSaving] = useState(false)
-    const [saved, setSaved] = useState(false)
+    const [records, setRecords] = useState<AttendanceRecord[]>([])
+    const [stats, setStats] = useState<any>(null)
+    const [events, setEvents] = useState<any[]>([])
+    const [loading, setLoading] = useState(true)
+    const [modalOpen, setModalOpen] = useState(false)
+    const [editingRecord, setEditingRecord] = useState<AttendanceRecord | null>(null)
+    const [submitting, setSubmitting] = useState(false)
+    const [error, setError] = useState('')
+    const [form, setForm] = useState({
+        eventId: '',
+        date: new Date().toISOString().slice(0, 10),
+        maleCount: 0,
+        femaleCount: 0,
+        childrenCount: 0,
+        newcomersCount: 0,
+        note: '',
+    })
 
-    useEffect(() => {
-        api.get('/events').then(({ data }) => {
-            setEvents(data.data)
-            setLoadingEvents(false)
-        })
-    }, [])
-
-    const handleSelectEvent = async (event: Event) => {
-        setSelectedEvent(event)
-        setSaved(false)
-        setLoadingMembers(true)
-
-        const [membersRes, attendanceRes] = await Promise.all([
-            api.get('/users'),
-            api.get(`/attendance/event/${event.id}`),
+    const fetchData = async () => {
+        const [recordsRes, statsRes, eventsRes] = await Promise.all([
+            api.get('/attendance'),
+            api.get('/attendance/stats'),
+            api.get('/events'),
         ])
-
-        const memberList: Member[] = membersRes.data.data
-        const existing: any[] = attendanceRes.data.data.attendances
-
-        setMembers(memberList)
-        setExistingAttendance(existing)
-
-        const initialRecords: Record<string, AttendanceRecord> = {}
-        memberList.forEach((m) => {
-            const found = existing.find((a) => a.userId === m.id)
-            initialRecords[m.id] = {
-                userId: m.id,
-                status: found ? found.status : 'PRESENT',
-            }
-        })
-
-        setRecords(initialRecords)
-        setLoadingMembers(false)
+        setRecords(recordsRes.data.data)
+        setStats(statsRes.data.data)
+        setEvents(eventsRes.data.data)
+        setLoading(false)
     }
 
-    const toggleStatus = (userId: string) => {
-        setRecords((prev) => {
-            const current = prev[userId]?.status || 'PRESENT'
-            const cycle: Record<string, 'PRESENT' | 'ABSENT' | 'EXCUSED'> = {
-                PRESENT: 'ABSENT',
-                ABSENT: 'EXCUSED',
-                EXCUSED: 'PRESENT',
-            }
-            return {
-                ...prev,
-                [userId]: { userId, status: cycle[current] },
-            }
+    useEffect(() => { fetchData() }, [])
+
+    const totalForForm =
+        form.maleCount + form.femaleCount +
+        form.childrenCount + form.newcomersCount
+
+    const handleOpenCreate = () => {
+        setEditingRecord(null)
+        setForm({
+            eventId: '',
+            date: new Date().toISOString().slice(0, 10),
+            maleCount: 0,
+            femaleCount: 0,
+            childrenCount: 0,
+            newcomersCount: 0,
+            note: '',
         })
+        setModalOpen(true)
     }
 
-    const setAllPresent = () => {
-        const updated: Record<string, AttendanceRecord> = {}
-        members.forEach((m) => {
-            updated[m.id] = { userId: m.id, status: 'PRESENT' }
+    const handleOpenEdit = (record: AttendanceRecord) => {
+        setEditingRecord(record)
+        setForm({
+            eventId: record.event ? '' : '',
+            date: new Date(record.date).toISOString().slice(0, 10),
+            maleCount: record.maleCount,
+            femaleCount: record.femaleCount,
+            childrenCount: record.childrenCount,
+            newcomersCount: record.newcomersCount,
+            note: record.note ?? '',
         })
-        setRecords(updated)
+        setModalOpen(true)
     }
 
-    const handleSave = async () => {
-        if (!selectedEvent) return
-        setSaving(true)
+    const handleSubmit = async () => {
+        setSubmitting(true)
+        setError('')
 
-        const payload = {
-            eventId: selectedEvent.id,
-            records: Object.values(records),
+        try {
+            if (editingRecord) {
+                await api.patch(`/attendance/${editingRecord.id}`, {
+                    ...form,
+                    eventId: form.eventId || undefined,
+                })
+            } else {
+                await api.post('/attendance', {
+                    ...form,
+                    eventId: form.eventId || undefined,
+                })
+            }
+            setModalOpen(false)
+            fetchData()
+        } catch (err: any) {
+            setError(err.response?.data?.message || 'Something went wrong')
+        } finally {
+            setSubmitting(false)
         }
-
-        await api.post('/attendance/bulk', payload)
-        setSaving(false)
-        setSaved(true)
     }
 
-    const summary = {
-        present: Object.values(records).filter((r) => r.status === 'PRESENT').length,
-        absent: Object.values(records).filter((r) => r.status === 'ABSENT').length,
-        excused: Object.values(records).filter((r) => r.status === 'EXCUSED').length,
+    const handleDelete = async (id: string) => {
+        if (!confirm('Delete this attendance record?')) return
+        await api.delete(`/attendance/${id}`)
+        setRecords((prev) => prev.filter((r) => r.id !== id))
     }
 
     return (
         <DashboardLayout role="ADMIN">
             <div className="p-6 space-y-6">
-                <div>
-                    <h1 className="text-2xl font-bold text-slate-800">Attendance</h1>
-                    <p className="text-slate-500">
-                        Select an event and mark member attendance
-                    </p>
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-2xl font-bold text-slate-800">Attendance</h1>
+                        <p className="text-slate-500">
+                            Record service attendance by category
+                        </p>
+                    </div>
+                    <Button
+                        onClick={handleOpenCreate}
+                        className="flex items-center text-white bg-[#3f2039] hover:bg-[#693565] gap-2"
+                    >
+                        <Plus className="h-4 w-4" />
+                        Record Attendance
+                    </Button>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <Card className="lg:col-span-1">
+                {/* All time stats */}
+                {stats && (
+                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
+                        {[
+                            { label: 'Total (All Time)', value: stats.allTime?.total ?? 0, color: 'text-slate-800' },
+                            { label: 'Men', value: stats.allTime?.male ?? 0, color: 'text-[#9B7E93]' },
+                            { label: 'Women', value: stats.allTime?.female ?? 0, color: 'text-[#D4AFA0]' },
+                            { label: 'Children', value: stats.allTime?.children ?? 0, color: 'text-[#A8B8A6]' },
+                            { label: 'Newcomers', value: stats.allTime?.newcomers ?? 0, color: 'text-[#d6b68d]' },
+                        ].map((s) => (
+                            <Card key={s.label}>
+                                <CardContent className="pt-4 text-center">
+                                    <p className={`text-2xl font-bold ${s.color}`}>
+                                        {s.value}
+                                    </p>
+                                    <p className="text-xs text-slate-500 mt-0.5">{s.label}</p>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </div>
+                )}
+
+                {/* Trend chart */}
+                {stats?.trend?.length > 0 && (
+                    <Card>
                         <CardHeader>
-                            <CardTitle className="text-sm font-semibold text-slate-700">
-                                Select Event
+                            <CardTitle className="text-base font-semibold text-slate-800">
+                                Recent Attendance Trend
                             </CardTitle>
                         </CardHeader>
-                        <CardContent className="p-0">
-                            {loadingEvents ? (
-                                <div className="py-8 flex justify-center">
-                                    <Spinner size="sm" />
-                                </div>
-                            ) : events.length === 0 ? (
-                                <p className="px-4 pb-4 text-sm text-slate-400">
-                                    No events found
-                                </p>
-                            ) : (
-                                <div className="divide-y max-h-[500px] overflow-y-auto">
-                                    {events.map((event) => (
-                                        <button
-                                            key={event.id}
-                                            onClick={() => handleSelectEvent(event)}
-                                            className={`w-full text-left px-4 py-3 transition-colors
-                        hover:bg-slate-50
-                        ${selectedEvent?.id === event.id
-                                                    ? 'bg-blue-50 border-l-2 border-[#683565]'
-                                                    : ''
-                                                }`}
-                                        >
-                                            <p className="text-sm font-medium text-black truncate">
-                                                {event.title}
-                                            </p>
-                                            <p className="text-xs text-slate-400 mt-0.5">
-                                                {new Date(event.startTime).toLocaleDateString('en-US', {
-                                                    weekday: 'short',
-                                                    month: 'short',
-                                                    day: 'numeric',
-                                                    year: 'numeric',
-                                                })}
-                                            </p>
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
+                        <CardContent>
+                            <ResponsiveContainer width="100%" height={240}>
+                                <BarChart data={stats.trend}>
+                                    <XAxis
+                                        dataKey="name"
+                                        tick={{ fontSize: 11 }}
+                                        tickFormatter={(v) => v.split(' ')[0]}
+                                    />
+                                    <YAxis tick={{ fontSize: 11 }} />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Bar dataKey="male" fill="#9B7E93" name="Men" radius={[4, 4, 0, 0]} />
+                                    <Bar dataKey="female" fill="#D4AFA0" name="Women" radius={[4, 4, 0, 0]} />
+                                    <Bar dataKey="children" fill="#A8B8A6" name="Children" radius={[4, 4, 0, 0]} />
+                                    <Bar dataKey="newcomers" fill="#d6b68d" name="Newcomers" radius={[4, 4, 0, 0]} />
+                                </BarChart>
+                            </ResponsiveContainer>
                         </CardContent>
                     </Card>
+                )}
 
-                    <div className="lg:col-span-2 space-y-4">
-                        {!selectedEvent ? (
-                            <Card>
-                                <CardContent className="py-20">
-                                    <EmptyState
-                                        icon={CheckSquare}
-                                        title="No event selected"
-                                        description="Select an event from the list to mark attendance"
-                                    />
-                                </CardContent>
-                            </Card>
-                        ) : loadingMembers ? (
-                            <Card>
-                                <CardContent className="py-20 flex justify-center">
-                                    <Spinner text="Loading members..." />
-                                </CardContent>
-                            </Card>
-                        ) : (
-                            <>
-                                <div className="grid grid-cols-3 gap-3">
-                                    {[
-                                        {
-                                            label: 'Present',
-                                            value: summary.present,
-                                            color: 'text-green-600',
-                                        },
-                                        {
-                                            label: 'Absent',
-                                            value: summary.absent,
-                                            color: 'text-red-500',
-                                        },
-                                        {
-                                            label: 'Excused',
-                                            value: summary.excused,
-                                            color: 'text-orange-400',
-                                        },
-                                    ].map((s) => (
-                                        <Card key={s.label}>
-                                            <CardContent className='pt-4 pb-3'>
-                                                <p className={`text-2xl font-bold ${s.color}`}>
-                                                    {s.value}
-                                                </p>
-                                                <p className="text-xs text-slate-500">{s.label}</p>
-                                            </CardContent>
-                                        </Card>
-                                    ))}
-                                </div>
-
-                                <div className="flex items-center justify-between">
-                                    <p className="text-sm text-slate-500">
-                                        <span className="font-medium text-slate-800">
-                                            {selectedEvent.title}
-                                        </span>{' '}
-                                        · {members.length} members
-                                    </p>
-                                    <div className="flex gap-2">
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={setAllPresent}
-                                        >
-                                            Mark All Present
-                                        </Button>
-                                        <Button
-                                            size="sm"
-                                            onClick={handleSave}
-                                            disabled={saving || saved}
-                                            className='bg-[#693565]'
-                                        >
-                                            {saving
-                                                ? 'Saving...'
-                                                : saved
-                                                    ? '✓ Saved'
-                                                    : 'Save Attendance'}
-                                        </Button>
-                                    </div>
-                                </div>
-
-                                <Card>
-                                    <CardContent className="p-0">
-                                        <div className="divide-y max-h-[500px] overflow-y-auto">
-                                            {members.map((member) => {
-                                                const status =
-                                                    records[member.id]?.status || 'PRESENT'
-                                                const config = statusConfig[status]
-
-                                                return (
-                                                    <div
-                                                        key={member.id}
-                                                        className="flex items-center justify-between px-4 py-3 hover:bg-slate-50"
-                                                    >
-                                                        <div className="flex items-center gap-3">
-                                                            <div className="h-8 w-8 rounded-full bg-[#7d4178] flex items-center justify-center text-white text-xs font-semibold shrink-0">
-                                                                {member.firstName[0]}{member.lastName[0]}
-                                                            </div>
-                                                            <div>
-                                                                <p className="text-sm font-medium text-slate-800">
-                                                                    {member.firstName} {member.lastName}
-                                                                </p>
-                                                                {member.gender && (
-                                                                    <p className="text-xs text-slate-400 capitalize">
-                                                                        {member.gender.toLowerCase()}
-                                                                    </p>
-                                                                )}
-                                                            </div>
-                                                        </div>
-
+                {/* Records list */}
+                {loading ? (
+                    <div className="py-20 flex justify-center">
+                        <Spinner text="Loading attendance records..." />
+                    </div>
+                ) : records.length === 0 ? (
+                    <EmptyState
+                        icon={CheckSquare}
+                        title="No attendance records yet"
+                        description="Start recording attendance for your services"
+                        action={
+                            <Button
+                                onClick={handleOpenCreate}
+                                className="flex items-center gap-2 bg-[#3f2039] hover:bg-[#693565]"
+                            >
+                                <Plus className="h-4 w-4" /> Record Attendance
+                            </Button>
+                        }
+                    />
+                ) : (
+                    <Card>
+                        <CardContent className="p-0">
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-sm">
+                                    <thead>
+                                        <tr className="border-b bg-slate-50">
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                                Event / Date
+                                            </th>
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                                Men
+                                            </th>
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                                Women
+                                            </th>
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                                Children
+                                            </th>
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                                Newcomers
+                                            </th>
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                                Total
+                                            </th>
+                                            <th className="px-4 py-3" />
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {records.map((record) => (
+                                            <tr
+                                                key={record.id}
+                                                className="border-b last:border-0 hover:bg-slate-50"
+                                            >
+                                                <td className="px-4 py-3">
+                                                    <p className="font-medium text-slate-800">
+                                                        {record.event?.title ?? '—'}
+                                                    </p>
+                                                    <p className="text-xs text-slate-400">
+                                                        {new Date(record.date).toLocaleDateString(
+                                                            'en-US',
+                                                            { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }
+                                                        )}
+                                                    </p>
+                                                </td>
+                                                <td className="px-4 py-3 text-blue-600 font-medium">
+                                                    {record.maleCount}
+                                                </td>
+                                                <td className="px-4 py-3 text-pink-600 font-medium">
+                                                    {record.femaleCount}
+                                                </td>
+                                                <td className="px-4 py-3 text-green-600 font-medium">
+                                                    {record.childrenCount}
+                                                </td>
+                                                <td className="px-4 py-3 text-orange-600 font-medium">
+                                                    {record.newcomersCount}
+                                                </td>
+                                                <td className="px-4 py-3 font-bold text-slate-800">
+                                                    {record.totalCount}
+                                                </td>
+                                                <td className="px-4 py-3">
+                                                    <div className="flex gap-1">
                                                         <button
-                                                            onClick={() => toggleStatus(member.id)}
-                                                            className={`flex items-center gap-1.5 px-3 py-1.5
-                                rounded-full text-xs font-medium border
-                                transition-all ${config.style}`}
+                                                            onClick={() => handleOpenEdit(record)}
+                                                            className="p-1.5 hover:bg-slate-100 rounded transition-colors"
                                                         >
-                                                            <config.icon className="h-3 w-3" />
-                                                            {config.label}
+                                                            <Pencil className="h-3.5 w-3.5 text-slate-500" />
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDelete(record.id)}
+                                                            className="p-1.5 hover:bg-red-50 rounded transition-colors"
+                                                        >
+                                                            <Trash2 className="h-3.5 w-3.5 text-red-500" />
                                                         </button>
                                                     </div>
-                                                )
-                                            })}
-                                        </div>
-                                    </CardContent>
-                                </Card>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </CardContent>
+                    </Card>
+                )}
+            </div>
 
-                                <p className="text-xs text-black text-center">
-                                    Tap a member's status button to cycle through
-                                    Present → Absent → Excused
-                                </p>
-                            </>
-                        )}
+            {/* Modal */}
+            <Modal
+                isOpen={modalOpen}
+                onClose={() => { setModalOpen(false); setError('') }}
+                title={editingRecord ? 'Edit Attendance' : 'Record Attendance'}
+            >
+                <div className="space-y-4">
+                    <div className="space-y-1.5">
+                        <Label>Service / Event (optional)</Label>
+                        <select
+                            value={form.eventId}
+                            onChange={(e) => setForm({ ...form, eventId: e.target.value })}
+                            className="w-full px-3 py-2 border border-slate-200 rounded-md
+                text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            <option value="">Select an event...</option>
+                            {events.map((e) => (
+                                <option key={e.id} value={e.id}>
+                                    {e.title} — {new Date(e.startTime).toLocaleDateString()}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="space-y-1.5">
+                        <Label>Date</Label>
+                        <Input
+                            type="date"
+                            value={form.date}
+                            onChange={(e) => setForm({ ...form, date: e.target.value })}
+                        />
+                    </div>
+
+                    {/* Count inputs */}
+                    <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-1.5">
+                            <Label className="text-blue-600">Men</Label>
+                            <Input
+                                type="number"
+                                min="0"
+                                value={form.maleCount}
+                                onChange={(e) =>
+                                    setForm({ ...form, maleCount: Number(e.target.value) })
+                                }
+                            />
+                        </div>
+                        <div className="space-y-1.5">
+                            <Label className="text-pink-600">Women</Label>
+                            <Input
+                                type="number"
+                                min="0"
+                                value={form.femaleCount}
+                                onChange={(e) =>
+                                    setForm({ ...form, femaleCount: Number(e.target.value) })
+                                }
+                            />
+                        </div>
+                        <div className="space-y-1.5">
+                            <Label className="text-green-600">Children</Label>
+                            <Input
+                                type="number"
+                                min="0"
+                                value={form.childrenCount}
+                                onChange={(e) =>
+                                    setForm({ ...form, childrenCount: Number(e.target.value) })
+                                }
+                            />
+                        </div>
+                        <div className="space-y-1.5">
+                            <Label className="text-orange-600">Newcomers</Label>
+                            <Input
+                                type="number"
+                                min="0"
+                                value={form.newcomersCount}
+                                onChange={(e) =>
+                                    setForm({ ...form, newcomersCount: Number(e.target.value) })
+                                }
+                            />
+                        </div>
+                    </div>
+
+                    {/* Live total */}
+                    <div className="p-3 bg-slate-50 rounded-lg flex items-center
+            justify-between">
+                        <p className="text-sm text-slate-600 font-medium">
+                            Total Attendance
+                        </p>
+                        <p className="text-xl font-bold text-slate-800">{totalForForm}</p>
+                    </div>
+
+                    <div className="space-y-1.5">
+                        <Label>Note (optional)</Label>
+                        <Input
+                            value={form.note}
+                            onChange={(e) => setForm({ ...form, note: e.target.value })}
+                            placeholder="Any notes about this service..."
+                        />
+                    </div>
+
+                    {error && <p className="text-sm text-red-500">{error}</p>}
+
+                    <div className="flex justify-end gap-3 pt-2">
+                        <Button
+                            variant="outline"
+                            onClick={() => { setModalOpen(false); setError('') }}
+                        >
+                            Cancel
+                        </Button>
+                        <Button onClick={handleSubmit} className='bg-[#3f2039] text-white hover:bg[#693565]' disabled={submitting}>
+                            {submitting
+                                ? 'Saving...'
+                                : editingRecord ? 'Save Changes' : 'Record Attendance'}
+                        </Button>
                     </div>
                 </div>
-            </div>
+            </Modal>
         </DashboardLayout>
     )
 }

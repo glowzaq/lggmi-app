@@ -6,7 +6,6 @@ import {
     getPrayerRequestById,
     updatePrayerRequest,
     deletePrayerRequest,
-    updatePrayerStatus,
     getPrayerStats,
 } from './prayer-requests.service'
 
@@ -25,8 +24,7 @@ export const create = async (req: Request, res: Response) => {
 
 export const getAll = async (req: Request, res: Response) => {
     try {
-        const { status } = req.query
-        const requests = await getAllPrayerRequests(status as string)
+        const requests = await getAllPrayerRequests()
         res.status(200).json({ status: 'success', data: requests })
     } catch (error: any) {
         res.status(500).json({ status: 'error', message: error.message })
@@ -82,22 +80,7 @@ export const remove = async (req: Request, res: Response) => {
     }
 }
 
-export const updateStatus = async (req: Request, res: Response) => {
-    try {
-        const { id } = req.params as { id: string }
-        const { status } = req.body
-        const request = await updatePrayerStatus(id, status)
-        res.status(200).json({
-            status: 'success',
-            message: `Prayer request marked as ${status.toLowerCase()}`,
-            data: request,
-        })
-    } catch (error: any) {
-        res.status(400).json({ status: 'error', message: error.message })
-    }
-}
-
-export const getStats = async (req: Request, res: Response) => {
+export const getStats = async (_req: Request, res: Response) => {
     try {
         const stats = await getPrayerStats()
         res.status(200).json({ status: 'success', data: stats })

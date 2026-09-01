@@ -8,8 +8,7 @@ import EmptyState from '@/components/shared/EmptyState'
 import Spinner from '@/components/shared/Spinner'
 import SermonModal from '@/components/admin/SermonModal'
 import {
-    BookOpen, Play, Mic, Plus,
-    Pencil, Trash2, Headphones,
+    BookOpen, Play, Mic, Plus, Headphones,
 } from 'lucide-react'
 import api from '@/services/api'
 
@@ -76,8 +75,8 @@ export default function WorkerSermonsPage() {
                             onClick={() => setActiveSeries(null)}
                             className={`px-3 py-1.5 rounded-full text-sm font-medium
                 transition-colors ${!activeSeries
-                                    ? 'bg-slate-900 text-white'
-                                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                    ? 'bg-[#9c5e96] text-white hover:bg-[#693565]'
+                                    : 'bg-slate-700 text-white hover:bg-[#693565]'
                                 }`}
                         >
                             All
@@ -87,8 +86,8 @@ export default function WorkerSermonsPage() {
                                 key={s}
                                 onClick={() => setActiveSeries(s)}
                                 className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${activeSeries === s
-                                        ? 'bg-slate-900 text-white'
-                                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                    ? 'bg-[#9c5e96] text-white hover:bg-[#693565]'
+                                    : 'bg-slate-700 text-white hover:bg-[#693565]'
                                     }`}
                             >
                                 {s}
@@ -124,8 +123,8 @@ export default function WorkerSermonsPage() {
                             >
                                 <CardHeader className="pb-2">
                                     <div className="flex items-start gap-3">
-                                        <div className="p-2 bg-blue-50 rounded-lg shrink-0">
-                                            <BookOpen className="h-4 w-4 text-blue-600" />
+                                        <div className="p-2 bg-[#9b7e93] rounded-lg shrink-0">
+                                            <BookOpen className="h-4 w-4 text-[#2a1626]" />
                                         </div>
                                         <div className="min-w-0 flex-1">
                                             <CardTitle className="text-sm font-semibold
@@ -133,7 +132,7 @@ export default function WorkerSermonsPage() {
                                                 {sermon.title}
                                             </CardTitle>
                                             {sermon.seriesName && (
-                                                <p className="text-xs text-blue-600 font-medium mt-0.5">
+                                                <p className="text-xs text-[#2a1626] font-medium mt-0.5">
                                                     {sermon.seriesName}
                                                 </p>
                                             )}

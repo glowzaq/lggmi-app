@@ -18,6 +18,7 @@ export const createEvangelism = async (input: CreateEvangelismInput) => {
             assimilated: input.assimilated ?? 0,
             notes: input.notes,
             conductedById: input.conductedById,
+            ageGroup: input.ageGroup,
         },
         include: {
             conductedBy: {
@@ -71,6 +72,7 @@ export const updateEvangelism = async (
             followUpNote: input.followUpNote,
             assimilated: input.assimilated,
             notes: input.notes,
+            ageGroup: input.ageGroup,
         },
         include: {
             conductedBy: {

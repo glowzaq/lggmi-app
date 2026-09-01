@@ -82,7 +82,7 @@ export default function AdminEvangelismPage() {
           </div>
           <Button
             onClick={handleOpenCreate}
-            className="flex items-center bg-[#3f2039] text-white gap-2"
+            className="flex items-center bg-[#3f2039] text-white gap-2 hover:bg-[#9c5e96]"
           >
             <Plus className="h-4 w-4" />
             New Record
@@ -140,7 +140,7 @@ export default function AdminEvangelismPage() {
             title="No evangelism records yet"
             description="Start recording your outreach activities"
             action={
-              <Button onClick={handleOpenCreate} className="flex bg-[#3f2039] text-white items-center gap-2">
+              <Button onClick={handleOpenCreate} className="flex bg-[#3f2039] hover:bg-[#693565] text-white items-center gap-2">
                 <Plus className="h-4 w-4" /> New Record
               </Button>
             }

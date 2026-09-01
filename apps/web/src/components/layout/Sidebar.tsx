@@ -1,6 +1,6 @@
 'use client'
 
-import { Bell, Globe, HandHeart, Star, Sparkles, FileText, BookOpen, Calendar, CheckSquare, ChevronLeft, ChevronRight, DollarSign, Flame, Heart, Home, LayoutDashboard, LogOut, Users } from "lucide-react"
+import { Bell, Globe, HandHeart, Star, Sparkles, FileText, BookOpen, Calendar, CheckSquare, ChevronLeft, ChevronRight, DollarSign, Flame, Heart, Home, LayoutDashboard, LogOut, Users, BookMarked } from "lucide-react"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
@@ -25,6 +25,7 @@ const navItems: Record<string, NavItem[]> = {
         {label: 'Announcements', href: '/admin/announcements', icon: Bell},
         {label: 'Sermons', href: '/admin/sermons', icon: BookOpen},
         {label: 'Events', href: '/admin/events', icon: Calendar},
+        {label: 'Devotionals', href: '/admin/devotionals', icon: BookMarked},
         {label: 'Spiritual Growth', href: '/admin/spiritual-growth', icon: Flame},
         {label: 'Evangelism', href: '/admin/evangelism', icon: Globe },
         {label: 'Welfare', href: '/admin/welfare', icon: HandHeart },

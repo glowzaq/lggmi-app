@@ -16,10 +16,8 @@ interface EventModalProps {
 
 const eventTypes = [
     'SUNDAY_SERVICE',
-    'BIBLE_STUDY',
-    'PRAYER_MEETING',
-    'SPECIAL_PROGRAM',
-    // 'YOUTH_SERVICE',
+    'MOMENT_OF_LIFTING',
+    'LET_THE_FIRE_FALL',
     'OTHER',
 ]
 
@@ -128,7 +126,7 @@ export default function EventModal({
                     <select
                         value={form.type}
                         onChange={(e) => set('type', e.target.value)}
-                        className="w-full px-3 py-2 border border-slate-200 rounded-md text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-slate-200 rounded-md text-sm bg-white focus:outline-none focus:ring-2 focus:ring-slate-500"
                     >
                         {eventTypes.map((t) => (
                             <option key={t} value={t}>
@@ -171,7 +169,7 @@ export default function EventModal({
                         onChange={(e) => set('description', e.target.value)}
                         placeholder="Optional details about this event"
                         rows={3}
-                        className="w-full px-3 py-2 border border-slate-200 rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-slate-200 rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-slate-500"
                     />
                 </div>
 
@@ -184,7 +182,7 @@ export default function EventModal({
                     <Button
                         onClick={handleSubmit}
                         disabled={loading}
-                        className="bg-[#693465] hover:bg-[#52284f] text-white"
+                        className="bg-slate-700 hover:bg-slate-900 text-white"
                     >
                         {loading ? 'Saving...' : isEdit ? 'Save Changes' : 'Create Event'}
                     </Button>

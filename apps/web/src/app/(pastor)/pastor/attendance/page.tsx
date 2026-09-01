@@ -3,74 +3,93 @@
 import { useEffect, useState } from 'react'
 import DashboardLayout from '@/components/layout/DashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import Spinner from '@/components/shared/Spinner'
+import { Button } from '@/components/ui/button'
 import EmptyState from '@/components/shared/EmptyState'
-import { CheckSquare } from 'lucide-react'
+import Spinner from '@/components/shared/Spinner'
+import { CheckSquare, Plus } from 'lucide-react'
 import {
-    LineChart, Line, XAxis, YAxis,
-    Tooltip, ResponsiveContainer,
+    BarChart, Bar, XAxis, YAxis,
+    Tooltip, ResponsiveContainer, Legend,
 } from 'recharts'
 import api from '@/services/api'
 
-interface AttendanceEvent {
-    event: { title: string; startTime: string; type: string }
-    attendances: any[]
-    summary: {
-        total: number
-        present: number
-        absent: number
-        excused: number
-    }
+interface AttendanceRecord {
+    id: string
+    date: string
+    maleCount: number
+    femaleCount: number
+    childrenCount: number
+    newcomersCount: number
+    totalCount: number
+    note: string | null
+    event: { title: string; type: string } | null
 }
 
 export default function PastorAttendancePage() {
+    const [records, setRecords] = useState<AttendanceRecord[]>([])
+    const [stats, setStats] = useState<any>(null)
     const [events, setEvents] = useState<any[]>([])
-    const [selectedEventId, setSelectedEventId] = useState<string | null>(null)
-    const [detail, setDetail] = useState<AttendanceEvent | null>(null)
-    const [trend, setTrend] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
-    const [loadingDetail, setLoadingDetail] = useState(false)
 
-    useEffect(() => {
-        Promise.all([
-            api.get('/events'),
+    const fetchData = async () => {
+        const [recordsRes, statsRes, eventsRes] = await Promise.all([
+            api.get('/attendance'),
             api.get('/attendance/stats'),
-        ]).then(([eventsRes, statsRes]) => {
-            setEvents(eventsRes.data.data)
-            setTrend(statsRes.data.data.trend)
-            setLoading(false)
-        })
-    }, [])
-
-    const handleSelectEvent = async (eventId: string) => {
-        setSelectedEventId(eventId)
-        setLoadingDetail(true)
-        const { data } = await api.get(`/attendance/event/${eventId}`)
-        setDetail(data.data)
-        setLoadingDetail(false)
+            api.get('/events'),
+        ])
+        setRecords(recordsRes.data.data)
+        setStats(statsRes.data.data)
+        setEvents(eventsRes.data.data)
+        setLoading(false)
     }
+
+    useEffect(() => { fetchData() }, [])
 
     return (
         <DashboardLayout role="PASTOR">
             <div className="p-6 space-y-6">
-                <div>
-                    <h1 className="text-2xl font-bold text-slate-800">Attendance</h1>
-                    <p className="text-slate-500">
-                        View attendance records across all services
-                    </p>
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-2xl font-bold text-slate-800">Attendance</h1>
+                        <p className="text-slate-500">
+                            Attendance recorded by category
+                        </p>
+                    </div>
                 </div>
 
+                {/* All time stats */}
+                {stats && (
+                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
+                        {[
+                            { label: 'Total (All Time)', value: stats.allTime?.total ?? 0, color: 'text-slate-800' },
+                            { label: 'Men', value: stats.allTime?.male ?? 0, color: 'text-[#9B7E93]' },
+                            { label: 'Women', value: stats.allTime?.female ?? 0, color: 'text-[#D4AFA0]' },
+                            { label: 'Children', value: stats.allTime?.children ?? 0, color: 'text-[#A8B8A6]' },
+                            { label: 'Newcomers', value: stats.allTime?.newcomers ?? 0, color: 'text-[#d6b68d]' },
+                        ].map((s) => (
+                            <Card key={s.label}>
+                                <CardContent className="pt-4 text-center">
+                                    <p className={`text-2xl font-bold ${s.color}`}>
+                                        {s.value}
+                                    </p>
+                                    <p className="text-xs text-slate-500 mt-0.5">{s.label}</p>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </div>
+                )}
+
                 {/* Trend chart */}
-                {trend.length > 0 && (
+                {stats?.trend?.length > 0 && (
                     <Card>
                         <CardHeader>
                             <CardTitle className="text-base font-semibold text-slate-800">
-                                Attendance Trend
+                                Recent Attendance Trend
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <ResponsiveContainer width="100%" height={200}>
-                                <LineChart data={trend}>
+                            <ResponsiveContainer width="100%" height={240}>
+                                <BarChart data={stats.trend}>
                                     <XAxis
                                         dataKey="name"
                                         tick={{ fontSize: 11 }}
@@ -78,158 +97,96 @@ export default function PastorAttendancePage() {
                                     />
                                     <YAxis tick={{ fontSize: 11 }} />
                                     <Tooltip />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="present"
-                                        stroke="#9c5e96"
-                                        strokeWidth={2}
-                                        dot={{ r: 4 }}
-                                    />
-                                </LineChart>
+                                    <Legend />
+                                    <Bar dataKey="male" fill="#9B7E93" name="Men" radius={[4, 4, 0, 0]} />
+                                    <Bar dataKey="female" fill="#D4AFA0" name="Women" radius={[4, 4, 0, 0]} />
+                                    <Bar dataKey="children" fill="#A8B8A6" name="Children" radius={[4, 4, 0, 0]} />
+                                    <Bar dataKey="newcomers" fill="#d6b68d" name="Newcomers" radius={[4, 4, 0, 0]} />
+                                </BarChart>
                             </ResponsiveContainer>
                         </CardContent>
                     </Card>
                 )}
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Event list */}
-                    <Card className="lg:col-span-1">
-                        <CardHeader>
-                            <CardTitle className="text-sm font-semibold text-slate-700">
-                                Events
-                            </CardTitle>
-                        </CardHeader>
+                {/* Records list */}
+                {loading ? (
+                    <div className="py-20 flex justify-center">
+                        <Spinner text="Loading attendance records..." />
+                    </div>
+                ) : records.length === 0 ? (
+                    <EmptyState
+                        icon={CheckSquare}
+                        title="No attendance records yet"
+                        description="No records yet"
+                    />
+                ) : (
+                    <Card>
                         <CardContent className="p-0">
-                            {loading ? (
-                                <div className="py-8 flex justify-center">
-                                    <Spinner size="sm" />
-                                </div>
-                            ) : (
-                                <div className="divide-y max-h-[400px] overflow-y-auto">
-                                    {events.map((event) => (
-                                        <button
-                                            key={event.id}
-                                            onClick={() => handleSelectEvent(event.id)}
-                                            className={`w-full text-left px-4 py-3 transition-colors
-                        hover:bg-slate-50
-                        ${selectedEventId === event.id
-                                                    ? 'bg-blue-50 border-l-2 border-[#d4b0d1]'
-                                                    : ''
-                                                }`}
-                                        >
-                                            <p className="text-sm font-medium text-slate-800 truncate">
-                                                {event.title}
-                                            </p>
-                                            <p className="text-xs text-slate-400 mt-0.5">
-                                                {new Date(event.startTime).toLocaleDateString()}
-                                            </p>
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-sm">
+                                    <thead>
+                                        <tr className="border-b bg-slate-50">
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                                Event / Date
+                                            </th>
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                                Men
+                                            </th>
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                                Women
+                                            </th>
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                                Children
+                                            </th>
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                                Newcomers
+                                            </th>
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                                Total
+                                            </th>
+                                            <th className="px-4 py-3" />
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {records.map((record) => (
+                                            <tr
+                                                key={record.id}
+                                                className="border-b last:border-0 hover:bg-slate-50"
+                                            >
+                                                <td className="px-4 py-3">
+                                                    <p className="font-medium text-slate-800">
+                                                        {record.event?.title ?? '—'}
+                                                    </p>
+                                                    <p className="text-xs text-slate-400">
+                                                        {new Date(record.date).toLocaleDateString(
+                                                            'en-US',
+                                                            { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }
+                                                        )}
+                                                    </p>
+                                                </td>
+                                                <td className="px-4 py-3 text-blue-600 font-medium">
+                                                    {record.maleCount}
+                                                </td>
+                                                <td className="px-4 py-3 text-pink-600 font-medium">
+                                                    {record.femaleCount}
+                                                </td>
+                                                <td className="px-4 py-3 text-green-600 font-medium">
+                                                    {record.childrenCount}
+                                                </td>
+                                                <td className="px-4 py-3 text-orange-600 font-medium">
+                                                    {record.newcomersCount}
+                                                </td>
+                                                <td className="px-4 py-3 font-bold text-slate-800">
+                                                    {record.totalCount}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </CardContent>
                     </Card>
-
-                    {/* Attendance detail */}
-                    <div className="lg:col-span-2">
-                        {!selectedEventId ? (
-                            <Card>
-                                <CardContent className="py-16">
-                                    <EmptyState
-                                        icon={CheckSquare}
-                                        title="Select an event"
-                                        description="Click an event to view its attendance record"
-                                    />
-                                </CardContent>
-                            </Card>
-                        ) : loadingDetail ? (
-                            <Card>
-                                <CardContent className="py-16 flex justify-center">
-                                    <Spinner text="Loading attendance..." />
-                                </CardContent>
-                            </Card>
-                        ) : detail ? (
-                            <div className="space-y-4">
-                                {/* Summary */}
-                                <div className="grid grid-cols-4 gap-3">
-                                    {[
-                                        { label: 'Total', value: detail.summary.total, color: 'text-slate-800' },
-                                        { label: 'Present', value: detail.summary.present, color: 'text-green-600' },
-                                        { label: 'Absent', value: detail.summary.absent, color: 'text-red-500' },
-                                        { label: 'Excused', value: detail.summary.excused, color: 'text-orange-500' },
-                                    ].map((s) => (
-                                        <Card key={s.label}>
-                                            <CardContent className="pt-3 pb-2 text-center">
-                                                <p className={`text-xl font-bold ${s.color}`}>
-                                                    {s.value}
-                                                </p>
-                                                <p className="text-xs text-slate-500">{s.label}</p>
-                                            </CardContent>
-                                        </Card>
-                                    ))}
-                                </div>
-
-                                {/* Attendance rate bar */}
-                                <Card>
-                                    <CardContent className="pt-4 space-y-2">
-                                        <div className="flex justify-between text-sm">
-                                            <span className="text-slate-600">Attendance rate</span>
-                                            <span className="font-semibold text-slate-800">
-                                                {detail.summary.total > 0
-                                                    ? Math.round(
-                                                        (detail.summary.present / detail.summary.total) * 100
-                                                    )
-                                                    : 0}%
-                                            </span>
-                                        </div>
-                                        <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-                                            <div
-                                                className="h-full bg-[#9c5e96] rounded-full transition-all"
-                                                style={{
-                                                    width:
-                                                        detail.summary.total > 0
-                                                            ? `${(detail.summary.present / detail.summary.total) * 100}%`
-                                                            : '0%',
-                                                }}
-                                            />
-                                        </div>
-                                    </CardContent>
-                                </Card>
-
-                                {/* Member list */}
-                                <Card>
-                                    <CardContent className="p-0">
-                                        <div className="divide-y max-h-[400px] overflow-y-auto">
-                                            {detail.attendances.map((a) => (
-                                                <div
-                                                    key={a.id}
-                                                    className="flex items-center justify-between px-4 py-3"
-                                                >
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="h-7 w-7 rounded-full bg-[#9c5e96] flex items-center justify-center text-white text-xs font-semibold">
-                                                            {a.user.firstName[0]}{a.user.lastName[0]}
-                                                        </div>
-                                                        <p className="text-sm text-slate-800">
-                                                            {a.user.firstName} {a.user.lastName}
-                                                        </p>
-                                                    </div>
-                                                    <span className={`text-xs px-2 py-1 rounded-full font-medium ${a.status === 'PRESENT'
-                                                            ? 'bg-green-100 text-green-700'
-                                                            : a.status === 'ABSENT'
-                                                                ? 'bg-red-100 text-red-600'
-                                                                : 'bg-orange-100 text-orange-600'
-                                                        }`}>
-                                                        {a.status}
-                                                    </span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            </div>
-                        ) : null}
-                    </div>
-                </div>
+                )}
             </div>
         </DashboardLayout>
     )

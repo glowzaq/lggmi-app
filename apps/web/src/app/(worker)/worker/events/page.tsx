@@ -22,10 +22,10 @@ interface Event {
 }
 
 const eventTypeColors: Record<string, string> = {
-    SUNDAY_SERVICE: 'bg-blue-100 text-blue-700',
-    BIBLE_STUDY: 'bg-green-100 text-green-700',
-    PRAYER_MEETING: 'bg-purple-100 text-purple-700',
-    SPECIAL_PROGRAM: 'bg-orange-100 text-orange-700',
+    SUNDAY_SERVICE: 'bg-[#9b7e93] text-[#2a1626]',
+    BIBLE_STUDY: 'bg-[#d4afa0] text-[#4a261a]',
+    PRAYER_MEETING: 'bg-[#a8b8a6] text-[#2d332d]',
+    SPECIAL_PROGRAM: 'bg-[#d6b68d] text-[#473723]',
     OTHER: 'bg-slate-100 text-slate-700',
 }
 

@@ -10,6 +10,7 @@ export interface CreateEvangelismInput {
     notes?: string
     assimilated?: number
     conductedById: string
+    ageGroup?: 'TEEN' | 'CHILD' | 'ADULT' | 'SENIOR' | 'ALL'
 }
 
 export interface UpdateEvangelismInput extends Partial<CreateEvangelismInput> {}

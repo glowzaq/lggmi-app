@@ -10,7 +10,7 @@ import Modal from '@/components/shared/Modal'
 import Spinner from '@/components/shared/Spinner'
 import EmptyState from '@/components/shared/EmptyState'
 import {
-    DollarSign, TrendingUp, TrendingDown,
+    DollarSign,
     Plus, BarChart3,
     Pencil,
 } from 'lucide-react'
@@ -24,9 +24,9 @@ interface Donation {
     id: string
     amount: number
     type: string
-    donatedAt: string
+    date: string
     note: string | null
-    user: {firstName: string; lastName: string}
+    event: { title: string}
 }
 
 interface DonationStats {
@@ -38,49 +38,48 @@ interface DonationStats {
 }
 
 const typeColors: Record<string, string> = {
-    TITHE: 'bg-blue-100 text-blue-700',
     OFFERING: 'bg-emerald-50 text-black',
-    SPECIAL_SEED: 'bg-purple-100 text-purple-700',
+    COMMITMENT_SEED: 'bg-purple-100 text-purple-700',
     OTHER: 'bg-slate-100 text-slate-700',
 }
 
 const donationTypes = [
-    'TITHE', 'OFFERING', 'SPECIAL_SEED', 'OTHER',
+    'OFFERING', 'COMMITMENT_SEED', 'OTHER',
 ]
 
 export default function AdminDonationsPage() {
     const [stats, setStats] = useState<DonationStats | null>(null)
+    const [events, setEvents] = useState<any[]>([])
     const [donations, setDonations] = useState<Donation[]>([])
-    const [members, setMembers] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
     const [editDonation, setEditDonation] = useState<Donation | null>(null)
     const [modalOpen, setModalOpen] = useState(false)
     const [submitting, setSubmitting] = useState(false)
     const [formError, setFormError] = useState('')
     const [form, setForm] = useState({
-        userId: '',
+        eventId: '',
         amount: '',
         type: 'OFFERING',
         note: '',
-        donatedAt: new Date().toISOString().slice(0, 10),
+        date: new Date().toISOString().slice(0, 10),
     })
 
     const fetchData = async () => {
-        const [statsRes, donationsRes, membersRes] = await Promise.all([
+        const [statsRes, donationsRes, eventsRes] = await Promise.all([
             api.get('/donations/stats'),
             api.get('/donations'),
-            api.get('/users'),
+            api.get('/events'),
         ])
         setStats(statsRes.data.data)
         setDonations(donationsRes.data.data)
-        setMembers(membersRes.data.data)
+        setEvents(eventsRes.data.data)
         setLoading(false)
     }
 
     useEffect(() => { fetchData() }, [])
 
     const handleSubmit = async () => {
-        if (!editDonation && !form.userId) {
+        if (!editDonation && !form.eventId) {
             setFormError('Member is required')
             return
         }
@@ -98,26 +97,26 @@ export default function AdminDonationsPage() {
                     amount: Number(form.amount),
                     type: form.type,
                     note: form.note || undefined,
-                    donatedAt: form.donatedAt,
+                    date: form.date,
                 })
             } else {
                 await api.post('/donations', {
-                    userId: form.userId,
+                    eventId: form.eventId,
                     amount: Number(form.amount),
                     type: form.type,
                     note: form.note || undefined,
-                    donatedAt: form.donatedAt,
+                    date: form.date,
                 })
             }
 
             setModalOpen(false)
             setEditDonation(null)
             setForm({
-                userId: '',
+                eventId: '',
                 amount: '',
                 type: 'OFFERING',
                 note: '',
-                donatedAt: new Date().toISOString().slice(0, 10),
+                date: new Date().toISOString().slice(0, 10),
             })
             fetchData()
         } catch (err: any) {
@@ -132,11 +131,11 @@ export default function AdminDonationsPage() {
     const handleEdit = (donation: Donation) => {
         setEditDonation(donation)
         setForm({
-            userId: '',
+            eventId: '',
             amount: String(donation.amount),
             type: donation.type,
             note: donation.note ?? '',
-            donatedAt: new Date(donation.donatedAt)
+            date: new Date(donation.date)
                 .toISOString()
                 .slice(0, 10),
         })
@@ -148,11 +147,11 @@ export default function AdminDonationsPage() {
         setEditDonation(null)
         setFormError('')
         setForm({
-            userId: '',
+            eventId: '',
             amount: '',
             type: 'OFFERING',
             note: '',
-            donatedAt: new Date().toISOString().slice(0, 10),
+            date: new Date().toISOString().slice(0, 10),
         })
     }
 
@@ -178,15 +177,15 @@ export default function AdminDonationsPage() {
                         onClick={() => {
                             setEditDonation(null)
                             setForm({
-                                userId: '',
+                                eventId: '',
                                 amount: '',
                                 type: 'OFFERING',
                                 note: '',
-                                donatedAt: new Date().toISOString().slice(0, 10),
+                                date: new Date().toISOString().slice(0, 10),
                             })
                             setModalOpen(true)
                         }}
-                        className="flex items-center gap-2 hover:bg-[#9c5e96] bg-[#693565]"
+                        className="flex items-center gap-2 bg-[#3f2039] hover:bg-[#693565]"
                     >
                         <Plus className="h-4 w-4" />
                         Add Donation
@@ -294,41 +293,38 @@ export default function AdminDonationsPage() {
                                         <table className="w-full text-sm">
                                             <thead>
                                                 <tr className="border-b bg-slate-50">
-                                                    <th className="text-left px-4 py-3 font-medium text-slate-600">Member</th>
+                                                    <th className="text-left px-4 py-3 font-medium text-slate-600">Event</th>
                                                     <th className="text-left px-4 py-3 font-medium text-slate-600">Type</th>
                                                     <th className="text-left px-4 py-3 font-medium text-slate-600">Amount</th>
                                                     <th className="text-left px-4 py-3 font-medium text-slate-600">Date</th>
                                                     <th className="text-left px-4 py-3 font-medium text-slate-600">Note</th>
-                                                    <th className="text-left px-4 py-3 font-medium text-slate-600">Action</th>
+                                                    <th className="px-4 py-3" />
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {donations.map((d) => (
-                                                    <tr
-                                                        key={d.id}
-                                                        className="border-b last:border-0 hover:bg-slate-50"
-                                                    >
+                                                    <tr key={d.id} className="border-b last:border-0 hover:bg-slate-50">
                                                         <td className="px-4 py-3 font-medium text-slate-800">
-                                                            {d.user.firstName} {d.user.lastName}
+                                                            {d.event?.title ?? '—'}
                                                         </td>
                                                         <td className="px-4 py-3">
-                                                            <span className={`text-s px-2 py-1 rounded-full font-medium ${typeColors[d.type]}`}>
+                                                            <span className={`text-xs px-2 py-1 rounded-full font-medium
+                                                                        ${typeColors[d.type]}`}>
                                                                 {d.type.replace(/_/g, ' ')}
                                                             </span>
                                                         </td>
-                                                        <td className="px-4 py-3 font-semibold text-[#3f2039]">
+                                                        <td className="px-4 py-3 font-semibold text-green-700">
                                                             ₦{Number(d.amount).toLocaleString()}
                                                         </td>
                                                         <td className="px-4 py-3 text-slate-500">
-                                                            {new Date(d.donatedAt).toLocaleDateString()}
+                                                            {new Date(d.date).toLocaleDateString()}
                                                         </td>
                                                         <td className="px-4 py-3 text-slate-400 text-xs">
                                                             {d.note ?? '—'}
                                                         </td>
-                                                        <td className='px-4 py-3 text-slate-400 text-xs'>
-                                                            <button onClick={()=> handleEdit(d)}>
-                                                            <Pencil className='h-3.5 w-3.5'/>
-
+                                                        <td className="px-4 py-3">
+                                                            <button onClick={() => handleEdit(d)}>
+                                                                <Pencil className="h-4 w-4 text-slate-400" />
                                                             </button>
                                                         </td>
                                                     </tr>
@@ -349,38 +345,22 @@ export default function AdminDonationsPage() {
                 title={editDonation ? 'Edit Donation' : 'Record Donation'}
             >
                 <div className="space-y-4">
-                    {!editDonation && (
-                        <div className="space-y-1.5">
-                            <Label>Member *</Label>
-                            <select
-                                value={form.userId}
-                                onChange={(e) => setForm({ ...form, userId: e.target.value })}
-                                className="w-full px-3 py-2 border border-slate-200 rounded-md
-            text-sm bg-white focus:outline-none focus:ring-2
-            focus:ring-blue-500"
-                            >
-                                <option value="">Select a member...</option>
-                                {members.map((m) => (
-                                    <option key={m.id} value={m.id}>
-                                        {m.firstName} {m.lastName}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    )}
-
-                    {editDonation && (
-                        <div className="space-y-1.5">
-                            <Label>Member</Label>
-                            <div className="px-3 py-2 bg-slate-50 border border-slate-200
-          rounded-md text-sm text-slate-600">
-                                {editDonation.user.firstName} {editDonation.user.lastName}
-                            </div>
-                            <p className="text-xs text-slate-400">
-                                Member cannot be changed on an existing record
-                            </p>
-                        </div>
-                    )}
+                    {/* Event selector */}
+                    <div className="space-y-1.5">
+                        <Label>Service / Event (optional)</Label>
+                        <select
+                            value={form.eventId}
+                            onChange={(e) => setForm({ ...form, eventId: e.target.value })}
+                            className="w-full px-3 py-2 border border-slate-200 rounded-md text-sm bg-white focus:outline-none focus:ring-2 focus:ring-purple-300"
+                        >
+                            <option value="">Select an event...</option>
+                            {events.map((e: any) => (
+                                <option key={e.id} value={e.id}>
+                                    {e.title} — {new Date(e.startTime).toLocaleDateString()}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
 
                     <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-1.5">
@@ -390,7 +370,7 @@ export default function AdminDonationsPage() {
                                 min="0"
                                 value={form.amount}
                                 onChange={(e) => setForm({ ...form, amount: e.target.value })}
-                                placeholder="e.g. 5000"
+                                placeholder="e.g. 50000"
                             />
                         </div>
                         <div className="space-y-1.5">
@@ -399,8 +379,7 @@ export default function AdminDonationsPage() {
                                 value={form.type}
                                 onChange={(e) => setForm({ ...form, type: e.target.value })}
                                 className="w-full px-3 py-2 border border-slate-200 rounded-md
-            text-sm bg-white focus:outline-none focus:ring-2
-            focus:ring-blue-500"
+            text-sm bg-white focus:outline-none focus:ring-2 focus:ring-purple-300"
                             >
                                 {donationTypes.map((t) => (
                                     <option key={t} value={t}>
@@ -415,8 +394,8 @@ export default function AdminDonationsPage() {
                         <Label>Date</Label>
                         <Input
                             type="date"
-                            value={form.donatedAt}
-                            onChange={(e) => setForm({ ...form, donatedAt: e.target.value })}
+                            value={form.date}
+                            onChange={(e) => setForm({ ...form, date: e.target.value })}
                         />
                     </div>
 
@@ -425,24 +404,18 @@ export default function AdminDonationsPage() {
                         <Input
                             value={form.note}
                             onChange={(e) => setForm({ ...form, note: e.target.value })}
-                            placeholder="e.g. Sunday offering - 12th Jan"
+                            placeholder="e.g. Sunday morning offering"
                         />
                     </div>
 
-                    {formError && (
-                        <p className="text-sm text-red-500">{formError}</p>
-                    )}
+                    {formError && <p className="text-sm text-red-500">{formError}</p>}
 
                     <div className="flex justify-end gap-3 pt-2">
-                        <Button variant="outline" onClick={handleCloseModal}>
-                            Cancel
-                        </Button>
-                        <Button onClick={handleSubmit} disabled={submitting}>
+                        <Button variant="outline" onClick={handleCloseModal}>Cancel</Button>
+                        <Button onClick={handleSubmit} disabled={submitting} className='bg-[#3f2039] hover:bg-[#693565]'>
                             {submitting
                                 ? 'Saving...'
-                                : editDonation
-                                    ? 'Save Changes'
-                                    : 'Record Donation'}
+                                : editDonation ? 'Save Changes' : 'Record Donation'}
                         </Button>
                     </div>
                 </div>

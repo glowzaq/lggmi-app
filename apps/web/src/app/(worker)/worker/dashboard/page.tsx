@@ -5,8 +5,14 @@ import DashboardLayout from '@/components/layout/DashboardLayout'
 import StatCard from '@/components/shared/StatCard'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Users, Calendar, Bell, Globe, Heart } from 'lucide-react'
-import { ResponsiveContainer, LineChart, XAxis, YAxis, Tooltip, Line } from 'recharts'
+import { ResponsiveContainer, BarChart, XAxis, YAxis, Tooltip, Bar } from 'recharts'
 import api from '@/services/api'
+
+interface Announcements {
+    id: string
+    title: string
+    content: string
+}
 
 export default function WorkerDashboard() {
     const [memberStats, setMemberStats] = useState<any>(null)
@@ -56,10 +62,10 @@ export default function WorkerDashboard() {
                         title="Total Members"
                         value={memberStats?.total ?? '—'}
                         icon={Users}
-                        iconColor="text-blue-600"
-                        iconBg="bg-blue-50"
+                        iconColor="text-[#4a261a]"
+                        iconBg="bg-[#d4afa0]"
                         subtitle={`+${memberStats?.newThisMonth ?? 0} this month`}
-                        subtitleColor="text-green-600"
+                        subtitleColor="text-purple-900"
                     />
                     <StatCard
                         title="Upcoming Events"
@@ -72,47 +78,45 @@ export default function WorkerDashboard() {
                         title="Announcements"
                         value={announcements?.length ?? '—'}
                         icon={Bell}
-                        iconColor="text-orange-600"
-                        iconBg="bg-orange-50"
+                        iconColor="text-[#2d332d]"
+                        iconBg="bg-[#a8b8a6]"
                     />
                     <StatCard
-                        title="Prayer Requests"
-                        value={prayerStats?.pending ?? '—'}
+                        title="Evangelism"
+                        value={evangelismStats?.length ?? '—'}
                         icon={Heart}
-                        iconColor="text-red-600"
-                        iconBg="bg-red-50"
-                    // subtitle="pending"
+                        iconColor="text-[#473723]"
+                        iconBg="bg-[#d6b68d]"
                     />
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="text-base font-semibold text-slate-800">
-                                Attendance Trend
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <ResponsiveContainer width="100%" height={220}>
-                                <LineChart data={attendanceStats?.trend ?? []}>
-                                    <XAxis
-                                        dataKey="name"
-                                        tick={{ fontSize: 11 }}
-                                        tickFormatter={(v) => v.split(' ')[0]}
-                                    />
-                                    <YAxis tick={{ fontSize: 11 }} />
-                                    <Tooltip />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="present"
-                                        stroke="#9c5e96"
-                                        strokeWidth={2}
-                                        dot={{ r: 3 }}
-                                    />
-                                </LineChart>
-                            </ResponsiveContainer>
-                        </CardContent>
-                    </Card>
+                    {attendanceStats?.trend?.length > 0 && (
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="text-base font-semibold text-slate-800">
+                                    Recent Attendance Trend
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <ResponsiveContainer width="100%" height={240}>
+                                    <BarChart data={attendanceStats.trend}>
+                                        <XAxis
+                                            dataKey="name"
+                                            tick={{ fontSize: 11 }}
+                                            tickFormatter={(v) => v.split(' ')[0]}
+                                        />
+                                        <YAxis tick={{ fontSize: 11 }} />
+                                        <Tooltip />
+                                        <Bar dataKey="male" fill="#9B7E93" name="Men" radius={[4, 4, 0, 0]} />
+                                        <Bar dataKey="female" fill="#D4AFA0" name="Women" radius={[4, 4, 0, 0]} />
+                                        <Bar dataKey="children" fill="#A8B8A6" name="Children" radius={[4, 4, 0, 0]} />
+                                        <Bar dataKey="newcomers" fill="#d6b68d" name="Newcomers" radius={[4, 4, 0, 0]} />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </CardContent>
+                        </Card>
+                    )}
 
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between">
@@ -123,15 +127,15 @@ export default function WorkerDashboard() {
                         </CardHeader>
                         <CardContent className="space-y-3">
                             {announcements?.length > 0 ? (
-                                announcements.map((ann) => (
+                                announcements.map((ann: Announcements) => (
                                     <div
                                         key={ann.id}
-                                        className="border-l-2 border-blue-500 pl-3 py-1"
+                                        className="border-l-2 border-purple-900 pl-3 py-1"
                                     >
-                                        <p className="text-sm font-medium text-slate-800">
+                                        <p className="text-sm font-medium text-slate-900">
                                             {ann.title}
                                         </p>
-                                        <p className="text-xs text-slate-500 line-clamp-2 mt-0.5">
+                                        <p className="text-xs text-slate-600 line-clamp-2 mt-0.5">
                                             {ann.content}
                                         </p>
                                     </div>
@@ -155,9 +159,7 @@ export default function WorkerDashboard() {
                     <CardContent className="space-y-3">
                         {recentMembers.map((member) => (
                             <div key={member.id} className="flex items-center gap-3">
-                                <div className="h-9 w-9 rounded-full bg-blue-100 flex
-                  items-center justify-center text-blue-700 text-sm
-                  font-semibold shrink-0">
+                                <div className="h-9 w-9 rounded-full bg-purple-100 flex items-center justify-center text-purple-900 text-sm font-semibold shrink-0">
                                     {member.firstName[0]}{member.lastName[0]}
                                 </div>
                                 <div className="flex-1 min-w-0">

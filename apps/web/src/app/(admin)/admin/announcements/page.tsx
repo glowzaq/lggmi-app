@@ -70,7 +70,7 @@ export default function AdminAnnouncementsPage() {
                     </div>
                     <Button
                         onClick={handleOpenCreate}
-                        className="flex items-center gap-2 bg-[#693565] hover:bg-[#9c5e96]"
+                        className="flex items-center gap-2 bg-[#3f2039] hover:bg-[#693565]"
                     >
                         <Plus className="h-4 w-4" />
                         Add Announcement
@@ -89,7 +89,7 @@ export default function AdminAnnouncementsPage() {
                         action={
                             <Button
                                 onClick={handleOpenCreate}
-                                className="flex items-center gap-2 bg-[#693565]"
+                                className="flex items-center gap-2 bg-[#3f2039] hover:bg-[#693565]"
                             >
                                 <Plus className="h-4 w-4" /> Add Announcement
                             </Button>
@@ -100,9 +100,9 @@ export default function AdminAnnouncementsPage() {
                         {announcements.map((ann) => (
                             <Card
                                 key={ann.id}
-                                className={`border-l-4 transition-opacity ${ann.isActive
-                                        ? 'border-l-purple-400'
-                                        : 'border-l-slate-300 opacity-60'
+                                className={`border-r-4 transition-opacity ${ann.isActive
+                                        ? 'border-slate-600'
+                                        : 'border-slate-300 opacity-60'
                                     }`}
                             >
                                 <CardHeader className="pb-2">
