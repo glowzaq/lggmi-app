@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { registerUser, loginUser, getMyProfile, createWorkerAccount } from './auth.services'
+import { registerUser, loginUser, getMyProfile, createWorkerAccount, resetUserPassword } from './auth.services'
 
 export const register = async (req: Request, res: Response) => {
     try {
@@ -44,6 +44,20 @@ export const createWorker = async (req: Request, res: Response) => {
             message: 'Worker account created successfully',
             data: result,
         })
+    } catch (error: any) {
+        res.status(400).json({ status: 'error', message: error.message })
+    }
+}
+
+export const resetPassword = async (req: Request, res: Response) => {
+    try {
+        const { userId, newPassword } = req.body
+        const result = await resetUserPassword(
+            userId,
+            newPassword,
+            req.user!.role
+        )
+        res.status(200).json({ status: 'success', message: result.message })
     } catch (error: any) {
         res.status(400).json({ status: 'error', message: error.message })
     }

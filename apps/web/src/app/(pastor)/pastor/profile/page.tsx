@@ -92,9 +92,7 @@ export default function PastorProfilePage() {
     if (userLoading) {
         return (
             <DashboardLayout role="PASTOR">
-                <div className="p-6 py-20 flex justify-center">
-                    <Spinner text="Loading profile..." />
-                </div>
+                <Spinner />
             </DashboardLayout>
         )
     }
@@ -114,50 +112,13 @@ export default function PastorProfilePage() {
                             <Button
                                 onClick={handleSave}
                                 disabled={saving || saved}
-                                className="flex items-center gap-2 bg-[#693565]
-                      hover:bg-[#3f2039] text-white shrink-0"
+                                className="flex items-center gap-2 hover:bg-[#693565]
+                      bg-[#3f2039] text-white shrink-0"
                             >
                                 <Save className="h-4 w-4" />
                                 {saving ? 'Saving...' : saved ? '✓ Updated' : 'Save Changes'}
                             </Button>
                         </div>
-        
-                        {/* ── Avatar banner ─────────────────────────────────── */}
-                        <Card className="bg-gradient-to-r from-[#693565] to-[#3f2039]
-                  border-0">
-                            <CardContent className="pt-6 pb-5">
-                                <div className="flex items-center gap-5">
-                                    <div className="h-20 w-20 rounded-full bg-white/20 flex
-                        items-center justify-center text-white text-3xl font-bold
-                        shrink-0 border-2 border-white/30">
-                                        {user?.firstName[0]}{user?.lastName[0]}
-                                    </div>
-                                    <div>
-                                        <h2 className="text-2xl font-bold text-white">
-                                            {user?.firstName} {user?.lastName}
-                                        </h2>
-                                        <p className="text-[#d4b0d1] text-sm mt-0.5">
-                                            {user?.email}
-                                        </p>
-                                        <div className="flex items-center gap-2 mt-2">
-                                            <span className="text-xs bg-white/20 text-white
-                            px-2.5 py-0.5 rounded-full font-medium">
-                                                {user?.role}
-                                            </span>
-                                            <span className="text-xs text-[#b885b2]">
-                                                Member since{' '}
-                                                {user?.joinedAt
-                                                    ? new Date(user.joinedAt).toLocaleDateString('en-US', {
-                                                        month: 'long',
-                                                        year: 'numeric',
-                                                    })
-                                                    : '—'}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
         
                         {/* ── Two-column form grid ──────────────────────────── */}
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -283,8 +244,8 @@ export default function PastorProfilePage() {
                                                 value={form.maritalStatus}
                                                 onChange={(e) => set('maritalStatus', e.target.value)}
                                                 className="w-full px-3 py-2 border border-slate-200
-                              rounded-md text-sm bg-white focus:outline-none
-                              focus:ring-2 focus:ring-[#693565]"
+                                  rounded-md text-sm bg-white focus:outline-none
+                                  focus:ring-2 focus:ring-[#693565]"
                                             >
                                                 {maritalOptions.map((o) => (
                                                     <option key={o.value} value={o.value}>
@@ -302,8 +263,8 @@ export default function PastorProfilePage() {
                                                 value={form.familyId}
                                                 onChange={(e) => set('familyId', e.target.value)}
                                                 className="w-full px-3 py-2 border border-slate-200
-                              rounded-md text-sm bg-white focus:outline-none
-                              focus:ring-2 focus:ring-[#693565]"
+                                  rounded-md text-sm bg-white focus:outline-none
+                                  focus:ring-2 focus:ring-[#693565]"
                                             >
                                                 <option value="">No family group</option>
                                                 {families.map((f) => (
@@ -354,8 +315,8 @@ export default function PastorProfilePage() {
                                             <div
                                                 key={item.label}
                                                 className="flex items-center justify-between
-                              text-sm border-b border-slate-200 pb-2 last:border-0
-                              last:pb-0"
+                                  text-sm border-b border-slate-200 pb-2 last:border-0
+                                  last:pb-0"
                                             >
                                                 <span className="text-slate-500">{item.label}</span>
                                                 <span className="font-medium text-slate-800">

@@ -7,6 +7,8 @@ import EmptyState from '@/components/shared/EmptyState'
 import Spinner from '@/components/shared/Spinner'
 import { Heart, Trash2 } from 'lucide-react'
 import api from '@/services/api'
+import { useConfirm } from '@/hooks/useConfirm'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
 
 interface PrayerRequest {
     id: string
@@ -20,6 +22,8 @@ export default function AdminPrayerRequestsPage() {
     const [requests, setRequests] = useState<PrayerRequest[]>([])
     const [loading, setLoading] = useState(true)
 
+    const {confirm, dialogProps } = useConfirm()
+
     useEffect(() => {
         api.get('/prayer-requests').then(({ data }) => {
             setRequests(data.data)
@@ -28,10 +32,18 @@ export default function AdminPrayerRequestsPage() {
     }, [])
 
     const handleDelete = async (id: string) => {
-        if (!confirm('Delete this prayer request?')) return
-        await api.delete(`/prayer-requests/${id}`)
-        setRequests((prev) => prev.filter((r) => r.id !== id))
-    }
+        confirm(
+            {
+            title: 'Delete Record',
+            message: 'This action cannot be undone. Are you sure?',
+            confirmLabel: 'Yes, Delete',
+        },
+        async () => {
+            await api.delete(`/prayer-requests/${id}`)
+            setRequests((prev) => prev.filter((r) => r.id !== id))
+        }
+    )
+}
 
     return (
         <DashboardLayout role="ADMIN">
@@ -97,6 +109,7 @@ export default function AdminPrayerRequestsPage() {
                     </div>
                 )}
             </div>
+            <ConfirmDialog {...dialogProps} />
         </DashboardLayout>
     )
 }

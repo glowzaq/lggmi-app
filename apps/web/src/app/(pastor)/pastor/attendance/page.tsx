@@ -127,18 +127,18 @@ export default function PastorAttendancePage() {
                                     <thead>
                                         <tr className="border-b bg-slate-50">
                                             <th className="text-left px-4 py-3 font-medium text-slate-600">
-                                                Event / Date
+                                                Event
                                             </th>
-                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600 hidden md:table-cell">
                                                 Men
                                             </th>
-                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600 hidden md:table-cell">
                                                 Women
                                             </th>
-                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600 hidden md:table-cell">
                                                 Children
                                             </th>
-                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600 hidden md:table-cell">
                                                 Newcomers
                                             </th>
                                             <th className="text-left px-4 py-3 font-medium text-slate-600">
@@ -164,16 +164,16 @@ export default function PastorAttendancePage() {
                                                         )}
                                                     </p>
                                                 </td>
-                                                <td className="px-4 py-3 text-blue-600 font-medium">
+                                                <td className="px-4 py-3 text-blue-600 font-medium hidden md:table-cell">
                                                     {record.maleCount}
                                                 </td>
-                                                <td className="px-4 py-3 text-pink-600 font-medium">
+                                                <td className="px-4 py-3 text-pink-600 font-medium hidden md:table-cell">
                                                     {record.femaleCount}
                                                 </td>
-                                                <td className="px-4 py-3 text-green-600 font-medium">
+                                                <td className="px-4 py-3 text-green-600 font-medium hidden md:table-cell">
                                                     {record.childrenCount}
                                                 </td>
-                                                <td className="px-4 py-3 text-orange-600 font-medium">
+                                                <td className="px-4 py-3 text-orange-600 font-medium hidden md:table-cell">
                                                     {record.newcomersCount}
                                                 </td>
                                                 <td className="px-4 py-3 font-bold text-slate-800">

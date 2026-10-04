@@ -127,16 +127,16 @@ export default function MembersPage() {
                                             <th className="text-left px-4 py-3 font-medium text-slate-600">
                                                 Contact
                                             </th>
-                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                            <th className="hidden md:table-cell text-left px-4 py-3 font-medium text-slate-600">
                                                 Gender
                                             </th>
-                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                            <th className="hidden md:table-cell text-left px-4 py-3 font-medium text-slate-600">
                                                 Role
                                             </th>
-                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600 hidden md:table-cell">
                                                 Joined
                                             </th>
-                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600 hidden md:table-cell">
                                                 Status
                                             </th>
                                             <th className="px-4 py-3" />
@@ -155,7 +155,7 @@ export default function MembersPage() {
                                                                 {member.firstName} {member.lastName}
                                                             </p>
                                                             {member.occupation && (
-                                                                <p className="text-xs text-slate-400">
+                                                                <p className="text-xs text-slate-400 hidden md:table-cell">
                                                                     {member.occupation}
                                                                 </p>
                                                             )}
@@ -164,7 +164,7 @@ export default function MembersPage() {
                                                 </td>
 
                                                 <td className="px-4 py-3">
-                                                    <p className="text-slate-600">{member.email}</p>
+                                                    <p className="text-slate-600 hidden md:table-cell">{member.email}</p>
                                                     {member.phone && (
                                                         <p className="text-xs text-slate-400">
                                                             {member.phone}
@@ -172,7 +172,7 @@ export default function MembersPage() {
                                                     )}
                                                 </td>
 
-                                                <td className="px-4 py-3">
+                                                <td className="px-4 py-3 hidden md:table-cell">
                                                     {member.gender ? (
                                                         <span className={`text-xs px-2 py-1 rounded-full font-medium ${member.gender === 'MALE'
                                                             ? 'bg-[#e1d5de] text-[#3f2039]'
@@ -185,20 +185,20 @@ export default function MembersPage() {
                                                     )}
                                                 </td>
 
-                                                <td className="px-4 py-3">
+                                                <td className="px-4 py-3 hidden md:table-cell">
                                                     <span className={`text-xs px-2 py-1 rounded-full font-small ${roleColors[member.role]}`}>
                                                         {member.role}
                                                     </span>
                                                 </td>
 
-                                                <td className="px-4 py-3 text-slate-500">
+                                                <td className="px-4 py-3 text-slate-500 hidden md:table-cell">
                                                     {new Date(member.joinedAt).toLocaleDateString(
                                                         'en-US',
                                                         { month: 'short', day: 'numeric', year: 'numeric' }
                                                     )}
                                                 </td>
 
-                                                <td className="px-4 py-3">
+                                                <td className="px-4 py-3 hidden md:table-cell">
                                                     <span className={`text-xs px-2 py-1 rounded-full
                             font-medium ${member.isActive
                                                             ? 'bg-purple-100 text-purple-900'

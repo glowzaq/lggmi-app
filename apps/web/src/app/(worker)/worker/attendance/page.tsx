@@ -107,7 +107,7 @@ export default function WorkerAttendancePage() {
                     </div>
                     <Button
                         onClick={handleOpenCreate}
-                        className="flex items-center text-white hover:bg-[#3f2029] bg-[#693565] gap-2"
+                        className="flex items-center text-white bg-[#3f2029] hover:bg-[#693565] gap-2"
                     >
                         <Plus className="h-4 w-4" />
                         Record Attendance
@@ -165,7 +165,6 @@ export default function WorkerAttendancePage() {
                     </Card>
                 )}
 
-                {/* Records list */}
                 {loading ? (
                     <div className="py-20 flex justify-center">
                         <Spinner text="Loading attendance records..." />
@@ -192,18 +191,18 @@ export default function WorkerAttendancePage() {
                                     <thead>
                                         <tr className="border-b bg-slate-50">
                                             <th className="text-left px-4 py-3 font-medium text-slate-600">
-                                                Event / Date
+                                                Event
                                             </th>
-                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600 hidden md:table-cell">
                                                 Men
                                             </th>
-                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600 hidden md:table-cell">
                                                 Women
                                             </th>
-                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600 hidden md:table-cell">
                                                 Children
                                             </th>
-                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600 hidden md:table-cell">
                                                 Newcomers
                                             </th>
                                             <th className="text-left px-4 py-3 font-medium text-slate-600">
@@ -222,23 +221,23 @@ export default function WorkerAttendancePage() {
                                                     <p className="font-medium text-slate-800">
                                                         {record.event?.title ?? '—'}
                                                     </p>
-                                                    <p className="text-xs text-slate-400">
+                                                    <p className="text-xs text-slate-400 hidden md:table-cell">
                                                         {new Date(record.date).toLocaleDateString(
                                                             'en-US',
                                                             { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }
                                                         )}
                                                     </p>
                                                 </td>
-                                                <td className="px-4 py-3 text-blue-600 font-medium">
+                                                <td className="px-4 py-3 text-blue-600 font-medium hidden md:table-cell">
                                                     {record.maleCount}
                                                 </td>
-                                                <td className="px-4 py-3 text-pink-600 font-medium">
+                                                <td className="px-4 py-3 text-pink-600 font-medium hidden md:table-cell">
                                                     {record.femaleCount}
                                                 </td>
-                                                <td className="px-4 py-3 text-green-600 font-medium">
+                                                <td className="px-4 py-3 text-green-600 font-medium hidden md:table-cell">
                                                     {record.childrenCount}
                                                 </td>
-                                                <td className="px-4 py-3 text-orange-600 font-medium">
+                                                <td className="px-4 py-3 text-orange-600 font-medium hidden md:table-cell">
                                                     {record.newcomersCount}
                                                 </td>
                                                 <td className="px-4 py-3 font-bold text-slate-800">

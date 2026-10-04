@@ -3,12 +3,10 @@
 import { useEffect, useState } from 'react'
 import DashboardLayout from '@/components/layout/DashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import EmptyState from '@/components/shared/EmptyState'
 import Spinner from '@/components/shared/Spinner'
-import WelfareModal from '@/components/shared/WelfareModal'
 import StatCard from '@/components/shared/StatCard'
-import { HandHeart, Plus, Pencil, Trash2, DollarSign, BarChart3 } from 'lucide-react'
+import { HandHeart, DollarSign, BarChart3 } from 'lucide-react'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import api from '@/services/api'
 
@@ -28,8 +26,6 @@ export default function PastorWelfarePage() {
     const [records, setRecords] = useState<WelfareRecord[]>([])
     const [stats, setStats] = useState<any>(null)
     const [loading, setLoading] = useState(true)
-    // const [modalOpen, setModalOpen] = useState(false)
-    // const [editingRecord, setEditingRecord] = useState<any>(null)
 
     const fetchData = async () => {
         const [recordsRes, statsRes] = await Promise.all([
@@ -43,12 +39,6 @@ export default function PastorWelfarePage() {
 
     useEffect(() => { fetchData() }, [])
 
-    // const handleDelete = async (id: string) => {
-    //     if (!confirm('Delete this welfare record?')) return
-    //     await api.delete(`/welfare/${id}`)
-    //     setRecords((prev) => prev.filter((r) => r.id !== id))
-    // }
-
     return (
         <DashboardLayout role="PASTOR">
             <div className="p-6 space-y-6">
@@ -59,13 +49,6 @@ export default function PastorWelfarePage() {
                             Track church welfare and support given
                         </p>
                     </div>
-                    {/* <Button
-                        onClick={() => { setEditingRecord(null); setModalOpen(true) }}
-                        className="flex items-center gap-2"
-                    >
-                        <Plus className="h-4 w-4" />
-                        New Record
-                    </Button> */}
                 </div>
 
                 {stats && (
@@ -103,14 +86,6 @@ export default function PastorWelfarePage() {
                         icon={HandHeart}
                         title="No welfare records yet"
                         description="No records at the moment"
-                        // action={
-                        //     <Button
-                        //         onClick={() => setModalOpen(true)}
-                        //         className="flex items-center gap-2"
-                        //     >
-                        //         <Plus className="h-4 w-4" /> New Record
-                        //     </Button>
-                        // }
                     />
                 ) : (
                     <div className="space-y-4">
@@ -135,18 +110,6 @@ export default function PastorWelfarePage() {
                                             <span className="text-lg font-bold text-green-600">
                                                 ₦{Number(record.amount).toLocaleString()}
                                             </span>
-                                            {/* <button
-                                                onClick={() => { setEditingRecord(record); setModalOpen(true) }}
-                                                className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"
-                                            >
-                                                <Pencil className="h-4 w-4 text-slate-500" />
-                                            </button>
-                                            <button
-                                                onClick={() => handleDelete(record.id)}
-                                                className="p-1.5 hover:bg-red-50 rounded-lg transition-colors"
-                                            >
-                                                <Trash2 className="h-4 w-4 text-red-500" />
-                                            </button> */}
                                         </div>
                                     </div>
                                 </CardHeader>

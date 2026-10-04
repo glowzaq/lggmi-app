@@ -9,6 +9,8 @@ import Spinner from '@/components/shared/Spinner'
 import AnnouncementModal from '@/components/admin/AnnouncementModal'
 import { Bell, BellOff, Plus, Pencil, Trash2 } from 'lucide-react'
 import api from '@/services/api'
+import { useConfirm } from '@/hooks/useConfirm'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
 
 interface Announcement {
     id: string
@@ -25,6 +27,8 @@ export default function AdminAnnouncementsPage() {
     const [modalOpen, setModalOpen] = useState(false)
     const [editingAnnouncement, setEditingAnnouncement] = useState<Announcement | null>(null)
 
+    const { confirm, dialogProps } = useConfirm()
+
     const fetchAnnouncements = async () => {
         const { data } = await api.get('/announcements')
         setAnnouncements(data.data)
@@ -40,11 +44,19 @@ export default function AdminAnnouncementsPage() {
         )
     }
 
-    const handleDelete = async (id: string) => {
-        if (!confirm('Delete this announcement?')) return
-        await api.delete(`/announcements/${id}`)
-        setAnnouncements((prev) => prev.filter((a) => a.id !== id))
-    }
+        const handleDelete = async (id: string) => {
+        confirm(
+            {
+            title: 'Delete Record',
+            message: 'This action cannot be undone. Are you sure?',
+            confirmLabel: 'Yes, Delete',
+        },
+        async () => {
+            await api.delete(`/announcements/${id}`)
+            setAnnouncements((prev) => prev.filter((a) => a.id !== id))
+        }
+    )
+}
 
     const handleOpenCreate = () => {
         setEditingAnnouncement(null)
@@ -176,6 +188,7 @@ export default function AdminAnnouncementsPage() {
                 onSuccess={fetchAnnouncements}
                 announcement={editingAnnouncement}
             />
+            <ConfirmDialog {...dialogProps} />
         </DashboardLayout>
     )
 }

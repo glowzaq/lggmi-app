@@ -11,6 +11,8 @@ import EmptyState from '@/components/shared/EmptyState'
 import Spinner from '@/components/shared/Spinner'
 import { Users, Plus, Trash2 } from 'lucide-react'
 import api from '@/services/api'
+import { useConfirm } from '@/hooks/useConfirm'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
 
 interface Family {
     id: string
@@ -26,6 +28,8 @@ export default function AdminFamiliesPage() {
     const [familyName, setFamilyName] = useState('')
     const [submitting, setSubmitting] = useState(false)
     const [error, setError] = useState('')
+
+    const { confirm, dialogProps } = useConfirm()
 
     const fetchFamilies = async () => {
         const { data } = await api.get('/families')
@@ -58,16 +62,19 @@ export default function AdminFamiliesPage() {
 
     const handleDelete = async (id: string, memberCount: number) => {
         if (memberCount > 0) {
-            alert(
-                `This family group has ${memberCount} member${memberCount > 1 ? 's' : ''}. Reassign them before deleting.`
-            )
-            return
-        }
-        if (!confirm('Delete this family group?')) return
-
-        await api.delete(`/families/${id}`)
-        setFamilies((prev) => prev.filter((f) => f.id !== id))
+            confirm(
+                {
+                title: 'Delete Record',
+                message: `This family group has ${memberCount} member${memberCount > 1 ? 's' : ''}. Reassign them before deleting. Action cannot be undone. Are you sure?`,
+                confirmLabel: 'Yes, Delete',
+            },
+            async () => {
+                await api.delete(`/families/${id}`)
+                setFamilies((prev) => prev.filter((f) => f.id !== id))
+            }
+        )
     }
+}
 
     return (
         <DashboardLayout role="ADMIN">
@@ -204,6 +211,7 @@ export default function AdminFamiliesPage() {
                     </div>
                 </div>
             </Modal>
+            <ConfirmDialog {...dialogProps} />
         </DashboardLayout>
     )
 }

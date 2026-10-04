@@ -62,7 +62,7 @@ export default function WorkerSermonsPage() {
                     </div>
                     <Button
                         onClick={handleOpenCreate}
-                        className="flex items-center gap-2 bg-[#693565] hover:bg-[#9c5e96]"
+                        className="flex items-center gap-2 bg-[#3f2039] hover:bg-[#693565]"
                     >
                         <Plus className="h-4 w-4" />
                         Add Sermon
@@ -86,8 +86,8 @@ export default function WorkerSermonsPage() {
                                 key={s}
                                 onClick={() => setActiveSeries(s)}
                                 className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${activeSeries === s
-                                    ? 'bg-[#9c5e96] text-white hover:bg-[#693565]'
-                                    : 'bg-slate-700 text-white hover:bg-[#693565]'
+                                    ? 'bg-[#693565] text-white'
+                                    : 'bg-slate-900 text-white'
                                     }`}
                             >
                                 {s}
@@ -108,7 +108,7 @@ export default function WorkerSermonsPage() {
                         action={
                             <Button
                                 onClick={handleOpenCreate}
-                                className="flex items-center gap-2 bg-[#693565] hover:bg-[#9c5e96]"
+                                className="flex items-center gap-2 hover:bg-[#693565] bg-[#3f2039]"
                             >
                                 <Plus className="h-4 w-4" /> Add Sermon
                             </Button>

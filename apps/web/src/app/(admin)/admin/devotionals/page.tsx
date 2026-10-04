@@ -11,6 +11,8 @@ import EmptyState from '@/components/shared/EmptyState'
 import Spinner from '@/components/shared/Spinner'
 import { BookMarked, Plus, Pencil, Trash2 } from 'lucide-react'
 import api from '@/services/api'
+import { useConfirm } from '@/hooks/useConfirm'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
 
 interface Devotional {
     id: string
@@ -41,6 +43,8 @@ export default function AdminDevotionalsPage() {
         author: '',
         devotionalDate: new Date().toISOString().slice(0, 10),
     })
+
+    const { confirm, dialogProps } = useConfirm()
 
     const fetchDevotionals = async () => {
         const { data } = await api.get('/devotionals')
@@ -105,10 +109,18 @@ export default function AdminDevotionalsPage() {
     }
 
     const handleDelete = async (id: string) => {
-        if (!confirm('Delete this devotional?')) return
-        await api.delete(`/devotionals/${id}`)
-        setDevotionals((prev) => prev.filter((d) => d.id !== id))
-    }
+        confirm(
+            {
+            title: 'Delete Record',
+            message: 'This action cannot be undone. Are you sure?',
+            confirmLabel: 'Yes, Delete',
+        },
+        async () => {
+            await api.delete(`/devotionals/${id}`)
+            setDevotionals((prev) => prev.filter((d) => d.id !== id))
+        }
+    )
+}
 
     return (
         <DashboardLayout role="ADMIN">
@@ -333,6 +345,7 @@ export default function AdminDevotionalsPage() {
                     </div>
                 </div>
             </Modal>
+            <ConfirmDialog {...dialogProps} />
         </DashboardLayout>
     )
 }

@@ -15,6 +15,8 @@ import {
     Tooltip, ResponsiveContainer, Legend,
 } from 'recharts'
 import api from '@/services/api'
+import { useConfirm } from '@/hooks/useConfirm'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
 
 interface AttendanceRecord {
     id: string
@@ -46,6 +48,8 @@ export default function AdminAttendancePage() {
         newcomersCount: 0,
         note: '',
     })
+
+    const { confirm, dialogProps } = useConfirm()
 
     const fetchData = async () => {
         const [recordsRes, statsRes, eventsRes] = await Promise.all([
@@ -118,11 +122,19 @@ export default function AdminAttendancePage() {
         }
     }
 
-    const handleDelete = async (id: string) => {
-        if (!confirm('Delete this attendance record?')) return
-        await api.delete(`/attendance/${id}`)
-        setRecords((prev) => prev.filter((r) => r.id !== id))
-    }
+        const handleDelete = async (id: string) => {
+        confirm(
+            {
+            title: 'Delete Record',
+            message: 'This action cannot be undone. Are you sure?',
+            confirmLabel: 'Yes, Delete',
+        },
+        async () => {
+            await api.delete(`/attendance/${id}`)
+            setRecords((prev) => prev.filter((r) => r.id !== id))
+        }
+    )
+}
 
     return (
         <DashboardLayout role="ADMIN">
@@ -221,18 +233,18 @@ export default function AdminAttendancePage() {
                                     <thead>
                                         <tr className="border-b bg-slate-50">
                                             <th className="text-left px-4 py-3 font-medium text-slate-600">
-                                                Event / Date
+                                                Event
                                             </th>
-                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600 hidden md:table-cell">
                                                 Men
                                             </th>
-                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600 hidden md:table-cell">
                                                 Women
                                             </th>
-                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600 hidden md:table-cell">
                                                 Children
                                             </th>
-                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600 hidden md:table-cell">
                                                 Newcomers
                                             </th>
                                             <th className="text-left px-4 py-3 font-medium text-slate-600">
@@ -258,16 +270,16 @@ export default function AdminAttendancePage() {
                                                         )}
                                                     </p>
                                                 </td>
-                                                <td className="px-4 py-3 text-blue-600 font-medium">
+                                                <td className="px-4 py-3 text-blue-600 font-medium hidden md:table-cell">
                                                     {record.maleCount}
                                                 </td>
-                                                <td className="px-4 py-3 text-pink-600 font-medium">
+                                                <td className="px-4 py-3 text-pink-600 font-medium hidden md:table-cell">
                                                     {record.femaleCount}
                                                 </td>
-                                                <td className="px-4 py-3 text-green-600 font-medium">
+                                                <td className="px-4 py-3 text-green-600 font-medium hidden md:table-cell">
                                                     {record.childrenCount}
                                                 </td>
-                                                <td className="px-4 py-3 text-orange-600 font-medium">
+                                                <td className="px-4 py-3 text-orange-600 font-medium hidden md:table-cell">
                                                     {record.newcomersCount}
                                                 </td>
                                                 <td className="px-4 py-3 font-bold text-slate-800">
@@ -415,6 +427,7 @@ export default function AdminAttendancePage() {
                     </div>
                 </div>
             </Modal>
+            <ConfirmDialog {...dialogProps} />
         </DashboardLayout>
     )
 }

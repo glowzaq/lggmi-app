@@ -162,7 +162,7 @@ export default function WorkerTestimoniesPage() {
                         action={
                             <Button
                                 onClick={() => setModalOpen(true)}
-                                className="flex items-center gap-2 hover:bg-[#3f2039] hover:text-white cursor-pointer bg-[#3f2039] text-white"
+                                className="flex items-center gap-2 hover:bg-[#693565] hover:text-white cursor-pointer bg-[#3f2039] text-white"
                             >
                                 <Plus className="h-4 w-4" /> Share Testimony
                             </Button>

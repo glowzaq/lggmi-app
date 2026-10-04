@@ -59,12 +59,6 @@ export default function PastorTestimoniesPage() {
         )
     }
 
-    const handleDelete = async (id: string) => {
-        if (!confirm('Delete this testimony?')) return
-        await api.delete(`/testimonies/${id}`)
-        setTestimonies((prev) => prev.filter((t) => t.id !== id))
-    }
-
     const filtered = filter === 'ALL'
         ? testimonies
         : testimonies.filter((t) => t.status === filter)
@@ -137,12 +131,6 @@ export default function PastorTestimoniesPage() {
                           font-medium ${config.badge}`}>
                                                     {config.label}
                                                 </span>
-                                                <button
-                                                    onClick={() => handleDelete(testimony.id)}
-                                                    className="p-1.5 hover:bg-red-50 rounded-lg transition-colors"
-                                                >
-                                                    <Trash2 className="h-3.5 w-3.5 text-red-500" />
-                                                </button>
                                             </div>
                                         </div>
                                     </CardHeader>

@@ -10,6 +10,8 @@ import {
     XCircle, Trash2,
 } from 'lucide-react'
 import api from '@/services/api'
+import { useConfirm } from '@/hooks/useConfirm'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
 
 interface Testimony {
     id: string
@@ -32,6 +34,8 @@ export default function AdminTestimoniesPage() {
     const [stats, setStats] = useState<any>(null)
     const [filter, setFilter] = useState<string>('ALL')
     const [loading, setLoading] = useState(true)
+
+    const { confirm, dialogProps } = useConfirm()
 
     const fetchData = async () => {
         const [testRes, statsRes] = await Promise.all([
@@ -60,10 +64,18 @@ export default function AdminTestimoniesPage() {
     }
 
     const handleDelete = async (id: string) => {
-        if (!confirm('Delete this testimony?')) return
-        await api.delete(`/testimonies/${id}`)
-        setTestimonies((prev) => prev.filter((t) => t.id !== id))
-    }
+        confirm(
+            {
+            title: 'Delete Record',
+            message: 'This action cannot be undone. Are you sure?',
+            confirmLabel: 'Yes, Delete',
+        },
+        async () => {
+            await api.delete(`/testimonies/${id}`)
+            setTestimonies((prev) => prev.filter((t) => t.id !== id))
+        }
+    )
+}
 
     const filtered = filter === 'ALL'
         ? testimonies
@@ -158,7 +170,7 @@ export default function AdminTestimoniesPage() {
                                                 {testimony.status !== 'APPROVED' && (
                                                     <button
                                                         onClick={() => handleApprove(testimony.id)}
-                                                        className="text-xs px-3 py-1.5 bg-green-600
+                                                        className="text-xs px-3 py-1.5 bg-green-800
                               text-white rounded-lg hover:bg-green-700
                               transition-colors font-medium"
                                                     >
@@ -184,6 +196,8 @@ export default function AdminTestimoniesPage() {
                     </div>
                 )}
             </div>
+
+            <ConfirmDialog {...dialogProps}/>
         </DashboardLayout>
     )
 }

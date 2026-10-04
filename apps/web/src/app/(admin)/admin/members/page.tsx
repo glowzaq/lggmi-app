@@ -5,12 +5,14 @@ import EmptyState from "@/components/shared/EmptyState"
 import Spinner from "@/components/shared/Spinner"
 import { Input } from "@/components/ui/input"
 import api from "@/services/api"
-import { MoreVertical, Search, Users, UserX } from "lucide-react"
+import { KeyRound, MoreVertical, Search, Users, UserX } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import WorkerModal from "@/components/admin/WorkerModal"
+import Modal from "@/components/shared/Modal"
+import { Label } from "@/components/ui/label"
 
 interface Member {
     id: string
@@ -40,6 +42,12 @@ export default function MembersPage() {
     const [search, setSearch] = useState('')
     const [genderFilter, setGenderFilter] = useState<string>('ALL')
     const [activeMenu, setActiveMenu] = useState<string | null>(null)
+    const [resetModalOpen, setResetModalOpen] = useState(false)
+    const [resetMember, setResetMember] = useState<Member | null>(null)
+    const [newPassword, setNewPassword] = useState('')
+    const [resetError, setResetError] = useState('')
+    const [resetting, setResetting] = useState(false)
+    const [resetSuccess, setResetSuccess] = useState('')
 
     useEffect(() => {
         fetchMembers()
@@ -57,6 +65,31 @@ export default function MembersPage() {
             prev.map((m) => (m.id === id ? { ...m, isActive: false } : m))
         )
         setActiveMenu(null)
+    }
+
+    const handleResetPassword = async () => {
+        if (!newPassword || newPassword.length < 6) {
+            setResetError('Password must be at least 6 characters')
+            return
+        }
+
+        setResetting(true)
+        setResetError('')
+
+        try {
+            await api.post('/auth/reset-password', {
+                userId: resetMember?.id,
+                newPassword,
+            })
+            setResetSuccess(`Password reset for ${resetMember?.firstName}`)
+            setResetModalOpen(false)
+            setNewPassword('')
+            setResetMember(null)
+        } catch (err: any) {
+            setResetError(err.response?.data?.message || 'Failed to reset password')
+        } finally {
+            setResetting(false)
+        }
     }
 
     const filtered = useMemo(() => {
@@ -148,16 +181,16 @@ export default function MembersPage() {
                                             <th className="text-left px-4 py-3 font-medium text-slate-600">
                                                 Contact
                                             </th>
-                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                                    <th className="text-left px-4 py-3 font-medium text-slate-600 hidden md:table-cell">
                                                 Gender
                                             </th>
-                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                                    <th className="text-left px-4 py-3 font-medium text-slate-600 hidden md:table-cell">
                                                 Role
                                             </th>
-                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                                    <th className="text-left px-4 py-3 font-medium text-slate-600 hidden md:table-cell">
                                                 Joined
                                             </th>
-                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                                    <th className="text-left px-4 py-3 font-medium text-slate-600 hidden md:table-cell">
                                                 Status
                                             </th>
                                             <th className="px-4 py-3" />
@@ -171,15 +204,12 @@ export default function MembersPage() {
                                             >
                                                 <td className="px-4 py-3">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-8 w-8 rounded-full bg-[#693565] flex items-center justify-center text-white text-xs font-semibold shrink-0">
-                                                            {member.firstName[0]}{member.lastName[0]}
-                                                        </div>
                                                         <div>
                                                             <p className="font-medium text-slate-800">
                                                                 {member.firstName} {member.lastName}
                                                             </p>
                                                             {member.occupation && (
-                                                                <p className="text-xs text-slate-400">
+                                                                <p className="text-xs text-slate-400 hidden md:table-cell">
                                                                     {member.occupation}
                                                                 </p>
                                                             )}
@@ -188,7 +218,7 @@ export default function MembersPage() {
                                                 </td>
 
                                                 <td className="px-4 py-3">
-                                                    <p className="text-slate-600">{member.email}</p>
+                                                    <p className="text-slate-600 hidden md:table-cell">{member.email}</p>
                                                     {member.phone && (
                                                         <p className="text-xs text-slate-400">
                                                             {member.phone}
@@ -196,11 +226,11 @@ export default function MembersPage() {
                                                     )}
                                                 </td>
 
-                                                <td className="px-4 py-3">
+                                                <td className="px-4 py-3 hidden md:table-cell">
                                                     {member.gender ? (
                                                         <span className={`text-xs px-2 py-1 rounded-full font-medium ${member.gender === 'MALE'
-                                                                ? 'bg-blue-100 text-blue-700'
-                                                                : 'bg-pink-100 text-pink-700'
+                                                            ? 'bg-blue-100 text-blue-700'
+                                                            : 'bg-pink-100 text-pink-700'
                                                             }`}>
                                                             {member.gender[0] + member.gender.slice(1).toLowerCase()}
                                                         </span>
@@ -209,21 +239,21 @@ export default function MembersPage() {
                                                     )}
                                                 </td>
 
-                                                <td className="px-4 py-3">
+                                                <td className="px-4 py-3 hidden md:table-cell">
                                                     <span className={`text-xs px-2 py-1 rounded-full
                             font-medium ${roleColors[member.role]}`}>
                                                         {member.role}
                                                     </span>
                                                 </td>
 
-                                                <td className="px-4 py-3 text-slate-500">
+                                                <td className="px-4 py-3 text-slate-500 hidden md:table-cell">
                                                     {new Date(member.joinedAt).toLocaleDateString(
                                                         'en-US',
                                                         { month: 'short', day: 'numeric', year: 'numeric' }
                                                     )}
                                                 </td>
 
-                                                <td className="px-4 py-3">
+                                                <td className="px-4 py-3 hidden md:table-cell">
                                                     <span className={`text-xs px-2 py-1 rounded-full
                             font-medium ${member.isActive
                                                             ? 'bg-green-100 text-green-700'
@@ -249,10 +279,23 @@ export default function MembersPage() {
                                                         <div className="absolute right-8 top-8 bg-white border border-slate-200 rounded-lg shadow-lg z-10 min-w-[140px] overflow-hidden">
                                                             {member.isActive && (
                                                                 <button
-                                                                    onClick={() => handleDeactivate(member.id)}
-                                                                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50"
+                                                                    onClick={() => {
+                                                                        setResetMember(member)
+                                                                        setResetModalOpen(true)
+                                                                    }}
+                                                                    className="w-full flex items-center gap-2 px-3 py-2
+                                                                        text-xs text-orange-600 hover:bg-orange-50"
                                                                 >
-                                                                    <UserX className="h-4 w-4" />
+                                                                    <KeyRound className="h-3 w-3" />
+                                                                    Reset Password
+                                                                </button>
+                                                            )}
+                                                            {member.isActive && (
+                                                                <button
+                                                                    onClick={() => handleDeactivate(member.id)}
+                                                                    className="w-full flex items-center gap-2 px-3 py-2 text-xs text-red-600 hover:bg-red-50"
+                                                                >
+                                                                    <UserX className="h-3 w-3" />
                                                                     Deactivate
                                                                 </button>
                                                             )}
@@ -278,6 +321,64 @@ export default function MembersPage() {
                 onClose={() => setWorkerModalOpen(false)}
                 onSuccess={fetchMembers}
             />
+
+            <Modal
+                isOpen={resetModalOpen}
+                onClose={() => {
+                    setResetModalOpen(false)
+                    setNewPassword('')
+                    setResetError('')
+                }}
+                title="Reset Password"
+                size="sm"
+            >
+                <div className="space-y-4">
+                    <div className="flex items-center gap-3 p-3 bg-orange-50
+      rounded-lg border border-orange-200">
+                        <KeyRound className="h-4 w-4 text-orange-600 shrink-0" />
+                        <p className="text-sm text-orange-800">
+                            Resetting password for{' '}
+                            <span className="font-semibold">
+                                {resetMember?.firstName} {resetMember?.lastName}
+                            </span>
+                        </p>
+                    </div>
+
+                    <div className="space-y-1.5">
+                        <Label>New Password</Label>
+                        <Input
+                            type="password"
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            placeholder="Minimum 6 characters"
+                        />
+                    </div>
+
+                    {resetError && (
+                        <p className="text-sm text-red-500">{resetError}</p>
+                    )}
+
+                    <div className="flex justify-end gap-3 pt-2">
+                        <Button
+                            variant="outline"
+                            onClick={() => {
+                                setResetModalOpen(false)
+                                setNewPassword('')
+                                setResetError('')
+                            }}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={handleResetPassword}
+                            disabled={resetting}
+                            className="bg-orange-600 hover:bg-orange-700 text-white"
+                        >
+                            {resetting ? 'Resetting...' : 'Reset Password'}
+                        </Button>
+                    </div>
+                </div>
+            </Modal>
         </DashboardLayout>
     )
 }

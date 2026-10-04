@@ -11,6 +11,8 @@ import EmptyState from '@/components/shared/EmptyState'
 import Spinner from '@/components/shared/Spinner'
 import { Sparkles, Plus, Pencil, Trash2, Check } from 'lucide-react'
 import api from '@/services/api'
+import { useConfirm } from '@/hooks/useConfirm'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
 
 interface MonthlyTheme {
     id: string
@@ -42,6 +44,8 @@ export default function AdminMonthlyThemePage() {
         month: new Date().getMonth() + 1,
         year: new Date().getFullYear(),
     })
+
+    const { confirm, dialogProps } = useConfirm()
 
     const fetchData = async () => {
         const [themesRes, activeRes] = await Promise.all([
@@ -110,10 +114,18 @@ export default function AdminMonthlyThemePage() {
     }
 
     const handleDelete = async (id: string) => {
-        if (!confirm('Delete this theme?')) return
-        await api.delete(`/monthly-theme/${id}`)
-        setThemes((prev) => prev.filter((t) => t.id !== id))
-    }
+        confirm(
+            {
+            title: 'Delete Record',
+            message: 'This action cannot be undone. Are you sure?',
+            confirmLabel: 'Yes, Delete',
+        },
+        async () => {
+            await api.delete(`/monthly-theme/${id}`)
+            setThemes((prev) => prev.filter((t) => t.id !== id))
+        }
+    )
+}
 
     return (
         <DashboardLayout role="ADMIN">
@@ -306,6 +318,7 @@ export default function AdminMonthlyThemePage() {
                     </div>
                 </div>
             </Modal>
+            <ConfirmDialog {...dialogProps} />
         </DashboardLayout>
     )
 }

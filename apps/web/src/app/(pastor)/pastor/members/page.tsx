@@ -82,9 +82,6 @@ export default function PastorMembersPage() {
                             >
                                 <CardContent className="pt-4 space-y-3">
                                     <div className="flex items-center gap-3">
-                                        <div className="h-10 w-10 rounded-full bg-[#683565] flex items-center justify-center text-white font-semibold shrink-0">
-                                            {member.firstName[0]}{member.lastName[0]}
-                                        </div>
                                         <div className="min-w-0">
                                             <p className="font-semibold text-slate-800 truncate">
                                                 {member.firstName} {member.lastName}

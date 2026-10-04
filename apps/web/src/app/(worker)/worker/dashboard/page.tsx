@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import DashboardLayout from '@/components/layout/DashboardLayout'
 import StatCard from '@/components/shared/StatCard'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Users, Calendar, Bell, Globe, Heart } from 'lucide-react'
+import { Users, Calendar, Bell, Globe } from 'lucide-react'
 import { ResponsiveContainer, BarChart, XAxis, YAxis, Tooltip, Bar } from 'recharts'
 import api from '@/services/api'
 
@@ -21,7 +21,6 @@ export default function WorkerDashboard() {
     const [recentMembers, setRecentMembers] = useState<any[]>([])
     const [announcements, setAnnouncements] = useState<any>(null)
     const [attendanceStats, setAttendanceStats] = useState<any>(null)
-    const [prayerStats, setPrayerStats] = useState<any>(null)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -31,15 +30,13 @@ export default function WorkerDashboard() {
             api.get('/evangelism/stats'),
             api.get('/users'),
             api.get('/announcements/active'),
-            api.get('/prayer-requests/stats'),
             api.get('/attendance/stats'),
-        ]).then(([ms, e, ev, m, a, p, att]) => {
+        ]).then(([ms, e, ev, m, a, att]) => {
             setMemberStats(ms.data.data)
             setEventStats(e.data.data)
             setEvangelismStats(ev.data.data)
             setRecentMembers(m.data.data.slice(0, 4))
             setAnnouncements(a.data.data.slice(0, 3))
-            setPrayerStats(p.data.data)
             setAttendanceStats(att.data.data)
             setLoading(false)
         })
@@ -75,7 +72,7 @@ export default function WorkerDashboard() {
                         iconBg="bg-purple-50"
                     />
                     <StatCard
-                        title="Announcements"
+                        title="Updates"
                         value={announcements?.length ?? '—'}
                         icon={Bell}
                         iconColor="text-[#2d332d]"
@@ -83,8 +80,8 @@ export default function WorkerDashboard() {
                     />
                     <StatCard
                         title="Evangelism"
-                        value={evangelismStats?.length ?? '—'}
-                        icon={Heart}
+                        value={evangelismStats?.totalOutreaches ?? '—'}
+                        icon={Globe}
                         iconColor="text-[#473723]"
                         iconBg="bg-[#d6b68d]"
                     />
@@ -121,7 +118,7 @@ export default function WorkerDashboard() {
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between">
                             <CardTitle className="text-base font-semibold text-slate-800">
-                                Announcements
+                                Updates
                             </CardTitle>
                             <Bell className="h-4 w-4 text-slate-400" />
                         </CardHeader>
@@ -159,9 +156,6 @@ export default function WorkerDashboard() {
                     <CardContent className="space-y-3">
                         {recentMembers.map((member) => (
                             <div key={member.id} className="flex items-center gap-3">
-                                <div className="h-9 w-9 rounded-full bg-purple-100 flex items-center justify-center text-purple-900 text-sm font-semibold shrink-0">
-                                    {member.firstName[0]}{member.lastName[0]}
-                                </div>
                                 <div className="flex-1 min-w-0">
                                     <p className="text-sm font-medium text-slate-800 truncate">
                                         {member.firstName} {member.lastName}

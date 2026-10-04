@@ -27,12 +27,6 @@ export default function PastorPrayerRequestsPage() {
         })
     }, [])
 
-    const handleDelete = async (id: string) => {
-        if (!confirm('Delete this prayer request?')) return
-        await api.delete(`/prayer-requests/${id}`)
-        setRequests((prev) => prev.filter((r) => r.id !== id))
-    }
-
     return (
         <DashboardLayout role="PASTOR">
             <div className="p-6 space-y-6">
@@ -73,13 +67,6 @@ export default function PastorPrayerRequestsPage() {
                                                 {request.user.firstName} {request.user.lastName}
                                             </p>
                                         </div>
-                                        <button
-                                            onClick={() => handleDelete(request.id)}
-                                            className="p-1.5 hover:bg-red-50 rounded-lg
-                        transition-colors shrink-0"
-                                        >
-                                            <Trash2 className="h-3.5 w-3.5 text-red-500" />
-                                        </button>
                                     </div>
                                 </CardHeader>
                                 <CardContent>

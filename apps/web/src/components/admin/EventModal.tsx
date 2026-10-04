@@ -176,13 +176,13 @@ export default function EventModal({
                 {error && <p className="text-sm text-red-500">{error}</p>}
 
                 <div className="flex justify-end gap-3 pt-2">
-                    <Button variant="outline" onClick={onClose}>
+                    <Button onClick={onClose}>
                         Cancel
                     </Button>
                     <Button
                         onClick={handleSubmit}
                         disabled={loading}
-                        className="bg-slate-700 hover:bg-slate-900 text-white"
+                        className="bg-[#3f2039] hover:bg-[#693565] text-white"
                     >
                         {loading ? 'Saving...' : isEdit ? 'Save Changes' : 'Create Event'}
                     </Button>

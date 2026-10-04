@@ -294,10 +294,10 @@ export default function AdminDonationsPage() {
                                             <thead>
                                                 <tr className="border-b bg-slate-50">
                                                     <th className="text-left px-4 py-3 font-medium text-slate-600">Event</th>
-                                                    <th className="text-left px-4 py-3 font-medium text-slate-600">Type</th>
+                                                    <th className="text-left px-4 py-3 font-medium text-slate-600 hidden md:table-cell">Type</th>
                                                     <th className="text-left px-4 py-3 font-medium text-slate-600">Amount</th>
-                                                    <th className="text-left px-4 py-3 font-medium text-slate-600">Date</th>
-                                                    <th className="text-left px-4 py-3 font-medium text-slate-600">Note</th>
+                                                    <th className="text-left px-4 py-3 font-medium text-slate-600 hidden md:table-cell">Date</th>
+                                                    <th className="text-left px-4 py-3 font-medium text-slate-600 hidden md:table-cell">Note</th>
                                                     <th className="px-4 py-3" />
                                                 </tr>
                                             </thead>
@@ -307,7 +307,7 @@ export default function AdminDonationsPage() {
                                                         <td className="px-4 py-3 font-medium text-slate-800">
                                                             {d.event?.title ?? '—'}
                                                         </td>
-                                                        <td className="px-4 py-3">
+                                                        <td className="px-4 py-3 hidden md:table-cell">
                                                             <span className={`text-xs px-2 py-1 rounded-full font-medium
                                                                         ${typeColors[d.type]}`}>
                                                                 {d.type.replace(/_/g, ' ')}
@@ -316,10 +316,10 @@ export default function AdminDonationsPage() {
                                                         <td className="px-4 py-3 font-semibold text-green-700">
                                                             ₦{Number(d.amount).toLocaleString()}
                                                         </td>
-                                                        <td className="px-4 py-3 text-slate-500">
+                                                        <td className="px-4 py-3 text-slate-500 hidden md:table-cell">
                                                             {new Date(d.date).toLocaleDateString()}
                                                         </td>
-                                                        <td className="px-4 py-3 text-slate-400 text-xs">
+                                                        <td className="px-4 py-3 text-slate-400 text-xs hidden md:table-cell">
                                                             {d.note ?? '—'}
                                                         </td>
                                                         <td className="px-4 py-3">

@@ -9,6 +9,8 @@ import Spinner from '@/components/shared/Spinner'
 import EventModal from '@/components/admin/EventModal'
 import { Calendar, MapPin, Clock, Plus, Pencil, Trash2 } from 'lucide-react'
 import api from '@/services/api'
+import { useConfirm } from '@/hooks/useConfirm'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
 
 interface Event {
     id: string
@@ -35,6 +37,8 @@ export default function AdminEventsPage() {
     const [modalOpen, setModalOpen] = useState(false)
     const [editingEvent, setEditingEvent] = useState<Event | null>(null)
 
+    const { confirm, dialogProps } = useConfirm()
+
     const fetchEvents = async () => {
         const { data } = await api.get('/events')
         setEvents(data.data)
@@ -43,11 +47,25 @@ export default function AdminEventsPage() {
 
     useEffect(() => { fetchEvents() }, [])
 
+    // const handleDelete = async (id: string) => {
+    //     if (!confirm('Delete this event?')) return
+    //     await api.delete(`/events/${id}`)
+    //     setEvents((prev) => prev.filter((e) => e.id !== id))
+    // }
+
     const handleDelete = async (id: string) => {
-        if (!confirm('Delete this event?')) return
-        await api.delete(`/events/${id}`)
-        setEvents((prev) => prev.filter((e) => e.id !== id))
-    }
+        confirm(
+            {
+            title: 'Delete Record',
+            message: 'This action cannot be undone. Are you sure?',
+            confirmLabel: 'Yes, Delete',
+        },
+        async () => {
+            await api.delete(`/events/${id}`)
+            setEvents((prev) => prev.filter((e) => e.id !== id))
+        }
+    )
+}
 
     const handleOpenCreate = () => {
         setEditingEvent(null)
@@ -168,6 +186,8 @@ export default function AdminEventsPage() {
                 onSuccess={fetchEvents}
                 event={editingEvent}
             />
+
+            <ConfirmDialog {...dialogProps} />
         </DashboardLayout>
     )
 }

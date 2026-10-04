@@ -58,7 +58,7 @@ export default function WorkerEventsPage() {
                     </div>
                     <Button
                         onClick={handleOpenCreate}
-                        className="flex items-center gap-2 bg-[#693565] hover:bg-[#9c5e96]"
+                        className="flex items-center gap-2 hover:bg-[#693565] bg-[#3f2039]"
                     >
                         <Plus className="h-4 w-4" />
                         Add Event
@@ -75,8 +75,8 @@ export default function WorkerEventsPage() {
                         title="No events yet"
                         description="Create your first church event"
                         action={
-                            <Button onClick={handleOpenCreate} className="flex items-center gap-2 bg-[#693565]">
-                                <Plus className="h-4 w-4" /> New Event
+                            <Button onClick={handleOpenCreate} className="flex items-center gap-2 bg-[#3f2039] hover:bg-[#693565]">
+                                <Plus className="h-4 w-4" /> Add Event
                             </Button>
                         }
                     />

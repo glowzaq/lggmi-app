@@ -68,7 +68,7 @@ export default function MemberSermonsPage() {
                                 key={s}
                                 onClick={() => setActiveSeries(s)}
                                 className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${activeSeries === s
-                                        ? 'bg-slate-900 text-white'
+                                        ? 'bg-[#693565] text-white'
                                         : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                                     }`}
                             >
