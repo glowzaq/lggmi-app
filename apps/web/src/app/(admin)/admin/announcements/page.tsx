@@ -9,6 +9,8 @@ import Spinner from '@/components/shared/Spinner'
 import AnnouncementModal from '@/components/admin/AnnouncementModal'
 import { Bell, BellOff, Plus, Pencil, Trash2 } from 'lucide-react'
 import api from '@/services/api'
+import { useConfirm } from '@/hooks/useConfirm'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
 
 interface Announcement {
     id: string
@@ -25,6 +27,8 @@ export default function AdminAnnouncementsPage() {
     const [modalOpen, setModalOpen] = useState(false)
     const [editingAnnouncement, setEditingAnnouncement] = useState<Announcement | null>(null)
 
+    const { confirm, dialogProps } = useConfirm()
+
     const fetchAnnouncements = async () => {
         const { data } = await api.get('/announcements')
         setAnnouncements(data.data)
@@ -40,11 +44,19 @@ export default function AdminAnnouncementsPage() {
         )
     }
 
-    const handleDelete = async (id: string) => {
-        if (!confirm('Delete this announcement?')) return
-        await api.delete(`/announcements/${id}`)
-        setAnnouncements((prev) => prev.filter((a) => a.id !== id))
-    }
+        const handleDelete = async (id: string) => {
+        confirm(
+            {
+            title: 'Delete Record',
+            message: 'This action cannot be undone. Are you sure?',
+            confirmLabel: 'Yes, Delete',
+        },
+        async () => {
+            await api.delete(`/announcements/${id}`)
+            setAnnouncements((prev) => prev.filter((a) => a.id !== id))
+        }
+    )
+}
 
     const handleOpenCreate = () => {
         setEditingAnnouncement(null)
@@ -70,7 +82,7 @@ export default function AdminAnnouncementsPage() {
                     </div>
                     <Button
                         onClick={handleOpenCreate}
-                        className="flex items-center gap-2 bg-[#693565] hover:bg-[#9c5e96]"
+                        className="flex items-center gap-2 bg-[#3f2039] hover:bg-[#693565]"
                     >
                         <Plus className="h-4 w-4" />
                         Add Announcement
@@ -89,7 +101,7 @@ export default function AdminAnnouncementsPage() {
                         action={
                             <Button
                                 onClick={handleOpenCreate}
-                                className="flex items-center gap-2 bg-[#693565]"
+                                className="flex items-center gap-2 bg-[#3f2039] hover:bg-[#693565]"
                             >
                                 <Plus className="h-4 w-4" /> Add Announcement
                             </Button>
@@ -100,9 +112,9 @@ export default function AdminAnnouncementsPage() {
                         {announcements.map((ann) => (
                             <Card
                                 key={ann.id}
-                                className={`border-l-4 transition-opacity ${ann.isActive
-                                        ? 'border-l-purple-400'
-                                        : 'border-l-slate-300 opacity-60'
+                                className={`border-r-4 transition-opacity ${ann.isActive
+                                        ? 'border-slate-600'
+                                        : 'border-slate-300 opacity-60'
                                     }`}
                             >
                                 <CardHeader className="pb-2">
@@ -176,6 +188,7 @@ export default function AdminAnnouncementsPage() {
                 onSuccess={fetchAnnouncements}
                 announcement={editingAnnouncement}
             />
+            <ConfirmDialog {...dialogProps} />
         </DashboardLayout>
     )
 }

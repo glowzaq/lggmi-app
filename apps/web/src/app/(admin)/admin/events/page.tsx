@@ -9,6 +9,8 @@ import Spinner from '@/components/shared/Spinner'
 import EventModal from '@/components/admin/EventModal'
 import { Calendar, MapPin, Clock, Plus, Pencil, Trash2 } from 'lucide-react'
 import api from '@/services/api'
+import { useConfirm } from '@/hooks/useConfirm'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
 
 interface Event {
     id: string
@@ -23,9 +25,9 @@ interface Event {
 
 const eventTypeColors: Record<string, string> = {
     SUNDAY_SERVICE: 'bg-blue-100 text-blue-700',
-    BIBLE_STUDY: 'bg-green-100 text-green-700',
-    PRAYER_MEETING: 'bg-purple-100 text-purple-700',
-    SPECIAL_PROGRAM: 'bg-orange-100 text-orange-700',
+    MOMENT_OF_LIFTING: 'bg-green-100 text-green-700',
+    LET_THE_FIRE_FALL: 'bg-purple-100 text-purple-700',
+    // SPECIAL_PROGRAM: 'bg-orange-100 text-orange-700',
     OTHER: 'bg-slate-100 text-slate-700',
 }
 
@@ -35,6 +37,8 @@ export default function AdminEventsPage() {
     const [modalOpen, setModalOpen] = useState(false)
     const [editingEvent, setEditingEvent] = useState<Event | null>(null)
 
+    const { confirm, dialogProps } = useConfirm()
+
     const fetchEvents = async () => {
         const { data } = await api.get('/events')
         setEvents(data.data)
@@ -43,11 +47,25 @@ export default function AdminEventsPage() {
 
     useEffect(() => { fetchEvents() }, [])
 
+    // const handleDelete = async (id: string) => {
+    //     if (!confirm('Delete this event?')) return
+    //     await api.delete(`/events/${id}`)
+    //     setEvents((prev) => prev.filter((e) => e.id !== id))
+    // }
+
     const handleDelete = async (id: string) => {
-        if (!confirm('Delete this event?')) return
-        await api.delete(`/events/${id}`)
-        setEvents((prev) => prev.filter((e) => e.id !== id))
-    }
+        confirm(
+            {
+            title: 'Delete Record',
+            message: 'This action cannot be undone. Are you sure?',
+            confirmLabel: 'Yes, Delete',
+        },
+        async () => {
+            await api.delete(`/events/${id}`)
+            setEvents((prev) => prev.filter((e) => e.id !== id))
+        }
+    )
+}
 
     const handleOpenCreate = () => {
         setEditingEvent(null)
@@ -71,10 +89,10 @@ export default function AdminEventsPage() {
                     </div>
                     <Button
                         onClick={handleOpenCreate}
-                        className="flex items-center gap-2 bg-[#693565]"
+                        className="flex items-center gap-2 bg-[#3f2039] hover:bg-[#693565]"
                     >
                         <Plus className="h-4 w-4" />
-                        New Event
+                        Add Event
                     </Button>
                 </div>
 
@@ -88,8 +106,8 @@ export default function AdminEventsPage() {
                         title="No events yet"
                         description="Create your first church event"
                         action={
-                            <Button onClick={handleOpenCreate} className="flex items-center gap-2 bg-[#693565]">
-                                <Plus className="h-4 w-4" /> New Event
+                            <Button onClick={handleOpenCreate} className="flex items-center gap-2 bg-[#3f2039] hover:bg-[#693565]">
+                                <Plus className="h-4 w-4" /> Add Event
                             </Button>
                         }
                     />
@@ -168,6 +186,8 @@ export default function AdminEventsPage() {
                 onSuccess={fetchEvents}
                 event={editingEvent}
             />
+
+            <ConfirmDialog {...dialogProps} />
         </DashboardLayout>
     )
 }

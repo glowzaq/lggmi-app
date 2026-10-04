@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import {
     logToday,
+    getDevotional,
     getToday,
     getLogs,
     getStats,
@@ -20,6 +21,7 @@ router.get(
 )
 
 router.post('/', logToday)
+router.get('/devotional', getDevotional)
 router.get('/today/:userId', getToday)
 router.get('/logs/:userId', getLogs)
 router.get('/stats/:userId', getStats)

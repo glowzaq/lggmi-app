@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import {
     upsertTodayLog,
+    getTodayDevotional,
     getTodayLog,
     getUserLogs,
     getUserSpiritualStats,
@@ -17,6 +18,18 @@ export const logToday = async (req: Request, res: Response) => {
         })
     } catch (error: any) {
         res.status(400).json({ status: 'error', message: error.message })
+    }
+}
+
+export const getDevotional = async (_req: Request, res: Response) => {
+    try {
+        const devotional = await getTodayDevotional()
+        res.status(200).json({
+            status: 'success',
+            data: devotional ?? null,
+        })
+    } catch (error: any) {
+        res.status(500).json({ status: 'error', message: error.message })
     }
 }
 

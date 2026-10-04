@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 import {
     createDonation,
     getAllDonations,
-    getUserDonations,
     getDonationById,
     updateDonation,
     deleteDonation,
@@ -24,26 +23,16 @@ export const create = async (req: Request, res: Response) => {
 
 export const getAll = async (req: Request, res: Response) => {
     try {
-        const { startDate, endDate, type, userId } = req.query
+        const { startDate, endDate, type, eventId } = req.query
         const donations = await getAllDonations({
             startDate: startDate as string,
             endDate: endDate as string,
             type: type as string,
-            userId: userId as string,
+            eventId: eventId as string,
         })
         res.status(200).json({ status: 'success', data: donations })
     } catch (error: any) {
         res.status(500).json({ status: 'error', message: error.message })
-    }
-}
-
-export const getByUser = async (req: Request, res: Response) => {
-    try {
-        const { userId } = req.params as { userId: string }
-        const data = await getUserDonations(userId)
-        res.status(200).json({ status: 'success', data })
-    } catch (error: any) {
-        res.status(404).json({ status: 'error', message: error.message })
     }
 }
 

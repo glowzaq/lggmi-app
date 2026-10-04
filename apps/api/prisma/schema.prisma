@@ -27,9 +27,8 @@ enum MaritalStatus {
 }
 
 enum DonationType {
-    TITHE
     OFFERING
-    SPECIAL_SEED
+    COMMITMENT_SEED
     OTHER
 }
 
@@ -39,17 +38,10 @@ enum AttendanceStatus {
     EXCUSED
 }
 
-enum PrayerStatus {
-    PENDING
-    PRAYED
-    ANSWERED
-}
-
 enum EventType {
     SUNDAY_SERVICE
-    BIBLE_STUDY
-    PRAYER_MEETING
-    SPECIAL_PROGRAM
+    MOMENT_OF_LIFTING
+    LET_THE_FIRE_FALL
     OTHER
 }
 
@@ -57,6 +49,13 @@ enum TestimonyStatus {
     PENDING
     APPROVED
     REJECTED
+}
+
+enum AgeGroup {
+    CHILD 
+    TEEN 
+    ADULT
+    SENIOR
 }
 
 model User {
@@ -79,8 +78,6 @@ model User {
 
     familyId            String?
     family              Family?         @relation(fields: [familyId], references: [id])
-    attendances         Attendance[]
-    donations           Donation[]
     prayerRequests      PrayerRequest[]
     spiritualLogs       SpiritualLog[]
     evangelismConducted Evangelism[]    @relation("EvangelismConductedBy")
@@ -89,6 +86,7 @@ model User {
     testimoniesApproved Testimony[]     @relation("TestimonyApprovedBy")
     themesCreated       MonthlyTheme[]  @relation("ThemeCreatedBy")
     reportsCreated      MonthlyReport[] @relation("ReportCreatedBy")
+    devotionalsCreated  Devotionals[] @relation("DevotionalCreatedBy")
 
     @@map("users")
 }
@@ -116,23 +114,26 @@ model Event {
     updatedAt   DateTime  @updatedAt
 
     attendances Attendance[]
+    donations   Donation[]
 
     @@map("events")
 }
 
 model Attendance {
-    id        String           @id @default(uuid())
-    status    AttendanceStatus @default(PRESENT)
-    note      String?
-    createdAt DateTime         @default(now())
-    updatedAt DateTime         @updatedAt
+    id             String   @id @default(uuid())
+    date           DateTime @default(now())
+    maleCount      Int      @default(0)
+    femaleCount    Int      @default(0)
+    childrenCount  Int      @default(0)
+    newcomersCount Int      @default(0)
+    totalCount     Int      @default(0)
+    note           String?
+    createdAt      DateTime @default(now())
+    updatedAt      DateTime @updatedAt
 
-    userId  String
-    user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-    eventId String
-    event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+    eventId String?
+    event   Event?  @relation(fields: [eventId], references: [id])
 
-    @@unique([userId, eventId])
     @@map("attendances")
 }
 
@@ -169,12 +170,12 @@ model Donation {
     amount    Decimal      @db.Decimal(10, 2)
     type      DonationType @default(OFFERING)
     note      String?
-    donatedAt DateTime     @default(now())
+    date      DateTime     @default(now())
     createdAt DateTime     @default(now())
     updatedAt DateTime     @updatedAt
 
-    userId String
-    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    eventId String?
+    event   Event?  @relation(fields: [eventId], references: [id])
 
     @@map("donations")
 }
@@ -183,7 +184,6 @@ model PrayerRequest {
     id        String       @id @default(uuid())
     title     String
     content   String
-    status    PrayerStatus @default(PENDING)
     createdAt DateTime     @default(now())
     updatedAt DateTime     @updatedAt
 
@@ -196,7 +196,7 @@ model PrayerRequest {
 model SpiritualLog {
     id           String   @id @default(uuid())
     prayed       Boolean  @default(false)
-    studiedBible Boolean  @default(false)
+    studiedDevotionals Boolean  @default(false)
     note         String?
     logDate      DateTime @default(now())
     createdAt    DateTime @default(now())
@@ -207,6 +207,25 @@ model SpiritualLog {
 
     @@unique([userId, logDate])
     @@map("spiritual_logs")
+}
+
+model Devotionals {
+    id                  String      @id @default(uuid())
+    title               String
+    scripture           String
+    body                String
+    scriptureText       String?
+    prayerPoint         String
+    author              String?
+    devotionalDate      DateTime @default(now())
+    createdAt           DateTime @default(now())
+    updatedAt           DateTime @updatedAt
+
+    createdById         String
+    createdBy           User @relation("DevotionalCreatedBy", fields: [createdById], references: [id])
+
+    @@unique([devotionalDate])
+    @@map("devotionals")
 }
 
 model Evangelism {
@@ -226,6 +245,8 @@ model Evangelism {
 
     conductedById String
     conductedBy   User   @relation("EvangelismConductedBy", fields: [conductedById], references: [id])
+
+    ageGroups           AgeGroup[]
 
     @@map("evangelism")
 }

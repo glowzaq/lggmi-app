@@ -52,16 +52,13 @@ export default function MemberAnnouncementsPage() {
                         {announcements.map((ann, index) => (
                             <Card
                                 key={ann.id}
-                                className="border-l-4 border-l-[#9c5e96] hover:shadow-md transition-shadow"
+                                className="border border-slate hover:shadow-md transition-shadow"
                             >
                                 <CardContent className="pt-4 space-y-2">
                                     <div className="flex items-start justify-between gap-3">
                                         <h3 className="font-semibold text-slate-800">
                                             {ann.title}
                                         </h3>
-                                        {index === 0 && (
-                                            <Sparkle />
-                                        )}
                                     </div>
                                     <p className="text-sm text-slate-600 leading-relaxed">
                                         {ann.content}

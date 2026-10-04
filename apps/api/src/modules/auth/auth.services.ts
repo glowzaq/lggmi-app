@@ -112,6 +112,32 @@ export const getMyProfile = async (userId: string) => {
     return formatUser(user)
 }
 
+export const resetUserPassword = async (
+    userId: string,
+    newPassword: string,
+    requestingRole: string
+) => {
+    if (!['ADMIN'].includes(requestingRole)) {
+        throw new Error('Only admins can reset passwords')
+    }
+
+    if (newPassword.length < 6) {
+        throw new Error('Password must be at least 6 characters')
+    }
+
+    const user = await prisma.user.findUnique({ where: { id: userId } })
+    if (!user) throw new Error('User not found')
+
+    const hashedPassword = await bcrypt.hash(newPassword, 12)
+
+    await prisma.user.update({
+        where: { id: userId },
+        data: { password: hashedPassword },
+    })
+
+    return { message: `Password reset successfully for ${user.firstName} ${user.lastName}` }
+}
+
 const generateToken = (payload: JwtPayload): string => {
     return jwt.sign(payload, process.env.JWT_SECRET as string, {
         expiresIn: '3d',

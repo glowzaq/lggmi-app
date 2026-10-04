@@ -89,7 +89,7 @@ export default function LoginPage() {
                                 <p className="text-sm text-red-700">{error}</p>
                             </div>
                         )}
-                        <Button type="submit" className="w-full" disabled={loading}>
+                        <Button type="submit" className="w-full bg-[#3f2039] hover:bg-[#693565]" disabled={loading}>
                             {loading ? 'Signing in...' : 'Sign In'}
                         </Button>
                         <p className="text-center text-sm text-slate-500">
@@ -97,7 +97,7 @@ export default function LoginPage() {
                             <button
                                 type="button"
                                 onClick={() => router.push('/register')}
-                                className="text-blue-600 hover:underline font-medium"
+                                className="text-[#693565] hover:underline font-medium"
                             >
                                 Create an account
                             </button>

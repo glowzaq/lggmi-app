@@ -1,30 +1,45 @@
 import { Request, Response } from 'express'
 import {
-    createAttendance,
-    getAllAttendance,
-    getAttendanceById,
-    updateAttendance,
-    deleteAttendance,
-    getAttendanceStats,
-} from './attendance.service'
+    createDevotional,
+    getTodayDevotional,
+    getAllDevotionals,
+    getDevotionalById,
+    updateDevotional,
+    deleteDevotional,
+} from './devotionals.service'
 
 export const create = async (req: Request, res: Response) => {
     try {
-        const record = await createAttendance(req.body)
+        const devotional = await createDevotional({
+            ...req.body,
+            createdById: req.user!.userId,
+        })
         res.status(201).json({
             status: 'success',
-            message: 'Attendance recorded successfully',
-            data: record,
+            message: 'Devotional created',
+            data: devotional,
         })
     } catch (error: any) {
         res.status(400).json({ status: 'error', message: error.message })
     }
 }
 
+export const getToday = async (req: Request, res: Response) => {
+    try {
+        const devotional = await getTodayDevotional()
+        res.status(200).json({
+            status: 'success',
+            data: devotional ?? null,
+        })
+    } catch (error: any) {
+        res.status(500).json({ status: 'error', message: error.message })
+    }
+}
+
 export const getAll = async (req: Request, res: Response) => {
     try {
-        const records = await getAllAttendance()
-        res.status(200).json({ status: 'success', data: records })
+        const devotionals = await getAllDevotionals()
+        res.status(200).json({ status: 'success', data: devotionals })
     } catch (error: any) {
         res.status(500).json({ status: 'error', message: error.message })
     }
@@ -33,8 +48,8 @@ export const getAll = async (req: Request, res: Response) => {
 export const getOne = async (req: Request, res: Response) => {
     try {
         const { id } = req.params as { id: string }
-        const record = await getAttendanceById(id)
-        res.status(200).json({ status: 'success', data: record })
+        const devotional = await getDevotionalById(id)
+        res.status(200).json({ status: 'success', data: devotional })
     } catch (error: any) {
         res.status(404).json({ status: 'error', message: error.message })
     }
@@ -43,11 +58,11 @@ export const getOne = async (req: Request, res: Response) => {
 export const update = async (req: Request, res: Response) => {
     try {
         const { id } = req.params as { id: string }
-        const record = await updateAttendance(id, req.body)
+        const devotional = await updateDevotional(id, req.body)
         res.status(200).json({
             status: 'success',
-            message: 'Attendance updated successfully',
-            data: record,
+            message: 'Devotional updated',
+            data: devotional,
         })
     } catch (error: any) {
         res.status(400).json({ status: 'error', message: error.message })
@@ -57,21 +72,12 @@ export const update = async (req: Request, res: Response) => {
 export const remove = async (req: Request, res: Response) => {
     try {
         const { id } = req.params as { id: string }
-        await deleteAttendance(id)
+        await deleteDevotional(id)
         res.status(200).json({
             status: 'success',
-            message: 'Attendance record deleted',
+            message: 'Devotional deleted',
         })
     } catch (error: any) {
         res.status(400).json({ status: 'error', message: error.message })
-    }
-}
-
-export const getStats = async (req: Request, res: Response) => {
-    try {
-        const stats = await getAttendanceStats()
-        res.status(200).json({ status: 'success', data: stats })
-    } catch (error: any) {
-        res.status(500).json({ status: 'error', message: error.message })
     }
 }

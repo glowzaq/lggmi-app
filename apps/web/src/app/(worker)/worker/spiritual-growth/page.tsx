@@ -49,7 +49,7 @@ interface LogHistory {
     note: string | null
 }
 
-export default function MemberSpiritualGrowthPage() {
+export default function WorkerSpiritualGrowthPage() {
     const { user, loading: userLoading } = useCurrentUser()
     const [todayLog, setTodayLog] = useState<TodayLog | null>(null)
     const [stats, setStats] = useState<SpiritualStats | null>(null)
@@ -118,7 +118,7 @@ export default function MemberSpiritualGrowthPage() {
 
     if (userLoading || loading) {
         return (
-            <DashboardLayout role="MEMBER">
+            <DashboardLayout role="WORKER">
                 <div className="p-6 py-20 flex justify-center">
                     <Spinner text="Loading your spiritual growth..." />
                 </div>
@@ -134,7 +134,7 @@ export default function MemberSpiritualGrowthPage() {
     })
 
     return (
-        <DashboardLayout role="MEMBER">
+        <DashboardLayout role="WORKER">
             <div className="p-6 space-y-6">
 
                 {/* ── Page Header ──────────────────────────────────── */}

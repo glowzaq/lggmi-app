@@ -14,7 +14,7 @@ export default function DashboardLayout({ children, role }: DashboardLayoutProps
         <AuthGuard allowedRoles={[role]}>
             <div className="flex h-screen bg-slate-50 overflow-hidden">
                 <Sidebar role={role} />
-                <div className="flex-1 flex flex-col overflow-hidden">
+                <div className="flex-1 flex flex-col overflow-hidden min-w-0">
                     <Topbar />
                     <main className="flex-1 overflow-y-auto">
                         {children}

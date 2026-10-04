@@ -8,5 +8,4 @@ export interface CreatePrayerRequestInput {
 export interface UpdatePrayerRequestInput {
     title?: string
     content?: string
-    status?: 'PENDING' | 'PRAYED' | 'ANSWERED'
 }

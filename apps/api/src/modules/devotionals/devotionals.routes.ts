@@ -1,18 +1,18 @@
 import { Router } from 'express'
 import {
-    create, getAll, getOne,
-    update, remove, getStats,
-} from './donations.controller'
+    create, getToday, getAll,
+    getOne, update, remove,
+} from './devotionals.controller'
 import { protect } from '../../middleware/auth.middleware'
 import { restrictTo } from '../../middleware/role.middleware'
 
 const router = Router()
 
 router.use(protect)
-router.use(restrictTo('PASTOR', 'ADMIN'))
 
-router.get('/stats', getStats)
-router.get('/', getAll)
+router.get('/today', getToday)
+
+router.get('/', restrictTo('ADMIN', 'PASTOR'), getAll)
 router.post('/', restrictTo('ADMIN'), create)
 router.get('/:id', getOne)
 router.patch('/:id', restrictTo('ADMIN'), update)

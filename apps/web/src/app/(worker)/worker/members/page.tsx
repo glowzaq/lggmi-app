@@ -5,12 +5,9 @@ import EmptyState from "@/components/shared/EmptyState"
 import Spinner from "@/components/shared/Spinner"
 import { Input } from "@/components/ui/input"
 import api from "@/services/api"
-import { MoreVertical, Search, Users, UserX } from "lucide-react"
+import { Search, Users } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Plus } from "lucide-react"
-import WorkerModal from "@/components/admin/WorkerModal"
 
 interface Member {
     id: string
@@ -27,10 +24,10 @@ interface Member {
 }
 
 const roleColors: Record<string, string> = {
-    PASTOR: 'bg-[#693465]/10 text-[#693465]',
-    ADMIN: 'bg-rose-50 text-rose-700',
-    MEMBER: 'bg-slate-100 text-slate-600',
-    WORKER: 'bg-green-50 text-green-700'
+    PASTOR: 'bg-[#9B7E93] text-[#2a1626]',
+    ADMIN: 'bg-[#d6b68d] text-[#473723]',
+    MEMBER: 'bg-[#a8b8a6] text-[#2d332d]',
+    WORKER: 'bg-[#d4afa0] text-[#4a261a]'
 }
 
 export default function MembersPage() {
@@ -130,16 +127,16 @@ export default function MembersPage() {
                                             <th className="text-left px-4 py-3 font-medium text-slate-600">
                                                 Contact
                                             </th>
-                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                            <th className="hidden md:table-cell text-left px-4 py-3 font-medium text-slate-600">
                                                 Gender
                                             </th>
-                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                            <th className="hidden md:table-cell text-left px-4 py-3 font-medium text-slate-600">
                                                 Role
                                             </th>
-                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600 hidden md:table-cell">
                                                 Joined
                                             </th>
-                                            <th className="text-left px-4 py-3 font-medium text-slate-600">
+                                            <th className="text-left px-4 py-3 font-medium text-slate-600 hidden md:table-cell">
                                                 Status
                                             </th>
                                             <th className="px-4 py-3" />
@@ -153,15 +150,12 @@ export default function MembersPage() {
                                             >
                                                 <td className="px-4 py-3">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="h-8 w-8 rounded-full bg-[#693565] flex items-center justify-center text-white text-xs font-semibold shrink-0">
-                                                            {member.firstName[0]}{member.lastName[0]}
-                                                        </div>
                                                         <div>
                                                             <p className="font-medium text-slate-800">
                                                                 {member.firstName} {member.lastName}
                                                             </p>
                                                             {member.occupation && (
-                                                                <p className="text-xs text-slate-400">
+                                                                <p className="text-xs text-slate-400 hidden md:table-cell">
                                                                     {member.occupation}
                                                                 </p>
                                                             )}
@@ -170,7 +164,7 @@ export default function MembersPage() {
                                                 </td>
 
                                                 <td className="px-4 py-3">
-                                                    <p className="text-slate-600">{member.email}</p>
+                                                    <p className="text-slate-600 hidden md:table-cell">{member.email}</p>
                                                     {member.phone && (
                                                         <p className="text-xs text-slate-400">
                                                             {member.phone}
@@ -178,11 +172,11 @@ export default function MembersPage() {
                                                     )}
                                                 </td>
 
-                                                <td className="px-4 py-3">
+                                                <td className="px-4 py-3 hidden md:table-cell">
                                                     {member.gender ? (
                                                         <span className={`text-xs px-2 py-1 rounded-full font-medium ${member.gender === 'MALE'
-                                                            ? 'bg-blue-100 text-blue-700'
-                                                            : 'bg-pink-100 text-pink-700'
+                                                            ? 'bg-[#e1d5de] text-[#3f2039]'
+                                                            : 'bg-[#E8D5D0] text-[#855246]'
                                                             }`}>
                                                             {member.gender[0] + member.gender.slice(1).toLowerCase()}
                                                         </span>
@@ -191,24 +185,23 @@ export default function MembersPage() {
                                                     )}
                                                 </td>
 
-                                                <td className="px-4 py-3">
-                                                    <span className={`text-xs px-2 py-1 rounded-full
-                            font-medium ${roleColors[member.role]}`}>
+                                                <td className="px-4 py-3 hidden md:table-cell">
+                                                    <span className={`text-xs px-2 py-1 rounded-full font-small ${roleColors[member.role]}`}>
                                                         {member.role}
                                                     </span>
                                                 </td>
 
-                                                <td className="px-4 py-3 text-slate-500">
+                                                <td className="px-4 py-3 text-slate-500 hidden md:table-cell">
                                                     {new Date(member.joinedAt).toLocaleDateString(
                                                         'en-US',
                                                         { month: 'short', day: 'numeric', year: 'numeric' }
                                                     )}
                                                 </td>
 
-                                                <td className="px-4 py-3">
+                                                <td className="px-4 py-3 hidden md:table-cell">
                                                     <span className={`text-xs px-2 py-1 rounded-full
                             font-medium ${member.isActive
-                                                            ? 'bg-green-100 text-green-700'
+                                                            ? 'bg-purple-100 text-purple-900'
                                                             : 'bg-slate-100 text-slate-500'
                                                         }`}>
                                                         {member.isActive ? 'Active' : 'Inactive'}

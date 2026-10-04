@@ -12,6 +12,8 @@ import {
     Pencil, Trash2, Headphones,
 } from 'lucide-react'
 import api from '@/services/api'
+import { useConfirm } from '@/hooks/useConfirm'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
 
 interface Sermon {
     id: string
@@ -31,6 +33,7 @@ export default function AdminSermonsPage() {
     const [loading, setLoading] = useState(true)
     const [modalOpen, setModalOpen] = useState(false)
     const [editingSermon, setEditingSermon] = useState<Sermon | null>(null)
+    const {confirm, dialogProps } = useConfirm()
 
     const fetchSermons = async () => {
         const [sermonsRes, seriesRes] = await Promise.all([
@@ -45,10 +48,18 @@ export default function AdminSermonsPage() {
     useEffect(() => { fetchSermons() }, [])
 
     const handleDelete = async (id: string) => {
-        if (!confirm('Delete this sermon?')) return
-        await api.delete(`/sermons/${id}`)
-        setSermons((prev) => prev.filter((s) => s.id !== id))
-    }
+        confirm(
+            {
+            title: 'Delete Record',
+            message: 'This action cannot be undone. Are you sure?',
+            confirmLabel: 'Yes, Delete',
+        },
+        async () => {
+            await api.delete(`/sermons/${id}`)
+            setSermons((prev) => prev.filter((s) => s.id !== id))
+        }
+    )
+}
 
     const handleOpenCreate = () => {
         setEditingSermon(null)
@@ -76,7 +87,7 @@ export default function AdminSermonsPage() {
                     </div>
                     <Button
                         onClick={handleOpenCreate}
-                        className="flex items-center gap-2 bg-[#693565]"
+                        className="flex items-center gap-2 bg-[#3f2039] hover:bg-[#693565]"
                     >
                         <Plus className="h-4 w-4" />
                         Add Sermon
@@ -100,7 +111,7 @@ export default function AdminSermonsPage() {
                                 key={s}
                                 onClick={() => setActiveSeries(s)}
                                 className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${activeSeries === s
-                                        ? 'bg-slate-900 text-white'
+                                        ? 'bg-[#693565] text-white'
                                         : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                                     }`}
                             >
@@ -122,7 +133,7 @@ export default function AdminSermonsPage() {
                         action={
                             <Button
                                 onClick={handleOpenCreate}
-                                className="flex items-center gap-2 bg-[#693565]"
+                                className="flex items-center gap-2 bg-[#3f2039] hover:bg-[#693565]"
                             >
                                 <Plus className="h-4 w-4" /> Add Sermon
                             </Button>
@@ -232,6 +243,8 @@ export default function AdminSermonsPage() {
                 onSuccess={fetchSermons}
                 sermon={editingSermon}
             />
+
+            <ConfirmDialog {...dialogProps} />
         </DashboardLayout >
     )
 }

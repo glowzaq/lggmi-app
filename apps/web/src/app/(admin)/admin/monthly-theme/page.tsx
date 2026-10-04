@@ -11,6 +11,8 @@ import EmptyState from '@/components/shared/EmptyState'
 import Spinner from '@/components/shared/Spinner'
 import { Sparkles, Plus, Pencil, Trash2, Check } from 'lucide-react'
 import api from '@/services/api'
+import { useConfirm } from '@/hooks/useConfirm'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
 
 interface MonthlyTheme {
     id: string
@@ -42,6 +44,8 @@ export default function AdminMonthlyThemePage() {
         month: new Date().getMonth() + 1,
         year: new Date().getFullYear(),
     })
+
+    const { confirm, dialogProps } = useConfirm()
 
     const fetchData = async () => {
         const [themesRes, activeRes] = await Promise.all([
@@ -110,10 +114,18 @@ export default function AdminMonthlyThemePage() {
     }
 
     const handleDelete = async (id: string) => {
-        if (!confirm('Delete this theme?')) return
-        await api.delete(`/monthly-theme/${id}`)
-        setThemes((prev) => prev.filter((t) => t.id !== id))
-    }
+        confirm(
+            {
+            title: 'Delete Record',
+            message: 'This action cannot be undone. Are you sure?',
+            confirmLabel: 'Yes, Delete',
+        },
+        async () => {
+            await api.delete(`/monthly-theme/${id}`)
+            setThemes((prev) => prev.filter((t) => t.id !== id))
+        }
+    )
+}
 
     return (
         <DashboardLayout role="ADMIN">
@@ -138,15 +150,15 @@ export default function AdminMonthlyThemePage() {
 
                 {/* Active theme banner */}
                 {activeTheme && (
-                    <div className="bg-gradient-to-r from-purple-600 to-purple-700
+                    <div className="bg-gradient-to-r from-[#693565] to-[#3f2039]
             rounded-xl p-5 text-white">
-                        <p className="text-purple-200 text-xs font-medium uppercase tracking-wider">
-                            Current Theme — {MONTHS[activeTheme.month - 1]} {activeTheme.year}
+                        <p className="text-purple-100 text-xs font-medium uppercase tracking-wider">
+                            {MONTHS[activeTheme.month - 1]} {activeTheme.year}
                         </p>
                         <h2 className="text-2xl font-bold mt-1">{activeTheme.title}</h2>
                         {activeTheme.scripture && (
                             <p className="text-purple-200 text-sm mt-1 italic">
-                                "{activeTheme.scripture}"
+                                {activeTheme.scripture}
                             </p>
                         )}
                     </div>
@@ -172,7 +184,7 @@ export default function AdminMonthlyThemePage() {
                         {themes.map((theme) => (
                             <Card
                                 key={theme.id}
-                                className={`hover:shadow-md transition-shadow ${theme.isActive ? 'border-purple-400 border-2' : ''
+                                className={`hover:shadow-md transition-shadow ${theme.isActive ? 'border-slate-500 border-2' : ''
                                     }`}
                             >
                                 <CardHeader className="pb-2">
@@ -306,6 +318,7 @@ export default function AdminMonthlyThemePage() {
                     </div>
                 </div>
             </Modal>
+            <ConfirmDialog {...dialogProps} />
         </DashboardLayout>
     )
 }

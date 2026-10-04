@@ -1,8 +1,13 @@
+'use client' // Added to allow state management
+
+import { useState } from 'react'
 import Link from 'next/link'
-import { Church, Users, Calendar, BookOpen, Heart, Shield } from 'lucide-react'
+import { Eye, Target, MapPin, Phone, Mail, Menu, X } from 'lucide-react'
 import Image from 'next/image'
 
 export default function LandingPage() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
   return (
     <div className="min-h-screen bg-white">
 
@@ -26,7 +31,9 @@ export default function LandingPage() {
               Latter Glory House
             </span>
           </div>
-          <div className="flex items-center gap-3">
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-3">
             <Link
               href="/login"
               className="text-sm font-medium text-slate-600
@@ -42,7 +49,37 @@ export default function LandingPage() {
               Join Us
             </Link>
           </div>
+
+          {/* Mobile Hamburger Button */}
+          <button 
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden p-2 text-slate-600 hover:text-slate-900 focus:outline-none"
+            aria-label="Toggle Menu"
+          >
+            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
         </div>
+
+        {/* Mobile Dropdown Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden absolute top-16 left-0 w-full bg-white border-b border-slate-100 shadow-lg px-6 py-4 flex flex-col gap-4 animate-in fade-in slide-in-from-top-2 duration-200">
+            <Link
+              href="/login"
+              onClick={() => setIsMenuOpen(false)}
+              className="text-base font-medium text-slate-600 hover:text-slate-900 transition-colors py-2"
+            >
+              Sign In
+            </Link>
+            <Link
+              href="/register"
+              onClick={() => setIsMenuOpen(false)}
+              className="text-base font-center font-medium bg-[#693565] text-white
+                px-4 py-2.5 rounded-lg hover:bg-[#7d4178] transition-colors text-center shadow-sm shadow-purple-900/10"
+            >
+              Join Us
+            </Link>
+          </div>
+        )}
       </nav>
 
       {/* Hero */}
@@ -86,103 +123,59 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* About */}
-      <section className="py-20 px-6">
-        <div className="max-w-4xl mx-auto text-center space-y-4">
-          <h2 className="text-3xl font-bold text-slate-800">About Us</h2>
-          <p className="text-slate-500 leading-relaxed max-w-2xl mx-auto">
-            We are a vibrant, spirit-filled church committed to winning
-            souls, making disciples and changing lives through the power
-            of the Gospel. Our doors are open to everyone.
-          </p>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="py-20 px-6 bg-slate-50">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-bold text-slate-800 text-center mb-12">
-            Everything Your Church Needs
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                icon: Users,
-                title: 'Member Management',
-                description:
-                  'Keep track of your congregation, family groups and member growth.',
-              },
-              {
-                icon: Calendar,
-                title: 'Events & Services',
-                description:
-                  'Manage Sunday services, Bible studies, prayer meetings and special programs.',
-              },
-              {
-                icon: BookOpen,
-                title: 'Sermon Archive',
-                description:
-                  'Store and share sermon recordings and notes with the congregation.',
-              },
-              {
-                icon: Heart,
-                title: 'Prayer & Welfare',
-                description:
-                  'Submit prayer requests and track church welfare and support given.',
-              },
-              {
-                icon: Shield,
-                title: 'Role-Based Access',
-                description:
-                  'Pastor, Admin, Worker and Member roles each with appropriate access.',
-              },
-              {
-                icon: Church,
-                title: 'Spiritual Growth',
-                description:
-                  'Members track daily prayer and Bible study to build spiritual habits.',
-              },
-            ].map((feature) => (
-              <div
-                key={feature.title}
-                className="bg-white rounded-xl p-6 shadow-sm
-                  hover:shadow-md transition-shadow space-y-3"
-              >
-                <div className="p-2.5 bg-purple-50 rounded-lg w-fit">
-                  <feature.icon className="h-5 w-5 text-[#693565]" />
-                </div>
-                <h3 className="font-semibold text-slate-800">
-                  {feature.title}
-                </h3>
-                <p className="text-sm text-slate-500 leading-relaxed">
-                  {feature.description}
-                </p>
-              </div>
-            ))}
+      {/* Vision & Mission */}
+      <section className="py-20 px-6 bg-slate-50/50">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+          
+          {/* Vision */}
+          <div className="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm flex flex-col items-center md:items-start text-center md:text-left space-y-4">
+            <div className="h-12 w-12 bg-purple-50 rounded-xl flex items-center justify-center text-[#693565]">
+              <Eye className="h-6 w-6" />
+            </div>
+            <h2 className="text-2xl font-bold text-slate-800">Vision Statement</h2>
+            <p className="text-slate-500 leading-relaxed">
+              To raise a people of supernatural influence evidencing the glory of God's kingdom.
+            </p>
           </div>
+
+          {/* Mission */}
+          <div className="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm flex flex-col items-center md:items-start text-center md:text-left space-y-4">
+            <div className="h-12 w-12 bg-purple-50 rounded-xl flex items-center justify-center text-[#693565]">
+              <Target className="h-6 w-6" />
+            </div>
+            <h2 className="text-2xl font-bold text-slate-800">Mission Statement</h2>
+            <p className="text-slate-500 leading-relaxed">
+              To lead believers to experience the Realities and Fullness of the New Life in Christ through the preaching and teaching of the word of life and impartation of the Holy Spirit in an atmosphere of true New Testament Worship in Spirit and Truth.
+            </p>
+          </div>
+
         </div>
       </section>
 
       {/* Service Times */}
       <section className="py-20 px-6">
-        <div className="max-w-3xl mx-auto text-center space-y-10">
+        <div className="max-w-5xl mx-auto text-center space-y-10">
           <h2 className="text-3xl font-bold text-slate-800">Service Times</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
               { day: 'Sunday', service: 'Sunday Service', time: '8:30 AM' },
-              { day: 'Tuesday', service: 'Bible Study', time: '4:30 PM' },
-              { day: 'Friday', service: 'Vigil', time: '9:00 PM' },
+              { day: 'Tuesday', service: 'Moment of Lifting', time: '4:30 PM' },
+              { day: 'Last Friday of the Month', service: 'Let the Fire Fall', time: '9:00 PM' },
             ].map((s) => (
               <div
                 key={s.day}
                 className="p-6 border border-slate-200 rounded-xl
-                  hover:border-[#693565] transition-colors"
+                  hover:border-[#693565] bg-white transition-colors flex flex-col justify-between min-h-[140px]"
               >
-                <p className="text-[#693565] font-semibold text-sm">
-                  {s.day}
+                <div>
+                  <p className="text-[#693565] font-semibold text-sm">
+                    {s.day}
+                  </p>
+                  <p className="text-slate-800 font-bold mt-1">{s.service}</p>
+                </div>
+                <p className="text-slate-500 text-sm mt-3 font-medium bg-slate-50 py-1.5 rounded-lg border border-slate-100">
+                  {s.time}
                 </p>
-                <p className="text-slate-800 font-bold mt-1">{s.service}</p>
-                <p className="text-slate-500 text-sm mt-1">{s.time}</p>
               </div>
             ))}
           </div>
@@ -191,17 +184,34 @@ export default function LandingPage() {
 
       {/* Contact */}
       <section className="py-20 px-6 bg-slate-50">
-        <div className="max-w-xl mx-auto text-center space-y-4">
+        <div className="max-w-5xl mx-auto text-center space-y-10">
           <h2 className="text-3xl font-bold text-slate-800">Find Us</h2>
-          <p className="text-slate-500">
-            📍 Nexus Compound, Ayegbami, Ilaro, Ogun State
-          </p>
-          <p className="text-slate-500">
-            📞 +234 000 000 0000
-          </p>
-          <p className="text-slate-500">
-            ✉️ info@churchname.com
-          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white p-6 rounded-xl border border-slate-200/60 flex flex-col items-center space-y-2">
+              <MapPin className="h-5 w-5 text-[#693565]" />
+              <span className="font-semibold text-slate-700">Address</span>
+              <p className="text-slate-500 text-sm text-center">
+                Nexus Compound, Ayegbami, Ilaro, Ogun State
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-xl border border-slate-200/60 flex flex-col items-center space-y-2">
+              <Phone className="h-5 w-5 text-[#693565]" />
+              <span className="font-semibold text-slate-700">Phone</span>
+              <p className="text-slate-500 text-sm">
+                +234 704 217 1592
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-xl border border-slate-200/60 flex flex-col items-center space-y-2">
+              <Mail className="h-5 w-5 text-[#693565]" />
+              <span className="font-semibold text-slate-700">Email</span>
+              <p className="text-slate-500 text-sm">
+                info@lggmi.org
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -224,9 +234,9 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 px-6 border-t border-slate-100 text-center">
-        <p className="text-sm text-slate-400">
-          © {new Date().getFullYear()} Church Name. All rights reserved.
+      <footer className="py-8 px-6 text-center bg-[#693565]">
+        <p className="text-sm text-white">
+          © {new Date().getFullYear()} Latter Glory House. All rights reserved.
         </p>
       </footer>
     </div>

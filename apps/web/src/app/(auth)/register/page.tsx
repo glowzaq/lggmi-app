@@ -174,7 +174,7 @@ export default function RegisterPage() {
 
                         <Button
                             type="submit"
-                            className="w-full"
+                            className="w-full bg-[#3f2039] hover:bg-[#693565]"
                             disabled={loading}
                         >
                             {loading ? 'Creating account...' : 'Create Account'}
@@ -185,7 +185,7 @@ export default function RegisterPage() {
                             <button
                                 type="button"
                                 onClick={() => router.push('/login')}
-                                className="text-blue-600 hover:underline font-medium"
+                                className="text-[#693565] hover:underline font-medium"
                             >
                                 Sign in
                             </button>

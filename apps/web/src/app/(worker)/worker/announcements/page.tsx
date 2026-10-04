@@ -49,7 +49,7 @@ export default function WorkerAnnouncementsPage() {
                 <div className="flex items-center justify-between">
                     <div>
                         <h1 className="text-2xl font-bold text-slate-800">
-                            Announcements
+                            Updates
                         </h1>
                         <p className="text-slate-500">
                             Manage Church Communications
@@ -57,10 +57,10 @@ export default function WorkerAnnouncementsPage() {
                     </div>
                     <Button
                         onClick={handleOpenCreate}
-                        className="flex items-center gap-2 bg-[#693565]"
+                        className="flex items-center gap-2 bg-[#3f2039] hover:bg-[#693565]"
                     >
                         <Plus className="h-4 w-4"/>
-                        New Announcement
+                        Add Update
                     </Button>
                 </div>
 
@@ -76,9 +76,9 @@ export default function WorkerAnnouncementsPage() {
                         action={
                             <Button
                                 onClick={handleOpenCreate}
-                                className="flex items-center gap-2 bg-[#693565]"
+                                className="flex items-center gap-2 bg-[#3f2039] hover:bg-[#693565]"
                             >
-                                <Plus className="h-4 w-4"/> New Announcement
+                                <Plus className="h-4 w-4"/> Add Update
                             </Button>
                         }
                     />
@@ -87,7 +87,7 @@ export default function WorkerAnnouncementsPage() {
                         {announcements.map((ann) => (
                             <Card
                                 key={ann.id}
-                                className={`border-l-4 transition-opacity ${ann.isActive ? 'border-l-purple-400' : 'border-l-slate-300 opacity-60'
+                                className={`border-r-4 transition-opacity ${ann.isActive ? 'border-r-[#693565]' : 'border-r-slate-300 opacity-60'
 
                                 }`}
                             >
@@ -97,7 +97,7 @@ export default function WorkerAnnouncementsPage() {
                                             {ann.title}
                                         </CardTitle>
                                         <div className="flex items-center gap-2 shrink-0">
-                                            <span className={`text-xs px-2 py-1 rounded-full font-medium ${ann.isActive ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'}`}>
+                                            <span className={`text-xs px-2 py-1 rounded-full font-medium ${ann.isActive ? 'bg-purple-100 text-purple-900' : 'bg-slate-100 text-slate-500'}`}>
                                                 {ann.isActive ? 'Active' : 'Inactive'}
                                             </span>
                                             <button

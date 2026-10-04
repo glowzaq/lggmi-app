@@ -11,6 +11,8 @@ import StatCard from '@/components/shared/StatCard'
 import { HandHeart, Plus, Pencil, Trash2, DollarSign, BarChart3 } from 'lucide-react'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import api from '@/services/api'
+import { useConfirm } from '@/hooks/useConfirm'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
 
 interface WelfareRecord {
     id: string
@@ -31,6 +33,8 @@ export default function AdminWelfarePage() {
     const [modalOpen, setModalOpen] = useState(false)
     const [editingRecord, setEditingRecord] = useState<any>(null)
 
+    const { confirm, dialogProps } = useConfirm()
+
     const fetchData = async () => {
         const [recordsRes, statsRes] = await Promise.all([
             api.get('/welfare'),
@@ -44,10 +48,18 @@ export default function AdminWelfarePage() {
     useEffect(() => { fetchData() }, [])
 
     const handleDelete = async (id: string) => {
-        if (!confirm('Delete this welfare record?')) return
-        await api.delete(`/welfare/${id}`)
-        setRecords((prev) => prev.filter((r) => r.id !== id))
-    }
+        confirm(
+            {
+            title: 'Delete Record',
+            message: 'This action cannot be undone. Are you sure?',
+            confirmLabel: 'Yes, Delete',
+        },
+        async () => {
+            await api.delete(`/welfare/${id}`)
+            setRecords((prev) => prev.filter((r) => r.id !== id))
+        }
+    )
+}
 
     return (
         <DashboardLayout role="ADMIN">
@@ -61,7 +73,7 @@ export default function AdminWelfarePage() {
                     </div>
                     <Button
                         onClick={() => { setEditingRecord(null); setModalOpen(true) }}
-                        className="flex items-center bg-[#3f2039] text-white gap-2"
+                        className="flex items-center bg-[#3f2039] hover:bg-[#693565] text-white gap-2"
                     >
                         <Plus className="h-4 w-4" />
                         New Record
@@ -106,7 +118,7 @@ export default function AdminWelfarePage() {
                         action={
                             <Button
                                 onClick={() => setModalOpen(true)}
-                                className="flex bg-[#3f2039] text-white items-center gap-2"
+                                className="flex bg-[#3f2039] hover:bg-[#693565] text-white items-center gap-2"
                             >
                                 <Plus className="h-4 w-4" /> New Record
                             </Button>
@@ -132,7 +144,7 @@ export default function AdminWelfarePage() {
                                             </p>
                                         </div>
                                         <div className="flex items-center gap-2 shrink-0">
-                                            <span className="text-lg font-bold text-green-600">
+                                            <span className="text-lg font-bold text-black">
                                                 ₦{Number(record.amount).toLocaleString()}
                                             </span>
                                             <button
@@ -177,6 +189,7 @@ export default function AdminWelfarePage() {
                 userId={user?.id ?? ''}
                 record={editingRecord}
             />
+            <ConfirmDialog {...dialogProps}/>
         </DashboardLayout>
     )
 }

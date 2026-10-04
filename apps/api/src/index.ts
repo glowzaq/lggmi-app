@@ -19,6 +19,7 @@ import welfareRoutes from './modules/welfare/welfare.routes'
 import testimoniesRoutes from './modules/testimonies/testimonies.routes'
 import monthlyThemeRoutes from './modules/monthly-theme/monthly-theme.routes'
 import monthlyReportRoutes from './modules/monthly-report/monthly-report.routes'
+import devotionalsRoutes from './modules/devotionals/devotionals.routes'
 
 
 dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
@@ -52,6 +53,7 @@ app.use('/api/welfare', welfareRoutes)
 app.use('/api/testimonies', testimoniesRoutes)
 app.use('/api/monthly-theme', monthlyThemeRoutes)
 app.use('/api/monthly-report', monthlyReportRoutes)
+app.use('/api/devotionals', devotionalsRoutes)
 
 app.get('/health', (req: Request, res: Response) => {
     res.status(200).json({

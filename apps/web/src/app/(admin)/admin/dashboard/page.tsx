@@ -10,7 +10,8 @@ import {
 } from 'lucide-react'
 import {
     BarChart, Bar, XAxis, YAxis, Tooltip,
-    ResponsiveContainer, LineChart, Line
+    ResponsiveContainer, LineChart, Line,
+    Legend
 } from 'recharts'
 import api from '@/services/api'
 
@@ -84,11 +85,11 @@ export default function AdminDashboard() {
                     />
                     <StatCard
                         title="Prayer Requests"
-                        value={prayerStats?.pending ?? '—'}
+                        value={prayerStats?.total ?? '—'}
                         icon={Heart}
                         iconColor="text-red-600"
                         iconBg="bg-red-50"
-                        subtitle="pending"
+                        subtitle="total"
                     />
                 </div>
 
@@ -121,8 +122,8 @@ export default function AdminDashboard() {
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <ResponsiveContainer width="100%" height={220}>
-                                <LineChart data={attendanceStats?.trend ?? []}>
+                            <ResponsiveContainer width="100%" height={240}>
+                                <LineChart data={attendanceStats?.trend} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
                                     <XAxis
                                         dataKey="name"
                                         tick={{ fontSize: 11 }}
@@ -130,13 +131,11 @@ export default function AdminDashboard() {
                                     />
                                     <YAxis tick={{ fontSize: 11 }} />
                                     <Tooltip />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="present"
-                                        stroke="#b885b2"
-                                        strokeWidth={2}
-                                        dot={{ r: 3 }}
-                                    />
+                                    <Legend />
+                                    <Line type="monotone" dataKey="male" stroke="#9B7E93" name="Men" strokeWidth={2} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+                                    <Line type="monotone" dataKey="female" stroke="#D4AFA0" name="Women" strokeWidth={2} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+                                    <Line type="monotone" dataKey="children" stroke="#A8B8A6" name="Children" strokeWidth={2} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+                                    <Line type="monotone" dataKey="newcomers" stroke="#d6b68d" name="Newcomers" strokeWidth={2} dot={{ r: 3 }} activeDot={{ r: 5 }} />
                                 </LineChart>
                             </ResponsiveContainer>
                         </CardContent>
@@ -159,12 +158,9 @@ export default function AdminDashboard() {
                                         className="flex items-center justify-between py-2 border-b last:border-0"
                                     >
                                         <div>
-                                            <p className="text-sm font-medium text-slate-800">
-                                                {d.user.firstName} {d.user.lastName}
-                                            </p>
                                             <p className="text-xs text-slate-400">
                                                 {d.type.replace('_', ' ')} ·{' '}
-                                                {new Date(d.donatedAt).toLocaleDateString()}
+                                                {new Date(d.createdAt).toLocaleDateString()}
                                             </p>
                                         </div>
                                         <p className="text-sm font-bold text-[#2d1729]">

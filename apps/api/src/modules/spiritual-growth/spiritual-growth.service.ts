@@ -4,6 +4,9 @@ import {
     UpdateSpiritualLogInput,
 } from './spiritual-growth.types'
 
+const resolvedStudiedDevotionals = (input: CreateSpiritualLogInput | UpdateSpiritualLogInput) =>
+    input.studiedDevotionals ?? (input as CreateSpiritualLogInput).studiedBible ?? false
+
 export const upsertTodayLog = async (input: CreateSpiritualLogInput) => {
     const user = await prisma.user.findUnique({
         where: { id: input.userId },
@@ -27,12 +30,14 @@ export const upsertTodayLog = async (input: CreateSpiritualLogInput) => {
         },
     })
 
+    const studiedDevotionals = resolvedStudiedDevotionals(input)
+
     if (existing) {
         return prisma.spiritualLog.update({
             where: { id: existing.id },
             data: {
                 prayed: input.prayed,
-                studiedBible: input.studiedBible,
+                studiedDevotionals,
                 note: input.note,
             },
         })
@@ -42,10 +47,16 @@ export const upsertTodayLog = async (input: CreateSpiritualLogInput) => {
         data: {
             userId: input.userId,
             prayed: input.prayed,
-            studiedBible: input.studiedBible,
+            studiedDevotionals,
             note: input.note,
             logDate: startOfDay,
         },
+    })
+}
+
+export const getTodayDevotional = async () => {
+    return prisma.devotionals.findFirst({
+        orderBy: { createdAt: 'desc' },
     })
 }
 
@@ -97,7 +108,7 @@ export const getUserStreak = async (userId: string) => {
     let previousDate: Date | null = null
 
     for (const log of logs) {
-        if (!log.prayed && !log.studiedBible) continue
+        if (!log.prayed && !log.studiedDevotionals) continue
 
         const logDate = new Date(log.logDate)
         logDate.setHours(0, 0, 0, 0)
@@ -144,9 +155,9 @@ export const getUserSpiritualStats = async (userId: string) => {
     })
 
     const totalDaysPrayed = allLogs.filter((l) => l.prayed).length
-    const totalDaysStudied = allLogs.filter((l) => l.studiedBible).length
+    const totalDaysStudied = allLogs.filter((l) => l.studiedDevotionals).length
     const totalDaysBoth = allLogs.filter(
-        (l) => l.prayed && l.studiedBible
+        (l) => l.prayed && l.studiedDevotionals
     ).length
 
     const { currentStreak, longestStreak } = await getUserStreak(userId)
@@ -161,7 +172,7 @@ export const getUserSpiritualStats = async (userId: string) => {
 
     const thisMonthPrayed = thisMonthLogs.filter((l) => l.prayed).length
     const thisMonthStudied = thisMonthLogs.filter(
-        (l) => l.studiedBible
+        (l) => l.studiedDevotionals
     ).length
 
     return {
@@ -196,7 +207,7 @@ export const getCongregationSpiritualStats = async () => {
             where: { logDate: { gte: today }, prayed: true },
         }),
         prisma.spiritualLog.count({
-            where: { logDate: { gte: today }, studiedBible: true },
+            where: { logDate: { gte: today }, studiedDevotionals: true },
         }),
         prisma.spiritualLog.count({
             where: { logDate: { gte: startOfMonth } },
@@ -222,7 +233,7 @@ export const getCongregationSpiritualStats = async () => {
                 prisma.spiritualLog.count({
                     where: {
                         logDate: { gte: date, lte: endOfDate },
-                        studiedBible: true,
+                        studiedDevotionals: true,
                     },
                 }),
             ]).then(([prayed, studied]) => ({

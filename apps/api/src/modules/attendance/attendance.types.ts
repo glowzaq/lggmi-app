@@ -1,15 +1,11 @@
-export interface MarkAttendanceInput {
-    userId: string;
-    eventId: string;
+export interface CreateAttendanceInput {
+    eventId?: string;
+    maleCount?: number;
+    femaleCount?: number;
+    childrenCount?: number;
+    newcomersCount?: number;
+    date?: string;
     note?: string;
-    status?: 'PRESENT' | 'ABSENT' | 'EXCUSED'
 }
 
-export interface BulkAttendanceInput {
-    eventId: string;
-    records: {
-        userId: string
-        status: 'PRESENT' | 'ABSENT' | 'EXCUSED'
-        note?: string
-    }[]
-}
+export interface UpdateAttendanceInput extends Partial<CreateAttendanceInput> {}

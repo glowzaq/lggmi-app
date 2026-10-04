@@ -18,7 +18,6 @@ export default function MemberDashboard() {
     const [upcomingEvents, setUpcomingEvents] = useState<any[]>([])
     const [latestSermons, setLatestSermons] = useState<any[]>([])
     const [announcements, setAnnouncements] = useState<any[]>([])
-    const [attendance, setAttendance] = useState<any>(null)
     const [spiritualGrowth, setSpiritualGrowth] = useState<any>(null)
     const [dataLoading, setDataLoading] = useState(true)
     const [myTestimonyCount, setMyTestimonyCount] = useState(0)
@@ -32,16 +31,14 @@ export default function MemberDashboard() {
             api.get('/events/upcoming'),
             api.get('/sermons/latest'),
             api.get('/announcements/active'),
-            api.get(`/attendance/user/${user.id}`),
             api.get(`/spiritual-growth/stats/${user.id}`),
             api.get(`/testimonies/user/${user.id}`),
             api.get('/monthly-theme/active'),
         ])
-            .then(([e, s, a, att, sp, test, th]) => {
+            .then(([e, s, a, sp, test, th]) => {
                 setUpcomingEvents(e.data.data.slice(0, 3))
                 setLatestSermons(s.data.data.slice(0, 3))
                 setAnnouncements(a.data.data.slice(0, 3))
-                setAttendance(att.data.data)
                 setSpiritualGrowth(sp.data.data)
                 setMyTestimonyCount(test.data.data.length)
                 setTheme(th.data.data)
@@ -64,10 +61,8 @@ export default function MemberDashboard() {
 
     const eventTypeLabel: Record<string, string> = {
         SUNDAY_SERVICE: 'Sunday Service',
-        BIBLE_STUDY: 'Bible Study',
-        PRAYER_MEETING: 'Prayer Meeting',
-        SPECIAL_PROGRAM: 'Special Program',
-        YOUTH_SERVICE: 'Youth Service',
+        MOMENT_OF_LIFTING: 'Bible Study',
+        LET_THE_FIRE_FALL: 'Vigil',
         OTHER: 'Other',
     }
 
@@ -97,11 +92,6 @@ export default function MemberDashboard() {
                         </div>
                     )}
                     <p className="text-purple-200 text-sm mt-2">
-                        Attendance rate:{' '}
-                        <span className="text-white font-semibold">
-                            {attendance?.summary?.attendanceRate ?? 0}%
-                        </span>
-                        {' · '}
                         Prayer streak:{' '}
                         <span className="text-white font-semibold">
                             {spiritualGrowth?.currentStreak ?? 0} days

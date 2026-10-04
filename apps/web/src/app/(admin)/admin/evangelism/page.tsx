@@ -11,6 +11,8 @@ import StatCard from '@/components/shared/StatCard'
 import { Globe, Plus, Pencil, Trash2, Users, Heart, Flame, Church } from 'lucide-react'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import api from '@/services/api'
+import { useConfirm } from '@/hooks/useConfirm'
+import ConfirmDialog from '@/components/shared/ConfirmDialog'
 
 interface EvangelismRecord {
   id: string
@@ -42,6 +44,8 @@ export default function AdminEvangelismPage() {
   const [modalOpen, setModalOpen] = useState(false)
   const [editingRecord, setEditingRecord] = useState<any>(null)
 
+  const { confirm, dialogProps } = useConfirm()
+
   const fetchData = async () => {
     const [recordsRes, statsRes] = await Promise.all([
       api.get('/evangelism'),
@@ -54,11 +58,19 @@ export default function AdminEvangelismPage() {
 
   useEffect(() => { fetchData() }, [])
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Delete this evangelism record?')) return
-    await api.delete(`/evangelism/${id}`)
-    setRecords((prev) => prev.filter((r) => r.id !== id))
-  }
+      const handleDelete = async (id: string) => {
+        confirm(
+            {
+            title: 'Delete Record',
+            message: 'This action cannot be undone. Are you sure?',
+            confirmLabel: 'Yes, Delete',
+        },
+        async () => {
+            await api.delete(`/evangelism/${id}`)
+            setRecords((prev) => prev.filter((r) => r.id !== id))
+        }
+    )
+}
 
   const handleOpenCreate = () => {
     setEditingRecord(null)
@@ -82,7 +94,7 @@ export default function AdminEvangelismPage() {
           </div>
           <Button
             onClick={handleOpenCreate}
-            className="flex items-center bg-[#3f2039] text-white gap-2"
+            className="flex items-center bg-[#3f2039] text-white gap-2 hover:bg-[#9c5e96]"
           >
             <Plus className="h-4 w-4" />
             New Record
@@ -140,7 +152,7 @@ export default function AdminEvangelismPage() {
             title="No evangelism records yet"
             description="Start recording your outreach activities"
             action={
-              <Button onClick={handleOpenCreate} className="flex bg-[#3f2039] text-white items-center gap-2">
+              <Button onClick={handleOpenCreate} className="flex bg-[#3f2039] hover:bg-[#693565] text-white items-center gap-2">
                 <Plus className="h-4 w-4" /> New Record
               </Button>
             }
@@ -226,6 +238,8 @@ export default function AdminEvangelismPage() {
         userId={user?.id ?? ''}
         record={editingRecord}
       />
+
+      <ConfirmDialog {...dialogProps} />
     </DashboardLayout>
   )
 }

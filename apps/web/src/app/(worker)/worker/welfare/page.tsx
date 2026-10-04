@@ -61,7 +61,7 @@ export default function WorkerWelfarePage() {
                     </div>
                     <Button
                         onClick={() => { setModalOpen(true) }}
-                        className="flex items-center bg-[#3f2039] text-white gap-2"
+                        className="flex items-center hover:bg-[#693565] bg-[#3f2039] text-white gap-2"
                     >
                         <Plus className="h-4 w-4" />
                         New Record
@@ -74,22 +74,22 @@ export default function WorkerWelfarePage() {
                             title="Total Given (All Time)"
                             value={`₦${stats.totalAmount?.toLocaleString()}`}
                             icon={DollarSign}
-                            iconColor="text-green-600"
-                            iconBg="bg-green-50"
+                            iconColor="text-[#2a1626]"
+                            iconBg="bg-[#9B7E93]"
                         />
                         <StatCard
                             title="This Month"
                             value={`₦${stats.thisMonth?.toLocaleString()}`}
                             icon={BarChart3}
-                            iconColor="text-blue-600"
-                            iconBg="bg-blue-50"
+                            iconColor="text-[#4a261a]"
+                            iconBg="bg-[#D4AFA0]"
                         />
                         <StatCard
                             title="Total Records"
                             value={stats.totalRecords}
                             icon={HandHeart}
-                            iconColor="text-purple-600"
-                            iconBg="bg-purple-50"
+                            iconColor="text-[#2d332d]"
+                            iconBg="bg-[#A8B8A6]"
                         />
                     </div>
                 )}
@@ -132,21 +132,9 @@ export default function WorkerWelfarePage() {
                                             </p>
                                         </div>
                                         <div className="flex items-center gap-2 shrink-0">
-                                            <span className="text-lg font-bold text-green-600">
+                                            <span className="text-lg font-bold text-[#693565]">
                                                 ₦{Number(record.amount).toLocaleString()}
                                             </span>
-                                            {/* <button
-                                                onClick={() => { setEditingRecord(record); setModalOpen(true) }}
-                                                className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"
-                                            >
-                                                <Pencil className="h-4 w-4 text-slate-500" />
-                                            </button>
-                                            <button
-                                                onClick={() => handleDelete(record.id)}
-                                                className="p-1.5 hover:bg-red-50 rounded-lg transition-colors"
-                                            >
-                                                <Trash2 className="h-4 w-4 text-red-500" />
-                                            </button> */}
                                         </div>
                                     </div>
                                 </CardHeader>
@@ -175,7 +163,6 @@ export default function WorkerWelfarePage() {
                 onClose={() => setModalOpen(false)}
                 onSuccess={fetchData}
                 userId={user?.id ?? ''}
-                // record={editingRecord}
             />
         </DashboardLayout>
     )

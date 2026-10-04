@@ -5,22 +5,22 @@ import DashboardLayout from '@/components/layout/DashboardLayout'
 import StatCard from '@/components/shared/StatCard'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
-    Users, TrendingUp, DollarSign, Heart,
-    Calendar, CheckSquare,
-    Bell
+    Users, DollarSign, Heart,
+    Calendar, Bell,
+    Globe
 } from 'lucide-react'
 import {
     LineChart, Line, XAxis, YAxis, Tooltip,
-    ResponsiveContainer, BarChart, Bar
+    ResponsiveContainer, BarChart, Bar,
+    Legend
 } from 'recharts'
 import api from '@/services/api'
 
 export default function PastorDashboard() {
     const [memberStats, setMemberStats] = useState<any>(null)
     const [donationStats, setDonationStats] = useState<any>(null)
-    const [announcementStats, setAnnouncementStats] = useState<any>(null)
     const [attendanceStats, setAttendanceStats] = useState<any>(null)
-    const [prayerStats, setPrayerStats] = useState<any>(null)
+    const [evangelismStats, setEvangelismStats] = useState<any>(null)
     const [eventStats, setEventStats] = useState<any>(null)
     const [recentMembers, setRecentMembers] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
@@ -29,17 +29,15 @@ export default function PastorDashboard() {
         Promise.all([
             api.get('/users/stats'),
             api.get('/donations/stats'),
-            api.get('/announcements'),
             api.get('/attendance/stats'),
-            api.get('/prayer-requests/stats'),
+            api.get('/evangelism/stats'),
             api.get('/events/stats'),
             api.get('/users'),
-        ]).then(([m, d, ann, a, p, e, rm]) => {
+        ]).then(([m, d, a, p, e, rm]) => {
             setMemberStats(m.data.data)
             setDonationStats(d.data.data)
-            setAnnouncementStats(ann.data.data.slice(0, 3))
             setAttendanceStats(a.data.data)
-            setPrayerStats(p.data.data)
+            setEvangelismStats(p.data.data)
             setEventStats(e.data.data)
             setRecentMembers(rm.data.data.slice(0, 5))
             setLoading(false)
@@ -93,22 +91,12 @@ export default function PastorDashboard() {
                         subtitle={`${eventStats?.thisMonth} this month`}
                     />
                     <StatCard
-                        title="Prayer Requests"
-                        value={prayerStats?.pending ?? '—'}
-                        icon={Heart}
+                        title="Total Outreaches"
+                        value={evangelismStats?.totalOutreaches ?? '—'}
+                        icon={Globe}
                         iconColor="text-pink-600"
                         iconBg="bg-pink-50"
-                        subtitle={`${prayerStats?.answered} answered`}
-                        subtitleColor="text-green-600"
-                    />
-                    <StatCard
-                        title="Announcements"
-                        value={announcementStats?.length ?? '_'}
-                        icon={Bell}
-                        iconColor='text-red-600'
-                        iconBg='bg-red-50'
-                        subtitle={`${announcementStats?.length} this month`}
-                        subtitleColor='text-red-600'
+                        subtitle={`${evangelismStats?.totalReached ?? '_'}+ souls reached`}
                     />
                 </div>
 
@@ -121,32 +109,22 @@ export default function PastorDashboard() {
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            {attendanceStats?.trend?.length > 0 ? (
-                                <ResponsiveContainer width="100%" height={220}>
-                                    <LineChart data={attendanceStats.trend}>
-                                        <XAxis
-                                            dataKey="name"
-                                            tick={{ fontSize: 11 }}
-                                            tickFormatter={(v) => v.split(' ')[0]}
-                                        />
-                                        <YAxis tick={{ fontSize: 11 }} />
-                                        <Tooltip />
-                                        <Line
-                                            type="monotone"
-                                            dataKey="present"
-                                            stroke="#3b82f6"
-                                            strokeWidth={2}
-                                            dot={{ r: 4 }}
-                                        />
-                                    </LineChart>
-                                </ResponsiveContainer>
-                            ) : (
-                                <div className="h-[220px] flex items-center justify-center">
-                                    <p className="text-slate-400 text-sm">
-                                        No attendance data yet
-                                    </p>
-                                </div>
-                            )}
+                            <ResponsiveContainer width="100%" height={240}>
+                                <LineChart data={attendanceStats?.trend} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                                    <XAxis
+                                        dataKey="name"
+                                        tick={{ fontSize: 11 }}
+                                        tickFormatter={(v) => v.split(' ')[0]}
+                                    />
+                                    <YAxis tick={{ fontSize: 11 }} />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Line type="monotone" dataKey="male" stroke="#9B7E93" name="Men" strokeWidth={2} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+                                    <Line type="monotone" dataKey="female" stroke="#D4AFA0" name="Women" strokeWidth={2} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+                                    <Line type="monotone" dataKey="children" stroke="#A8B8A6" name="Children" strokeWidth={2} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+                                    <Line type="monotone" dataKey="newcomers" stroke="#d6b68d" name="Newcomers" strokeWidth={2} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+                                </LineChart>
+                            </ResponsiveContainer>
                         </CardContent>
                     </Card>
 
@@ -167,7 +145,7 @@ export default function PastorDashboard() {
                                         />
                                         <Bar
                                             dataKey="total"
-                                            fill="#9c5e96"
+                                            fill="#314158"
                                             radius={[4, 4, 0, 0]}
                                         />
                                     </BarChart>
@@ -195,7 +173,7 @@ export default function PastorDashboard() {
                                 <div className="flex items-center gap-3">
                                     <div className="w-32 h-2 bg-slate-100 rounded-full overflow-hidden">
                                         <div
-                                            className="h-full bg-blue-500 rounded-full"
+                                            className="h-full bg-slate-700 rounded-full"
                                             style={{
                                                 width: memberStats?.total
                                                     ? `${(memberStats.men / memberStats.total) * 100}%`
@@ -213,7 +191,7 @@ export default function PastorDashboard() {
                                 <div className="flex items-center gap-3">
                                     <div className="w-32 h-2 bg-slate-100 rounded-full overflow-hidden">
                                         <div
-                                            className="h-full bg-pink-500 rounded-full"
+                                            className="h-full bg-gray-500 rounded-full"
                                             style={{
                                                 width: memberStats?.total
                                                     ? `${(memberStats.women / memberStats.total) * 100}%`
@@ -224,20 +202,6 @@ export default function PastorDashboard() {
                                     <span className="text-sm font-medium text-slate-800 w-8">
                                         {memberStats?.women}
                                     </span>
-                                </div>
-                            </div>
-                            <div className="pt-3 border-t grid grid-cols-2 gap-4">
-                                <div className="text-center">
-                                    <p className="text-2xl font-bold text-green-600">
-                                        {prayerStats?.answered}
-                                    </p>
-                                    <p className="text-xs text-slate-500">Answered Prayers</p>
-                                </div>
-                                <div className="text-center">
-                                    <p className="text-2xl font-bold text-orange-500">
-                                        {prayerStats?.pending}
-                                    </p>
-                                    <p className="text-xs text-slate-500">Pending Prayers</p>
                                 </div>
                             </div>
                         </CardContent>
@@ -256,9 +220,6 @@ export default function PastorDashboard() {
                                         key={member.id}
                                         className="flex items-center gap-3"
                                     >
-                                        <div className="h-9 w-9 rounded-full bg-[#683565] flex items-center justify-center text-white text-sm font-semibold shrink-0">
-                                            {member.firstName[0]}{member.lastName[0]}
-                                        </div>
                                         <div className="flex-1 min-w-0">
                                             <p className="text-sm font-medium text-slate-800 truncate">
                                                 {member.firstName} {member.lastName}
@@ -268,8 +229,8 @@ export default function PastorDashboard() {
                                             </p>
                                         </div>
                                         <span className={`text-xs px-2 py-0.5 rounded-full ${member.gender === 'MALE'
-                                            ? 'bg-blue-100 text-blue-700'
-                                            : 'bg-pink-100 text-pink-700'
+                                            ? 'bg-slate-100 text-slate-700'
+                                            : 'bg-gray-100 text-gray-700'
                                             }`}>
                                             {member.gender?.toLowerCase() ?? 'N/A'}
                                         </span>

@@ -1,17 +1,21 @@
-import { Router } from "express";
-import { protect } from "../../middleware/auth.middleware";
-import { restrictTo } from "../../middleware/role.middleware";
-import { bulkMark, getByEvent, getByUser, getStats, mark } from "./attendance.controller";
+import { Router } from 'express'
+import {
+    create, getAll, getOne,
+    update, remove, getStats,
+} from './attendance.controller'
+import { protect } from '../../middleware/auth.middleware'
+import { restrictTo } from '../../middleware/role.middleware'
 
 const router = Router()
+
 router.use(protect)
+router.use(restrictTo('PASTOR', 'ADMIN', 'WORKER'))
 
-router.get('/stats', restrictTo('ADMIN', 'PASTOR', 'WORKER'), getStats)
-
-router.get('/event/:eventId', restrictTo('ADMIN', 'PASTOR', 'WORKER'), getByEvent)
-router.get('/user/:userId', getByUser)
-
-router.post('/', restrictTo('ADMIN', 'WORKER'), mark)
-router.post('/bulk', restrictTo('ADMIN', 'WORKER'), bulkMark)
+router.get('/stats', getStats)
+router.get('/', getAll)
+router.post('/', restrictTo('ADMIN', 'WORKER'), create)
+router.get('/:id', getOne)
+router.patch('/:id', restrictTo('ADMIN'), update)
+router.delete('/:id', restrictTo('ADMIN'), remove)
 
 export default router
