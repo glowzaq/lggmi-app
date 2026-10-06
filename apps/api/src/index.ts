@@ -28,12 +28,30 @@ const app: Application = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(helmet());
-app.use(cors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
-    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+// app.use(cors({
+//     origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+//     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+//     allowedHeaders: ['Content-Type', 'Authorization'],
+// }));
 
+const allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'https://lggmi-app.vercel.app/',
+]
+
+app.use(
+    cors({
+        origin: (origin, callback) => {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true)
+            } else {
+                callback(new Error('Not allowed by CORS'))
+            }
+        },
+        credentials: true,
+    })
+)
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
