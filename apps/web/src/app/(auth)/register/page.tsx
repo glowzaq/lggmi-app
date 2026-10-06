@@ -12,13 +12,16 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Alert, AlertDescription, } from '@/components/ui/alert'
 import api from '@/services/api'
 import Image from 'next/image'
+import { AlertCircle, CheckCircle } from 'lucide-react'
 
 export default function RegisterPage() {
     const router = useRouter()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
+    const [success, setSuccess] = useState(false)
     const [form, setForm] = useState({
         firstName: '',
         lastName: '',
@@ -65,7 +68,12 @@ export default function RegisterPage() {
             localStorage.setItem('token', data.data.token)
             localStorage.setItem('user', JSON.stringify(data.data.user))
 
-            router.push('/member/dashboard')
+            setSuccess(true)
+
+            setTimeout(() => {
+                router.push('/member/dashboard')
+            }, 2000)
+
         } catch (err: any) {
             setError(err.response?.data?.message || 'Registration failed')
         } finally {
@@ -95,6 +103,26 @@ export default function RegisterPage() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
+
+                    {/* Success alert */}
+                    {success && (
+                        <Alert className="mb-4 border-green-200 bg-green-50">
+                            <CheckCircle className="h-4 w-4 text-green-600" />
+                            <AlertDescription className="text-green-800 font-medium">
+                                Registration successful! Redirecting to your dashboard...
+                            </AlertDescription>
+                        </Alert>
+                    )}
+
+                    {/* Error alert */}
+                    {error && (
+                        <Alert className="mb-4 border-red-200 bg-red-50">
+                            <AlertCircle className="h-4 w-4 text-red-600" />
+                            <AlertDescription className="text-red-800">
+                                {error}
+                            </AlertDescription>
+                        </Alert>
+                    )}
                     <form onSubmit={handleSubmit} className="space-y-4">
                         {/* Name row */}
                         <div className="grid grid-cols-2 gap-3">
@@ -106,6 +134,7 @@ export default function RegisterPage() {
                                     onChange={(e) => set('firstName', e.target.value)}
                                     placeholder="John"
                                     required
+                                    disabled={success}
                                 />
                             </div>
                             <div className="space-y-1.5">
@@ -116,6 +145,7 @@ export default function RegisterPage() {
                                     onChange={(e) => set('lastName', e.target.value)}
                                     placeholder="Doe"
                                     required
+                                    disabled={success}
                                 />
                             </div>
                         </div>
@@ -129,6 +159,7 @@ export default function RegisterPage() {
                                 onChange={(e) => set('email', e.target.value)}
                                 placeholder="john@example.com"
                                 required
+                                disabled={success}
                             />
                         </div>
 
@@ -141,6 +172,7 @@ export default function RegisterPage() {
                                 onChange={(e) => set('phone', e.target.value)}
                                 placeholder="+234 000 000 0000"
                                 required
+                                disabled={success}
                             />
                         </div>
 
@@ -153,6 +185,7 @@ export default function RegisterPage() {
                                 onChange={(e) => set('password', e.target.value)}
                                 placeholder="At least 6 characters"
                                 required
+                                disabled={success}
                             />
                         </div>
 
@@ -165,6 +198,7 @@ export default function RegisterPage() {
                                 onChange={(e) => set('confirmPassword', e.target.value)}
                                 placeholder="Repeat your password"
                                 required
+                                disabled={success}
                             />
                         </div>
 
@@ -175,9 +209,13 @@ export default function RegisterPage() {
                         <Button
                             type="submit"
                             className="w-full bg-[#3f2039] hover:bg-[#693565]"
-                            disabled={loading}
+                            disabled={loading || success}
                         >
-                            {loading ? 'Creating account...' : 'Create Account'}
+                            {loading
+                                ? 'Creating account...'
+                                : success
+                                    ? 'Redirecting...'
+                                    : 'Create Account'}
                         </Button>
 
                         <p className="text-center text-sm text-slate-500">

@@ -7,18 +7,19 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import Image from "next/image";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, CheckCircle } from "lucide-react";
 
 export default function LoginPage() {
     const router = useRouter()
     const [formData, setFormData] = useState({ email: '', password: '' })
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
+    const [success, setSuccess] = useState(false)
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        e.stopPropagation()
+    const handleSubmit = async (e?: React.FormEvent) => {
+        if (e) e.preventDefault()
         setError('')
         setLoading(true)
 
@@ -28,15 +29,19 @@ export default function LoginPage() {
             localStorage.setItem('token', data.data.token)
             localStorage.setItem('user', JSON.stringify(data.data.user))
 
+            setSuccess(true)
+
             const role = data.data.user.role
-            if (role === 'PASTOR') router.push('/pastor/dashboard')
-            else if (role === 'ADMIN') router.push('/admin/dashboard')
-            else if (role === 'WORKER') router.push('/worker/dashboard')
-            else router.push('/member/dashboard')
+            setTimeout(() => {
+                if (role === 'PASTOR') router.push('/pastor/dashboard')
+                else if (role === 'ADMIN') router.push('/admin/dashboard')
+                else if (role === 'WORKER') router.push('/worker/dashboard')
+                else router.push('/member/dashboard')
+            }, 1500)
+
         } catch (err: any) {
             setError(err.response?.data?.message || 'Login failed')
             setLoading(false)
-            setTimeout(() => setError(err), 1000)
         }
     }
 
@@ -60,6 +65,23 @@ export default function LoginPage() {
                     <CardDescription>Sign in to your account</CardDescription>
                 </CardHeader>
                 <CardContent>
+                    {success && (
+                        <Alert className="mb-4 border-green-200 bg-green-50">
+                            <CheckCircle className="h-4 w-4 text-green-600" />
+                            <AlertDescription className="text-green-800 font-medium">
+                                Login successful! Redirecting...
+                            </AlertDescription>
+                        </Alert>
+                    )}
+
+                    {error && (
+                        <Alert className="mb-4 border-red-200 bg-red-50">
+                            <AlertCircle className="h-4 w-4 text-red-600" />
+                            <AlertDescription className="text-red-800">
+                                {error}
+                            </AlertDescription>
+                        </Alert>
+                    )}
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="email">Email</Label>
@@ -89,8 +111,17 @@ export default function LoginPage() {
                                 <p className="text-sm text-red-700">{error}</p>
                             </div>
                         )}
-                        <Button type="submit" className="w-full bg-[#3f2039] hover:bg-[#693565]" disabled={loading}>
-                            {loading ? 'Signing in...' : 'Sign In'}
+                        <Button
+                            type="button"
+                            onClick={handleSubmit}
+                            className="w-full"
+                            disabled={loading || success}
+                        >
+                            {loading
+                                ? 'Signing in...'
+                                : success
+                                    ? 'Redirecting...'
+                                    : 'Sign In'}
                         </Button>
                         <p className="text-center text-sm text-slate-500">
                             New here?{' '}
