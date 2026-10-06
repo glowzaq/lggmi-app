@@ -49,9 +49,12 @@ app.use(
                 callback(new Error('Not allowed by CORS'))
             }
         },
-        credentials: true,
+        credentials: true, // Allows cookies and Authorization headers
+        allowedHeaders: ['Content-Type', 'Authorization'], // Explicitly allow login request headers
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
     })
 )
+
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
